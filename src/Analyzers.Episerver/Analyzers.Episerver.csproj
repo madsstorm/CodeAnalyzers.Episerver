@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>netstandard1.3</TargetFramework>
@@ -12,11 +12,10 @@
     <Authors>Mads Storm Hansen</Authors>
     <PackageLicenseUrl>https://github.com/madsstorm/Analyzers.Episerver/blob/master/LICENSE</PackageLicenseUrl>
     <PackageProjectUrl>https://github.com/madsstorm/Analyzers.Episerver</PackageProjectUrl>
-    <PackageIconUrl>https://github.com/madsstorm.png</PackageIconUrl>
     <RepositoryUrl>https://github.com/madsstorm/Analyzers.Episerver</RepositoryUrl>
     <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
     <Description>Code Analyzers for projects using Episerver.</Description>
-    <PackageTags>Episerver Analyzer Roslyn CodeAnalysis C# CSharp</PackageTags>
+    <PackageTags>Analyzers Episerver CodeAnalysis Roslyn</PackageTags>
     <NoPackageAnalysis>true</NoPackageAnalysis>
   </PropertyGroup>
 
