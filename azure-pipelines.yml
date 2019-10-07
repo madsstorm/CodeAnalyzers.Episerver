@@ -5,7 +5,7 @@ pool:
   vmImage: 'windows-latest'
 
 variables:
-  solution: '**/*.sln'
+  solution: 'src/Analyzers.Episerver.sln'
   buildPlatform: 'Any CPU'
   buildConfiguration: 'Release'
 
@@ -30,7 +30,7 @@ steps:
 - task: DotNetCoreCLI@2
   inputs:
     command: 'pack'
-    packagesToPack: '**/*.csproj'
+    packagesToPack: 'src/Analyzers.Episerver/Analyzers.Episerver.csproj'
     versioningScheme: 'off'
 
 - task: NuGetCommand@2
