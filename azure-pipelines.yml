@@ -33,9 +33,8 @@ steps:
     packagesToPack: 'src/Analyzers.Episerver/Analyzers.Episerver.csproj'
     versioningScheme: 'off'
 
-- task: NuGetCommand@2
+- task: PublishBuildArtifacts@1
   inputs:
-    command: 'push'
-    packagesToPush: '$(Build.ArtifactStagingDirectory)/**/*.nupkg;!$(Build.ArtifactStagingDirectory)/**/*.symbols.nupkg'
-    nuGetFeedType: 'internal'
-    publishVstsFeed: 'a6a06a57-80da-445b-924e-29cb41864183'
+    PathtoPublish: '$(Build.ArtifactStagingDirectory)'
+    ArtifactName: 'drop'
+    publishLocation: 'Container'
