@@ -16,4 +16,8 @@
     <ProjectReference Include="..\..\src\Analyzers.Episerver\Analyzers.Episerver.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Tests\" />
+  </ItemGroup>
+
 </Project>
