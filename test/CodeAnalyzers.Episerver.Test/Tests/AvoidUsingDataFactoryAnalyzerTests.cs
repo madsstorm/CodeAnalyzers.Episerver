@@ -9,12 +9,6 @@ namespace CodeAnalyzers.Episerver.Test.Tests
     public class AvoidUsingDataFactoryAnalyzerTests : DiagnosticVerifier
     {
         [TestMethod]
-        public void FailingTest()
-        {
-            Assert.Fail();
-        }
-
-        [TestMethod]
         public void CanAnalyzeEmptySource()
         {
             var test = "";
