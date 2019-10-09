@@ -11,26 +11,21 @@ steps:
 - task: DotNetCoreCLI@2
   displayName: 'Build $(buildConfiguration)'
   inputs:
-    command: build
+    command: 'build'
     projects: 'src/CodeAnalyzers.Episerver/CodeAnalyzers.Episerver.csproj'
-    arguments: '--configuration $(buildConfiguration)'
+    configuration: '$(buildConfiguration)'
 
 - task: DotNetCoreCLI@2
   displayName: 'Test $(BuildConfiguration)'
   inputs:
     command: 'test'
     projects: 'test/**/*.csproj'
-    arguments: --configuration $(BuildConfiguration)
+    configuration: '$(BuildConfiguration)'
 
 - task: DotNetCoreCLI@2
-  displayName: 'Pack'
+  displayName: 'Pack $(BuildConfiguration)'
   inputs:
     command: 'pack'
     packagesToPack: 'src/CodeAnalyzers.Episerver/CodeAnalyzers.Episerver.csproj'
     versioningScheme: 'off'
-
-- task: PublishBuildArtifacts@1
-  inputs:
-    PathtoPublish: '$(Build.ArtifactStagingDirectory)'
-    ArtifactName: 'drop'
-    publishLocation: 'Container'
+    configuration: '$(BuildConfiguration)'
