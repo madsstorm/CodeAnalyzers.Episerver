@@ -171,13 +171,6 @@ namespace CodeAnalyzers.Episerver.Test.Tests
             VerifyCSharpDiagnostic(new string[] { EPiServerDataFactory, test }, expectedPropertyReference, expectedMethodInvocation);
         }
 
-
-
-
-
-
-
-
         protected override DiagnosticAnalyzer GetCSharpDiagnosticAnalyzer() => new AvoidUsingDataFactoryAnalyzer();
     }
 }
