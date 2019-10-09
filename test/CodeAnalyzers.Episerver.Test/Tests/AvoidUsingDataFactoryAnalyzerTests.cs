@@ -9,6 +9,25 @@ namespace CodeAnalyzers.Episerver.Test.Tests
     [TestClass]
     public class AvoidUsingDataFactoryAnalyzerTests : DiagnosticVerifier
     {
+        private const string EPiServerDataFactory = @"
+        namespace EPiServer
+        {
+            public class DataFactory
+            {
+                public static DataFactory Instance { get; }
+                public int Method(int i) { return i; }
+            }
+        }";
+
+        private const string CustomDataFactory = @"
+        namespace Custom
+        {
+            public class DataFactory
+            {
+                public static DataFactory Instance { get; }
+            }
+        }";
+
         [TestMethod]
         public void CanIgnoreEmptySource()
         {
@@ -18,15 +37,6 @@ namespace CodeAnalyzers.Episerver.Test.Tests
         [TestMethod]
         public void CanIgnoreCustomDataFactoryClass()
         {
-            var customDataFactory = @"
-                namespace Custom
-                {
-                    public class DataFactory
-                    {
-                        public static DataFactory Instance { get; }
-                    }
-                }";
-
             var test = @"
                 using Custom;
 
@@ -41,21 +51,12 @@ namespace CodeAnalyzers.Episerver.Test.Tests
                     }
                 }";
 
-            VerifyCSharpDiagnostic(new string[] { customDataFactory, test });
+            VerifyCSharpDiagnostic(new string[] { CustomDataFactory, test });
         }
 
         [TestMethod]
-        public void CanDetectPropertyAccess()
+        public void CanDetectPropertyReference()
         {
-            var EPiServerDataFactory = @"
-                namespace EPiServer
-                {
-                    public class DataFactory
-                    {
-                        public static DataFactory Instance { get; }
-                    }
-                }";
-
             var test = @"
                 using EPiServer;
 
@@ -70,7 +71,7 @@ namespace CodeAnalyzers.Episerver.Test.Tests
                     }
                 }";
 
-            var expected = new DiagnosticResult
+            var expectedPropertyReference = new DiagnosticResult
             {
                 Id = DiagnosticIds.AvoidUsingDataFactoryAnalyzerRuleId,
                 Message = "Avoid using legacy API DataFactory.Instance",
@@ -81,8 +82,101 @@ namespace CodeAnalyzers.Episerver.Test.Tests
                        }
             };
 
-            VerifyCSharpDiagnostic(new string[] { EPiServerDataFactory, test }, expected);
+            VerifyCSharpDiagnostic(new string[] { EPiServerDataFactory, test }, expectedPropertyReference);
         }
+
+        [TestMethod]
+        public void CanDetectMethodInvocation()
+        {
+            var test = @"
+                using EPiServer;
+
+                namespace Test
+                {
+                    public class TypeName
+                    {
+                        public void Test()
+                        {
+                            DataFactory.Instance.Method(0);
+                        }
+                    }
+                }";
+
+            var expectedPropertyReference = new DiagnosticResult
+            {
+                Id = DiagnosticIds.AvoidUsingDataFactoryAnalyzerRuleId,
+                Message = "Avoid using legacy API DataFactory.Instance",
+                Severity = DiagnosticSeverity.Warning,
+                Locations =
+                   new[] {
+                            new DiagnosticResultLocation("Test1.cs", 10, 29)
+                       }
+            };
+
+            var expectedMethodInvocation = new DiagnosticResult
+            {
+                Id = DiagnosticIds.AvoidUsingDataFactoryAnalyzerRuleId,
+                Message = "Avoid using legacy API DataFactory.Method(int)",
+                Severity = DiagnosticSeverity.Warning,
+                Locations =
+                   new[] {
+                            new DiagnosticResultLocation("Test1.cs", 10, 29)
+                       }
+            };
+
+            VerifyCSharpDiagnostic(new string[] { EPiServerDataFactory, test }, expectedMethodInvocation, expectedPropertyReference);
+        }
+
+        [TestMethod]
+        public void CanDetectMethodReference()
+        {
+            var test = @"
+                using EPiServer;
+                using System;
+
+                namespace Test
+                {
+                    public class TypeName
+                    {
+                        public void Test()
+                        {
+                            var factory = DataFactory.Instance;
+                            Func<int,int> method = factory.Method;
+                        }
+                    }
+                }";
+
+            var expectedPropertyReference = new DiagnosticResult
+            {
+                Id = DiagnosticIds.AvoidUsingDataFactoryAnalyzerRuleId,
+                Message = "Avoid using legacy API DataFactory.Instance",
+                Severity = DiagnosticSeverity.Warning,
+                Locations =
+                   new[] {
+                            new DiagnosticResultLocation("Test1.cs", 11, 43)
+                       }
+            };
+
+            var expectedMethodInvocation = new DiagnosticResult
+            {
+                Id = DiagnosticIds.AvoidUsingDataFactoryAnalyzerRuleId,
+                Message = "Avoid using legacy API DataFactory.Method(int)",
+                Severity = DiagnosticSeverity.Warning,
+                Locations =
+                   new[] {
+                            new DiagnosticResultLocation("Test1.cs", 12, 52)
+                       }
+            };
+
+            VerifyCSharpDiagnostic(new string[] { EPiServerDataFactory, test }, expectedPropertyReference, expectedMethodInvocation);
+        }
+
+
+
+
+
+
+
 
         protected override DiagnosticAnalyzer GetCSharpDiagnosticAnalyzer() => new AvoidUsingDataFactoryAnalyzer();
     }
