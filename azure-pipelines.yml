@@ -20,7 +20,7 @@ steps:
   inputs:
     command: 'test'
     projects: 'test/CodeAnalyzers.Episerver.Test/CodeAnalyzers.Episerver.Test.csproj'
-    arguments: '--configuration $(buildConfiguration) --collect "Code coverage"'
+    arguments: '--configuration $(buildConfiguration) /p:CollectCoverage=true /p:CoverletOutputFormat=cobertura'
 
 - task: CopyFiles@2
   displayName: 'Copy package'
