@@ -15,8 +15,8 @@
     <ProjectGuid>{196E7C95-EAFB-4A2B-94C1-D6A58D46208C}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Analyzers.Episerver.Vsix</RootNamespace>
-    <AssemblyName>Analyzers.Episerver.Vsix</AssemblyName>
+    <RootNamespace>CodeAnalyzers.Episerver.Vsix</RootNamespace>
+    <AssemblyName>CodeAnalyzers.Episerver.Vsix</AssemblyName>
     <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
     <GeneratePkgDefFile>false</GeneratePkgDefFile>
     <IncludeAssemblyInVSIXContainer>false</IncludeAssemblyInVSIXContainer>
@@ -54,9 +54,9 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Analyzers.Episerver\Analyzers.Episerver.csproj">
+    <ProjectReference Include="..\CodeAnalyzers.Episerver\CodeAnalyzers.Episerver.csproj">
       <Project>{220c789c-6d2c-4f4b-8c5d-afb9518ad071}</Project>
-      <Name>Analyzers.Episerver</Name>
+      <Name>CodeAnalyzers.Episerver</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

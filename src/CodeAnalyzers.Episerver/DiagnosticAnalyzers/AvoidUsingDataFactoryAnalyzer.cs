@@ -3,14 +3,14 @@ using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.Diagnostics;
 using Microsoft.CodeAnalysis.Operations;
 
-namespace Analyzers.Episerver.DiagnosticAnalyzers
+namespace CodeAnalyzers.Episerver.DiagnosticAnalyzers
 {
     [DiagnosticAnalyzer(LanguageNames.CSharp)]
     public class AvoidUsingDataFactoryAnalyzer : DiagnosticAnalyzer
     {
         private const string Title = "Avoid using legacy API DataFactory";
         private const string MessageFormat = "Avoid using legacy API {0}";
-        private const string Description = "This API has been replaced by IContentRepository, IContentEvents and a number of related interfaces.";
+        private const string Description = "Legacy data source in EPiServer CMS. This API has been replaced by the IContentRepository, IContentEvents and a number of related interfaces.";
 
         private const string TypeMetadataName = "EPiServer.DataFactory";
 

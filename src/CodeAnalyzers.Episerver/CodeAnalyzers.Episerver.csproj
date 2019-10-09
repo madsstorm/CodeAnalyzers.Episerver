@@ -7,15 +7,15 @@
   </PropertyGroup>
 
   <PropertyGroup>
-    <PackageId>Analyzers.Episerver</PackageId>
+    <PackageId>CodeAnalyzers.Episerver</PackageId>
     <PackageVersion>1.0.0.0</PackageVersion>
     <Authors>Mads Storm Hansen</Authors>
-    <PackageLicenseUrl>https://github.com/madsstorm/Analyzers.Episerver/blob/master/LICENSE</PackageLicenseUrl>
-    <PackageProjectUrl>https://github.com/madsstorm/Analyzers.Episerver</PackageProjectUrl>
-    <RepositoryUrl>https://github.com/madsstorm/Analyzers.Episerver</RepositoryUrl>
+    <PackageLicenseUrl>https://github.com/madsstorm/CodeAnalyzers.Episerver/blob/master/LICENSE</PackageLicenseUrl>
+    <PackageProjectUrl>https://github.com/madsstorm/CodeAnalyzers.Episerver</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/madsstorm/CodeAnalyzers.Episerver</RepositoryUrl>
     <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
     <Description>Code Analyzers for projects using Episerver.</Description>
-    <PackageTags>Analyzers Episerver CodeAnalysis Roslyn</PackageTags>
+    <PackageTags>CodeAnalyzers Episerver CodeAnalysis Analyzers Roslyn</PackageTags>
     <NoPackageAnalysis>true</NoPackageAnalysis>
   </PropertyGroup>
 

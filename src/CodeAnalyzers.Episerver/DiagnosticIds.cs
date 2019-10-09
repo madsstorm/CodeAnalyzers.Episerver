@@ -1,5 +1,5 @@
 ﻿
-namespace Analyzers.Episerver
+namespace CodeAnalyzers.Episerver
 {
     public static class DiagnosticIds
     {

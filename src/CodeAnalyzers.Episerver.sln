@@ -3,11 +3,11 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.29326.143
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Analyzers.Episerver", "Analyzers.Episerver\Analyzers.Episerver.csproj", "{220C789C-6D2C-4F4B-8C5D-AFB9518AD071}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CodeAnalyzers.Episerver", "CodeAnalyzers.Episerver\CodeAnalyzers.Episerver.csproj", "{220C789C-6D2C-4F4B-8C5D-AFB9518AD071}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Analyzers.Episerver.Test", "..\test\Analyzers.Episerver.Test\Analyzers.Episerver.Test.csproj", "{3D1D7017-302D-465D-AF8A-7E5C7D9571D3}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CodeAnalyzers.Episerver.Test", "..\test\CodeAnalyzers.Episerver.Test\CodeAnalyzers.Episerver.Test.csproj", "{3D1D7017-302D-465D-AF8A-7E5C7D9571D3}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Analyzers.Episerver.Vsix", "Analyzers.Episerver.Vsix\Analyzers.Episerver.Vsix.csproj", "{196E7C95-EAFB-4A2B-94C1-D6A58D46208C}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CodeAnalyzers.Episerver.Vsix", "CodeAnalyzers.Episerver.Vsix\CodeAnalyzers.Episerver.Vsix.csproj", "{196E7C95-EAFB-4A2B-94C1-D6A58D46208C}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

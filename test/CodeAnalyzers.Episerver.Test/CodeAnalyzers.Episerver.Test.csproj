@@ -13,7 +13,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\src\Analyzers.Episerver\Analyzers.Episerver.csproj" />
+    <ProjectReference Include="..\..\src\CodeAnalyzers.Episerver\CodeAnalyzers.Episerver.csproj" />
   </ItemGroup>
 
   <ItemGroup>
