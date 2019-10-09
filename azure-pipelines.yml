@@ -4,19 +4,23 @@ trigger:
 pool:
   vmImage: 'ubuntu-latest'
 
+variables:
+  buildConfiguration: 'Release'
+
 steps:
 - task: DotNetCoreCLI@2
   displayName: 'Build'
   inputs:
     command: 'build'
     projects: 'src/CodeAnalyzers.Episerver/CodeAnalyzers.Episerver.csproj'
-    arguments: '--configuration Release'
+    arguments: '--configuration $(buildConfiguration)'
 
 - task: DotNetCoreCLI@2
   displayName: 'Test'
   inputs:
     command: 'test'
     projects: 'test/CodeAnalyzers.Episerver.Test/CodeAnalyzers.Episerver.Test.csproj'
+    arguments: '--configuration $(buildConfiguration) --collect "Code coverage"'
 
 - task: CopyFiles@2
   displayName: 'Copy package'
