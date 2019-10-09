@@ -12,7 +12,7 @@ steps:
 - task: CopyFiles@2
   displayName: 'Copy package'
   inputs:
-    Contents: '**/*.nupkg'
+    Contents: '**/Release/**/*.nupkg'
     TargetFolder: '$(Build.ArtifactStagingDirectory)'
     FlattenFolders: true
 
