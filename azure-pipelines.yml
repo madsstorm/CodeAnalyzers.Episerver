@@ -5,9 +5,18 @@ pool:
   vmImage: 'ubuntu-latest'
 
 steps:
-- script: dotnet build --configuration Release src/CodeAnalyzers.Episerver/CodeAnalyzers.Episerver.csproj
+- task: DotNetCoreCLI@2
+  displayName: 'Build'
+  inputs:
+    command: 'build'
+    projects: 'src/CodeAnalyzers.Episerver/CodeAnalyzers.Episerver.csproj'
+    arguments: '--configuration Release'
 
-- script: dotnet test test/CodeAnalyzers.Episerver.Test/CodeAnalyzers.Episerver.Test.csproj
+- task: DotNetCoreCLI@2
+  displayName: 'Test'
+  inputs:
+    command: 'test'
+    projects: 'test/CodeAnalyzers.Episerver.Test/CodeAnalyzers.Episerver.Test.csproj'
 
 - task: CopyFiles@2
   displayName: 'Copy package'
@@ -17,7 +26,7 @@ steps:
     FlattenFolders: true
 
 - task: PublishBuildArtifacts@1
-  displayName: 'Pubslih artifact'
+  displayName: 'Publish artifact'
   inputs:
     PathtoPublish: '$(Build.ArtifactStagingDirectory)'
     ArtifactName: 'drop'
