@@ -29,6 +29,12 @@ steps:
 
 - task: DotNetCoreCLI@2
   inputs:
+    command: 'test'
+    projects: '**/test/*.csproj'
+    arguments: '--configuration $(buildConfiguration)'
+
+- task: DotNetCoreCLI@2
+  inputs:
     command: 'pack'
     packagesToPack: 'src/CodeAnalyzers.Episerver/CodeAnalyzers.Episerver.csproj'
     versioningScheme: 'off'
