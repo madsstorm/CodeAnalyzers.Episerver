@@ -2,33 +2,28 @@ trigger:
 - master
 
 pool:
-  vmImage: 'windows-latest'
+  vmImage: 'ubuntu-latest'
 
 variables:
-  solution: 'src/CodeAnalyzers.Episerver.sln'
-  buildPlatform: 'Any CPU'
   buildConfiguration: 'Release'
 
 steps:
-- task: NuGetToolInstaller@1
-
-- task: NuGetCommand@2
+- task: DotNetCoreCLI@2
+  displayName: 'Build $(buildConfiguration)'
   inputs:
-    restoreSolution: '$(solution)'
-
-- task: VSBuild@1
-  inputs:
-    solution: '$(solution)'
-    platform: '$(buildPlatform)'
-    configuration: '$(buildConfiguration)'
+    command: build
+    projects: 'src/CodeAnalyzers.Episerver/CodeAnalyzers.Episerver.csproj'
+    arguments: '--configuration $(buildConfiguration)'
 
 - task: DotNetCoreCLI@2
+  displayName: 'Test $(BuildConfiguration)'
   inputs:
     command: 'test'
     projects: 'test/**/*.csproj'
-    arguments: --configuration $(BuildConfiguration) /p:CollectCoverage=true /p:CoverletOutputFormat=cobertura
+    arguments: --configuration $(BuildConfiguration)
 
 - task: DotNetCoreCLI@2
+  displayName: 'Pack'
   inputs:
     command: 'pack'
     packagesToPack: 'src/CodeAnalyzers.Episerver/CodeAnalyzers.Episerver.csproj'
