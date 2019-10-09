@@ -21,11 +21,3 @@ steps:
     command: 'test'
     projects: 'test/**/*.csproj'
     configuration: '$(BuildConfiguration)'
-
-- task: DotNetCoreCLI@2
-  displayName: 'Pack $(BuildConfiguration)'
-  inputs:
-    command: 'pack'
-    packagesToPack: 'src/CodeAnalyzers.Episerver/CodeAnalyzers.Episerver.csproj'
-    versioningScheme: 'off'
-    configuration: '$(BuildConfiguration)'
