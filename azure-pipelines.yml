@@ -27,6 +27,7 @@ steps:
   inputs:
     Contents: '**/*.nupkg'
     TargetFolder: '$(Build.ArtifactStagingDirectory)'
+    FlattenFolders: true
 
 - task: PublishBuildArtifacts@1
   displayName: 'Pubslih artifact'
