@@ -3,7 +3,7 @@ using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.Diagnostics;
 using Microsoft.CodeAnalysis.Operations;
 
-namespace CodeAnalyzers.Episerver.DiagnosticAnalyzers
+namespace CodeAnalyzers.Episerver.DiagnosticAnalyzers.CSharp
 {
     [DiagnosticAnalyzer(LanguageNames.CSharp)]
     public class AvoidUsingDataFactoryAnalyzer : DiagnosticAnalyzer
