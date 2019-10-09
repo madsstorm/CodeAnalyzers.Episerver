@@ -7,11 +7,7 @@ pool:
 steps:
 - script: dotnet build --configuration Release src/CodeAnalyzers.Episerver/CodeAnalyzers.Episerver.csproj
 
-- task: DotNetCoreCLI@2
-  displayName: 'Test'
-  inputs:
-    command: 'test'
-    projects: 'test/**/*.csproj'
+- script: dotnet test test/CodeAnalyzers.Episerver.Test/CodeAnalyzers.Episerver.Test.csproj
 
 - task: CopyFiles@2
   displayName: 'Copy package'
