@@ -20,7 +20,12 @@ steps:
   inputs:
     command: 'test'
     projects: 'test/CodeAnalyzers.Episerver.Test/CodeAnalyzers.Episerver.Test.csproj'
-    arguments: '--configuration $(buildConfiguration) /p:CollectCoverage=true /p:CoverletOutputFormat=cobertura'
+    arguments: '--configuration $(buildConfiguration) /p:CollectCoverage=true /p:CoverletOutputFormat=cobertura /p:CoverletOutput=$(Build.SourcesDirectory)/TestResults/Coverage/'
+
+- task: reportgenerator@4
+  inputs:
+    reports: '$(Build.SourcesDirectory)/TestResults/Coverage/'
+    targetdir: '$(Build.SourcesDirectory)/coveragereport'
 
 - task: CopyFiles@2
   displayName: 'Copy package'
