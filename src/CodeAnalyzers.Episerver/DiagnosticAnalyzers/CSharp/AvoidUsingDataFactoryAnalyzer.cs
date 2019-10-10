@@ -8,23 +8,10 @@ namespace CodeAnalyzers.Episerver.DiagnosticAnalyzers.CSharp
     [DiagnosticAnalyzer(LanguageNames.CSharp)]
     public class AvoidUsingDataFactoryAnalyzer : DiagnosticAnalyzer
     {
-        private const string Title = "Avoid using legacy API DataFactory";
-        private const string MessageFormat = "Avoid using legacy API {0}";
-        private const string Description = "Legacy data source in EPiServer CMS. This API has been replaced by the IContentRepository, IContentEvents and a number of related interfaces.";
-
         private const string TypeMetadataName = "EPiServer.DataFactory";
 
-        private static readonly DiagnosticDescriptor Rule =
-            new DiagnosticDescriptor(
-                DiagnosticIds.AvoidUsingDataFactoryAnalyzerRuleId,
-                Title,
-                MessageFormat,
-                DiagnosticCategories.Usage,
-                DiagnosticSeverity.Warning,
-                isEnabledByDefault: true,
-                description: Description);
-
-        public override ImmutableArray<DiagnosticDescriptor> SupportedDiagnostics => ImmutableArray.Create(Rule);
+        public override ImmutableArray<DiagnosticDescriptor> SupportedDiagnostics =>
+            ImmutableArray.Create(Descriptors.EPI1000_AvoidUsingDataFactory);
 
         public override void Initialize(AnalysisContext context)
         {
@@ -49,7 +36,7 @@ namespace CodeAnalyzers.Episerver.DiagnosticAnalyzers.CSharp
                             {
                                 operationAnalysisContext.ReportDiagnostic(
                                     Diagnostic.Create(
-                                    Rule,
+                                    Descriptors.EPI1000_AvoidUsingDataFactory,
                                     propertyReferenceOperation.Syntax.GetLocation(),
                                     propertyReferenceOperation.Property.ToDisplayString(
                                         SymbolDisplayFormat.CSharpShortErrorMessageFormat)));
@@ -66,7 +53,7 @@ namespace CodeAnalyzers.Episerver.DiagnosticAnalyzers.CSharp
                             {
                                 operationAnalysisContext.ReportDiagnostic(
                                     Diagnostic.Create(
-                                        Rule,
+                                        Descriptors.EPI1000_AvoidUsingDataFactory,
                                         invocationOperation.Syntax.GetLocation(),
                                         invocationOperation.TargetMethod.ToDisplayString(
                                             SymbolDisplayFormat.CSharpShortErrorMessageFormat)));
@@ -82,7 +69,7 @@ namespace CodeAnalyzers.Episerver.DiagnosticAnalyzers.CSharp
                             {
                                 operationAnalysisContext.ReportDiagnostic(
                                     Diagnostic.Create(
-                                        Rule,
+                                        Descriptors.EPI1000_AvoidUsingDataFactory,
                                         methodReferenceOperation.Syntax.GetLocation(),
                                         methodReferenceOperation.Method.ToDisplayString(
                                             SymbolDisplayFormat.CSharpShortErrorMessageFormat)));

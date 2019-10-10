@@ -73,8 +73,8 @@ namespace CodeAnalyzers.Episerver.Test.Tests
 
             var expectedPropertyReference = new DiagnosticResult
             {
-                Id = DiagnosticIds.AvoidUsingDataFactoryAnalyzerRuleId,
-                Message = "Avoid using legacy API DataFactory.Instance",
+                Id = Descriptors.EPI1000_AvoidUsingDataFactory.Id,
+                Message = string.Format(Descriptors.EPI1000_AvoidUsingDataFactory.MessageFormat.ToString(), "DataFactory.Instance"),
                 Severity = DiagnosticSeverity.Warning,
                 Locations =
                    new[] {
@@ -104,8 +104,8 @@ namespace CodeAnalyzers.Episerver.Test.Tests
 
             var expectedPropertyReference = new DiagnosticResult
             {
-                Id = DiagnosticIds.AvoidUsingDataFactoryAnalyzerRuleId,
-                Message = "Avoid using legacy API DataFactory.Instance",
+                Id = Descriptors.EPI1000_AvoidUsingDataFactory.Id,
+                Message = string.Format(Descriptors.EPI1000_AvoidUsingDataFactory.MessageFormat.ToString(), "DataFactory.Instance"),
                 Severity = DiagnosticSeverity.Warning,
                 Locations =
                    new[] {
@@ -115,8 +115,8 @@ namespace CodeAnalyzers.Episerver.Test.Tests
 
             var expectedMethodInvocation = new DiagnosticResult
             {
-                Id = DiagnosticIds.AvoidUsingDataFactoryAnalyzerRuleId,
-                Message = "Avoid using legacy API DataFactory.Method(int)",
+                Id = Descriptors.EPI1000_AvoidUsingDataFactory.Id,
+                Message = string.Format(Descriptors.EPI1000_AvoidUsingDataFactory.MessageFormat.ToString(), "DataFactory.Method(int)"),
                 Severity = DiagnosticSeverity.Warning,
                 Locations =
                    new[] {
@@ -148,8 +148,8 @@ namespace CodeAnalyzers.Episerver.Test.Tests
 
             var expectedPropertyReference = new DiagnosticResult
             {
-                Id = DiagnosticIds.AvoidUsingDataFactoryAnalyzerRuleId,
-                Message = "Avoid using legacy API DataFactory.Instance",
+                Id = Descriptors.EPI1000_AvoidUsingDataFactory.Id,
+                Message = string.Format(Descriptors.EPI1000_AvoidUsingDataFactory.MessageFormat.ToString(), "DataFactory.Instance"),
                 Severity = DiagnosticSeverity.Warning,
                 Locations =
                    new[] {
@@ -159,8 +159,8 @@ namespace CodeAnalyzers.Episerver.Test.Tests
 
             var expectedMethodInvocation = new DiagnosticResult
             {
-                Id = DiagnosticIds.AvoidUsingDataFactoryAnalyzerRuleId,
-                Message = "Avoid using legacy API DataFactory.Method(int)",
+                Id = Descriptors.EPI1000_AvoidUsingDataFactory.Id,
+                Message = string.Format(Descriptors.EPI1000_AvoidUsingDataFactory.MessageFormat.ToString(), "DataFactory.Method(int)"),
                 Severity = DiagnosticSeverity.Warning,
                 Locations =
                    new[] {
