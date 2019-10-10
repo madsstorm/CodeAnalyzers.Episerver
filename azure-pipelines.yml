@@ -20,7 +20,7 @@ steps:
   inputs:
     command: 'test'
     projects: 'test/CodeAnalyzers.Episerver.Test/CodeAnalyzers.Episerver.Test.csproj'
-    arguments: '--configuration $(buildConfiguration) /p:CollectCoverage=true /p:CoverletOutputFormat=cobertura /p:CoverletOutput=$(Build.SourcesDirectory)/TestResults/Coverage/'
+    arguments: '--configuration $(buildConfiguration) --collect "Code coverage" /p:CollectCoverage=true /p:CoverletOutputFormat=cobertura /p:CoverletOutput=$(Build.SourcesDirectory)/TestResults/Coverage/'
 
 - task: reportgenerator@4
   displayName: 'Generate code coverage'
