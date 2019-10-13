@@ -18,65 +18,56 @@ namespace CodeAnalyzers.Episerver.DiagnosticAnalyzers.CSharp
             context.ConfigureGeneratedCodeAnalysis(GeneratedCodeAnalysisFlags.Analyze | GeneratedCodeAnalysisFlags.ReportDiagnostics);
             context.EnableConcurrentExecution();
 
-            context.RegisterCompilationStartAction(
-                (CompilationStartAnalysisContext compilationStartAnalysisContext) =>
+            context.RegisterCompilationStartAction(compilationContext =>
+            {
+                var dataFactory = compilationContext.Compilation.GetTypeByMetadataName(TypeMetadataName);
+                if (dataFactory == null)
                 {
-                    INamedTypeSymbol dataFactoryTypeSymbol =
-                        compilationStartAnalysisContext.Compilation.GetTypeByMetadataName(TypeMetadataName);
-                    if (dataFactoryTypeSymbol == null)
+                    return;
+                }
+
+                compilationContext.RegisterOperationAction(operationContext =>
+                {
+                    var operation = (IPropertyReferenceOperation)operationContext.Operation;
+                    if (Equals(operation.Property?.Type, dataFactory))
                     {
-                        return;
+                        ReportDiagnostic(operationContext, operation,
+                            operation.Property.ToDisplayString(SymbolDisplayFormat.CSharpShortErrorMessageFormat));
                     }
+                },
+                OperationKind.PropertyReference);
 
-                    compilationStartAnalysisContext.RegisterOperationAction(
-                        (OperationAnalysisContext operationAnalysisContext) =>
-                        {
-                            IPropertyReferenceOperation propertyReferenceOperation = (IPropertyReferenceOperation)operationAnalysisContext.Operation;
-                            if (Equals(propertyReferenceOperation.Property?.Type, dataFactoryTypeSymbol))
-                            {
-                                operationAnalysisContext.ReportDiagnostic(
-                                    Diagnostic.Create(
-                                    Descriptors.EPI1000_AvoidUsingDataFactory,
-                                    propertyReferenceOperation.Syntax.GetLocation(),
-                                    propertyReferenceOperation.Property.ToDisplayString(
-                                        SymbolDisplayFormat.CSharpShortErrorMessageFormat)));
-                            }
-                        },
-                        OperationKind.PropertyReference);
+                compilationContext.RegisterOperationAction(operationContext =>
+                {
+                    var operation = (IInvocationOperation)operationContext.Operation;
+                    if (Equals(operation.Instance?.Type, dataFactory))
+                    {
+                        ReportDiagnostic(operationContext, operation,
+                            operation.TargetMethod.ToDisplayString(SymbolDisplayFormat.CSharpShortErrorMessageFormat));
+                    }
+                },
+                OperationKind.Invocation);
 
+                compilationContext.RegisterOperationAction(operationContext =>
+                {
+                    var operation = (IMethodReferenceOperation)operationContext.Operation;
+                    if (Equals(operation.Instance?.Type, dataFactory))
+                    {
+                        ReportDiagnostic(operationContext, operation,
+                            operation.Method.ToDisplayString(SymbolDisplayFormat.CSharpShortErrorMessageFormat));
+                    }
+                },
+                OperationKind.MethodReference);
+            });
+        }
 
-                    compilationStartAnalysisContext.RegisterOperationAction(
-                        (OperationAnalysisContext operationAnalysisContext) =>
-                        {
-                            IInvocationOperation invocationOperation = (IInvocationOperation)operationAnalysisContext.Operation;
-                            if (Equals(invocationOperation.Instance?.Type, dataFactoryTypeSymbol))
-                            {
-                                operationAnalysisContext.ReportDiagnostic(
-                                    Diagnostic.Create(
-                                        Descriptors.EPI1000_AvoidUsingDataFactory,
-                                        invocationOperation.Syntax.GetLocation(),
-                                        invocationOperation.TargetMethod.ToDisplayString(
-                                            SymbolDisplayFormat.CSharpShortErrorMessageFormat)));
-                            }
-                        },
-                        OperationKind.Invocation);
-
-                    compilationStartAnalysisContext.RegisterOperationAction(
-                        (OperationAnalysisContext operationAnalysisContext) =>
-                        {
-                            IMethodReferenceOperation methodReferenceOperation = (IMethodReferenceOperation)operationAnalysisContext.Operation;
-                            if (Equals(methodReferenceOperation.Instance?.Type, dataFactoryTypeSymbol))
-                            {
-                                operationAnalysisContext.ReportDiagnostic(
-                                    Diagnostic.Create(
-                                        Descriptors.EPI1000_AvoidUsingDataFactory,
-                                        methodReferenceOperation.Syntax.GetLocation(),
-                                        methodReferenceOperation.Method.ToDisplayString(
-                                            SymbolDisplayFormat.CSharpShortErrorMessageFormat)));
-                            }
-                        },
-                        OperationKind.MethodReference);
-                });
+        private void ReportDiagnostic(OperationAnalysisContext operationContext, IOperation operation, params object[] messageArgs)
+        {
+            operationContext.ReportDiagnostic(
+                Diagnostic.Create(
+                    Descriptors.EPI1000_AvoidUsingDataFactory,
+                    operation.Syntax.GetLocation(),
+                    messageArgs));
         }
     }
 }
