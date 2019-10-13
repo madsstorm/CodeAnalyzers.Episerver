@@ -14,27 +14,6 @@ namespace CodeAnalyzers.Episerver.Test
         }
 
         [Fact]
-        public async Task CanIgnoreContentLoader()
-        {
-            var test = @"
-                using EPiServer;
-                using EPiServer.Core;
-
-                namespace Test
-                {
-                    public class TypeName
-                    {
-                        public void Test(IContentLoader loader)
-                        {
-                            var children = loader.GetChildren<PageData>(PageReference.StartPage);
-                        }
-                    }
-                }";
-
-            await Verify.VerifyAnalyzerAsync(test);
-        }
-
-        [Fact]
         public async Task CanIgnoreCustomDataFactoryClass()
         {
             var test = @"
@@ -88,7 +67,6 @@ namespace CodeAnalyzers.Episerver.Test
         {
             var test = @"
                 using MyFactory = EPiServer.DataFactory;
-                using EPiServer.Core;
 
                 namespace Test
                 {                   
@@ -98,12 +76,12 @@ namespace CodeAnalyzers.Episerver.Test
                     {
                         public void Test()
                         {
-                            MyFactory.Instance.GetChildren(PageReference.StartPage);
+                            var factory = MyFactory.Instance;
                         }
                     }
                 }";
 
-            var expected = Verify.Diagnostic().WithLocation(13, 29);
+            var expected = Verify.Diagnostic().WithLocation(12, 43);
 
             await Verify.VerifyAnalyzerAsync(test, expected);
         }
@@ -113,7 +91,6 @@ namespace CodeAnalyzers.Episerver.Test
         {
             var test = @"
                 using static EPiServer.DataFactory;
-                using EPiServer.Core;
 
                 namespace Test
                 {
@@ -121,12 +98,12 @@ namespace CodeAnalyzers.Episerver.Test
                     {
                         public void Test()
                         {
-                            Instance.GetChildren(PageReference.StartPage);
+                            var factory = Instance;
                         }
                     }
                 }";
 
-            var expected = Verify.Diagnostic().WithLocation(11, 29);
+            var expected = Verify.Diagnostic().WithLocation(10, 43);
 
             await Verify.VerifyAnalyzerAsync(test, expected);
         }
