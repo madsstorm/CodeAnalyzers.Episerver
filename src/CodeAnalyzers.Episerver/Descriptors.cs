@@ -2,9 +2,7 @@
 using System.Collections.Concurrent;
 using static Microsoft.CodeAnalysis.DiagnosticSeverity;
 using static CodeAnalyzers.Episerver.Category;
-using System.Runtime.CompilerServices;
 
-[assembly: InternalsVisibleTo("CodeAnalyzers.Episerver.Test")]
 namespace CodeAnalyzers.Episerver
 {
     internal enum Category
