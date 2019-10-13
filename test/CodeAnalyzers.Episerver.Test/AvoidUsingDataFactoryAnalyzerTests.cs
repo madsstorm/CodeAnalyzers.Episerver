@@ -14,6 +14,27 @@ namespace CodeAnalyzers.Episerver.Test
         }
 
         [Fact]
+        public async Task CanIgnoreContentLoader()
+        {
+            var test = @"
+                using EPiServer;
+                using EPiServer.Core;
+
+                namespace Test
+                {
+                    public class TypeName
+                    {
+                        public void Test(IContentLoader loader)
+                        {
+                            var children = loader.GetChildren<PageData>(PageReference.StartPage);
+                        }
+                    }
+                }";
+
+            await Verify.VerifyAnalyzerAsync(test);
+        }
+
+        [Fact]
         public async Task CanIgnoreCustomDataFactoryClass()
         {
             var test = @"
