@@ -57,60 +57,9 @@ namespace CodeAnalyzers.Episerver.Test
                     }
                 }";
 
-            var expected = Verify.Diagnostic().WithLocation(10, 43).WithArguments("DataFactory.Instance");
+            var expected = Verify.Diagnostic().WithLocation(10, 43);
 
             await Verify.VerifyAnalyzerAsync(test, expected);
-        }
-
-        [Fact]
-        public async Task CanDetectMethodInvocation()
-        {
-            var test = @"
-                using EPiServer;
-                using EPiServer.Core;
-
-                namespace Test
-                {
-                    public class TypeName
-                    {
-                        public void Test()
-                        {
-                            DataFactory.Instance.GetChildren(PageReference.StartPage);
-                        }
-                    }
-                }";
-
-            var expected = Verify.Diagnostic().WithLocation(11, 29).WithArguments("DataFactory.Instance");
-            var expected2 = Verify.Diagnostic().WithLocation(11, 29).WithArguments("DataFactory.GetChildren(PageReference)");
-
-            await Verify.VerifyAnalyzerAsync(test, expected, expected2);
-        }
-
-        [Fact]
-        public async Task CanDetectMethodReference()
-        {
-            var test = @"
-                using EPiServer;
-                using EPiServer.Core;
-
-                namespace Test
-                {
-                    using System;
-
-                    public class TypeName
-                    {
-                        public void Test()
-                        {
-                            var factory = DataFactory.Instance;
-                            Func<PageReference,PageDataCollection> method = factory.GetChildren;
-                        }
-                    }
-                }";
-
-            var expected = Verify.Diagnostic().WithLocation(13, 43).WithArguments("DataFactory.Instance");
-            var expected2 = Verify.Diagnostic().WithLocation(14, 77).WithArguments("DataFactory.GetChildren(PageReference)");
-
-            await Verify.VerifyAnalyzerAsync(test, expected, expected2);          
         }
 
         [Fact]
@@ -133,10 +82,9 @@ namespace CodeAnalyzers.Episerver.Test
                     }
                 }";
 
-            var expected = Verify.Diagnostic().WithLocation(13, 29).WithArguments("DataFactory.Instance");
-            var expected2 = Verify.Diagnostic().WithLocation(13, 29).WithArguments("DataFactory.GetChildren(PageReference)");
+            var expected = Verify.Diagnostic().WithLocation(13, 29);
 
-            await Verify.VerifyAnalyzerAsync(test, expected, expected2);
+            await Verify.VerifyAnalyzerAsync(test, expected);
         }
 
         [Fact]
@@ -157,10 +105,9 @@ namespace CodeAnalyzers.Episerver.Test
                     }
                 }";
 
-            var expected = Verify.Diagnostic().WithLocation(11, 29).WithArguments("DataFactory.Instance");
-            var expected2 = Verify.Diagnostic().WithLocation(11, 29).WithArguments("DataFactory.GetChildren(PageReference)");
+            var expected = Verify.Diagnostic().WithLocation(11, 29);
 
-            await Verify.VerifyAnalyzerAsync(test, expected, expected2);
+            await Verify.VerifyAnalyzerAsync(test, expected);
         }
     }
 }

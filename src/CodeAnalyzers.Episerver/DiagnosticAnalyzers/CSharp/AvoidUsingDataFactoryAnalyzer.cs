@@ -28,12 +28,6 @@ namespace CodeAnalyzers.Episerver.DiagnosticAnalyzers.CSharp
 
                 compilationContext.RegisterOperationAction(operationContext =>
                     AnalyzePropertyReference(operationContext, dataFactory), OperationKind.PropertyReference);
-
-                compilationContext.RegisterOperationAction(operationContext =>
-                    AnalyzeInvocation(operationContext, dataFactory), OperationKind.Invocation);
-
-                compilationContext.RegisterOperationAction(operationContext =>
-                    AnalyzeMethodReference(operationContext, dataFactory), OperationKind.MethodReference);
             });
         }       
 
@@ -42,32 +36,11 @@ namespace CodeAnalyzers.Episerver.DiagnosticAnalyzers.CSharp
             var operation = (IPropertyReferenceOperation)operationContext.Operation;
             if (Equals(operation.Property?.Type, dataFactory))
             {
-                ReportDiagnostic(operationContext, operation, operation.Property.ToDisplayString(SymbolDisplayFormat.CSharpShortErrorMessageFormat));
+                operationContext.ReportDiagnostic(
+                    Diagnostic.Create(
+                        Descriptors.EPI1000_AvoidUsingDataFactory,
+                        operation.Syntax.GetLocation()));
             }
-        }
-
-        private void AnalyzeInvocation(OperationAnalysisContext operationContext, INamedTypeSymbol dataFactory)
-        {
-            var operation = (IInvocationOperation)operationContext.Operation;
-            if (Equals(operation.Instance?.Type, dataFactory))
-            {
-                ReportDiagnostic(operationContext, operation, operation.TargetMethod.ToDisplayString(SymbolDisplayFormat.CSharpShortErrorMessageFormat));
-            }
-        }
-
-        private void AnalyzeMethodReference(OperationAnalysisContext operationContext, INamedTypeSymbol dataFactory)
-        {
-            var operation = (IMethodReferenceOperation)operationContext.Operation;
-            if (Equals(operation.Instance?.Type, dataFactory))
-            {
-                ReportDiagnostic(operationContext, operation, operation.Method.ToDisplayString(SymbolDisplayFormat.CSharpShortErrorMessageFormat));
-            }
-        }
-
-        private void ReportDiagnostic(OperationAnalysisContext operationContext, IOperation operation, params object[] messageArgs)
-        {
-            operationContext.ReportDiagnostic(
-                Diagnostic.Create(Descriptors.EPI1000_AvoidUsingDataFactory, operation.Syntax.GetLocation(), messageArgs));
         }
     }
 }

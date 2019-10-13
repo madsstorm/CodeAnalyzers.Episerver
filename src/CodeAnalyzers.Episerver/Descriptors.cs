@@ -23,6 +23,6 @@ namespace CodeAnalyzers.Episerver
 
         internal static DiagnosticDescriptor EPI1000_AvoidUsingDataFactory { get; } =
             Rule("EPI1000", "Avoid using DataFactory", Usage, Warning,
-                "Avoid using {0}", "Legacy data source in EPiServer CMS. This API has been replaced by the IContentRepository, IContentEvents and a number of related interfaces.");
+                "Avoid using DataFactory", "Legacy data source in EPiServer CMS. This API has been replaced by the IContentRepository, IContentEvents and a number of related interfaces.");
     }
 }
