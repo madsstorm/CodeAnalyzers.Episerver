@@ -27,47 +27,47 @@ namespace CodeAnalyzers.Episerver.DiagnosticAnalyzers.CSharp
                 }
 
                 compilationContext.RegisterOperationAction(operationContext =>
-                {
-                    var operation = (IPropertyReferenceOperation)operationContext.Operation;
-                    if (Equals(operation.Property?.Type, dataFactory))
-                    {
-                        ReportDiagnostic(operationContext, operation,
-                            operation.Property.ToDisplayString(SymbolDisplayFormat.CSharpShortErrorMessageFormat));
-                    }
-                },
-                OperationKind.PropertyReference);
+                    AnalyzePropertyReference(operationContext, dataFactory), OperationKind.PropertyReference);
 
                 compilationContext.RegisterOperationAction(operationContext =>
-                {
-                    var operation = (IInvocationOperation)operationContext.Operation;
-                    if (Equals(operation.Instance?.Type, dataFactory))
-                    {
-                        ReportDiagnostic(operationContext, operation,
-                            operation.TargetMethod.ToDisplayString(SymbolDisplayFormat.CSharpShortErrorMessageFormat));
-                    }
-                },
-                OperationKind.Invocation);
+                    AnalyzeInvocation(operationContext, dataFactory), OperationKind.Invocation);
 
                 compilationContext.RegisterOperationAction(operationContext =>
-                {
-                    var operation = (IMethodReferenceOperation)operationContext.Operation;
-                    if (Equals(operation.Instance?.Type, dataFactory))
-                    {
-                        ReportDiagnostic(operationContext, operation,
-                            operation.Method.ToDisplayString(SymbolDisplayFormat.CSharpShortErrorMessageFormat));
-                    }
-                },
-                OperationKind.MethodReference);
+                    AnalyzeMethodReference(operationContext, dataFactory), OperationKind.MethodReference);
             });
+        }       
+
+        private void AnalyzePropertyReference(OperationAnalysisContext operationContext, INamedTypeSymbol dataFactory)
+        {
+            var operation = (IPropertyReferenceOperation)operationContext.Operation;
+            if (Equals(operation.Property?.Type, dataFactory))
+            {
+                ReportDiagnostic(operationContext, operation, operation.Property.ToDisplayString(SymbolDisplayFormat.CSharpShortErrorMessageFormat));
+            }
+        }
+
+        private void AnalyzeInvocation(OperationAnalysisContext operationContext, INamedTypeSymbol dataFactory)
+        {
+            var operation = (IInvocationOperation)operationContext.Operation;
+            if (Equals(operation.Instance?.Type, dataFactory))
+            {
+                ReportDiagnostic(operationContext, operation, operation.TargetMethod.ToDisplayString(SymbolDisplayFormat.CSharpShortErrorMessageFormat));
+            }
+        }
+
+        private void AnalyzeMethodReference(OperationAnalysisContext operationContext, INamedTypeSymbol dataFactory)
+        {
+            var operation = (IMethodReferenceOperation)operationContext.Operation;
+            if (Equals(operation.Instance?.Type, dataFactory))
+            {
+                ReportDiagnostic(operationContext, operation, operation.Method.ToDisplayString(SymbolDisplayFormat.CSharpShortErrorMessageFormat));
+            }
         }
 
         private void ReportDiagnostic(OperationAnalysisContext operationContext, IOperation operation, params object[] messageArgs)
         {
             operationContext.ReportDiagnostic(
-                Diagnostic.Create(
-                    Descriptors.EPI1000_AvoidUsingDataFactory,
-                    operation.Syntax.GetLocation(),
-                    messageArgs));
+                Diagnostic.Create(Descriptors.EPI1000_AvoidUsingDataFactory, operation.Syntax.GetLocation(), messageArgs));
         }
     }
 }
