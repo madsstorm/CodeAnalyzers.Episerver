@@ -171,6 +171,51 @@ namespace CodeAnalyzers.Episerver.Test.Tests
             VerifyCSharpDiagnostic(new string[] { EPiServerDataFactory, test }, expectedPropertyReference, expectedMethodInvocation);
         }
 
+        [TestMethod]
+        public void CanDetectTypeAlias()
+        {
+            var test = @"
+                using MyFactory = EPiServer.DataFactory;
+                using System;
+
+                namespace Test
+                {
+                    public class TypeName
+                    {
+                        public void Test()
+                        {
+                            MyFactory.Instance.Method(0);
+                        }
+                    }
+                }";
+
+            var expectedPropertyReference = new DiagnosticResult
+            {
+                Id = Descriptors.EPI1000_AvoidUsingDataFactory.Id,
+                Message = string.Format(Descriptors.EPI1000_AvoidUsingDataFactory.MessageFormat.ToString(), "DataFactory.Method(int)"),
+                Severity = DiagnosticSeverity.Warning,
+                Locations =
+                    new[] {
+                            new DiagnosticResultLocation("Test1.cs", 11, 29)
+                    }
+            };
+
+
+            var expectedMethodInvocation = new DiagnosticResult
+            {
+                Id = Descriptors.EPI1000_AvoidUsingDataFactory.Id,
+                Message = string.Format(Descriptors.EPI1000_AvoidUsingDataFactory.MessageFormat.ToString(), "DataFactory.Instance"),
+                Severity = DiagnosticSeverity.Warning,
+                Locations =
+                    new[] {
+                            new DiagnosticResultLocation("Test1.cs", 11, 29)
+                    }
+            };
+
+            VerifyCSharpDiagnostic(new string[] { EPiServerDataFactory, test }, expectedPropertyReference, expectedMethodInvocation);
+
+        }
+
         protected override DiagnosticAnalyzer GetCSharpDiagnosticAnalyzer() => new AvoidUsingDataFactoryAnalyzer();
     }
 }
