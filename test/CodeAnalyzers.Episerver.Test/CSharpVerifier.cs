@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace CodeAnalyzers.Episerver.Test
 {
-    public class CSharpVerifier<TAnalyzer>
+    internal class CSharpVerifier<TAnalyzer>
         where TAnalyzer : DiagnosticAnalyzer, new()
     {
         public static DiagnosticResult Diagnostic()
@@ -25,14 +25,14 @@ namespace CodeAnalyzers.Episerver.Test
 
         public static Task VerifyAnalyzerAsync(string source, params DiagnosticResult[] expected)
         {
-            var test = new Test { TestCode = source };
+            var test = new EpiserverTest { TestCode = source };
             test.ExpectedDiagnostics.AddRange(expected);
             return test.RunAsync();
         }
 
-        public class Test : CSharpCodeFixTest<TAnalyzer, EmptyCodeFixProvider, XUnitVerifier>
+        private class EpiserverTest : CSharpCodeFixTest<TAnalyzer, EmptyCodeFixProvider, XUnitVerifier>
         {
-            public Test()
+            public EpiserverTest()
             {
                 SolutionTransforms.Add((solution, projectId) =>
                 {

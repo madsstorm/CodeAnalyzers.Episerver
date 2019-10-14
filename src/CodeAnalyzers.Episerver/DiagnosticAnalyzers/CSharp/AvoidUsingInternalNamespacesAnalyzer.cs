@@ -1,4 +1,5 @@
-﻿using System.Collections.Immutable;
+﻿using System;
+using System.Collections.Immutable;
 using System.Linq;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.Diagnostics;
@@ -18,6 +19,11 @@ namespace CodeAnalyzers.Episerver.DiagnosticAnalyzers.CSharp
 
         public override void Initialize(AnalysisContext context)
         {
+            if(context is null)
+            {
+                return;
+            }
+
             context.RegisterCompilationStartAction(compilationContext =>
             {
                 compilationContext.RegisterOperationAction(AnalyzePropertyReference, OperationKind.PropertyReference);
@@ -39,9 +45,9 @@ namespace CodeAnalyzers.Episerver.DiagnosticAnalyzers.CSharp
             ReportIfInternal(operationContext, space, operation);
         }
 
-        private void ReportIfInternal(OperationAnalysisContext operationContext, INamespaceSymbol space, IOperation operation)
+        private static void ReportIfInternal(OperationAnalysisContext operationContext, INamespaceSymbol space, IOperation operation)
         {
-            if (!Equals(space?.MetadataName, InternalNamespace))
+            if (!string.Equals(space?.MetadataName, InternalNamespace, StringComparison.Ordinal))
             {
                 return;
             }
@@ -53,7 +59,8 @@ namespace CodeAnalyzers.Episerver.DiagnosticAnalyzers.CSharp
             }
 
             string rootNamespace = displayParts.First().Symbol?.MetadataName;
-            if (Equals(rootNamespace, EpiserverNamespace) || Equals(rootNamespace, MediachaseNamespace))
+            if (string.Equals(rootNamespace, EpiserverNamespace, StringComparison.Ordinal) ||
+                string.Equals(rootNamespace, MediachaseNamespace, StringComparison.Ordinal))
             {
                 operationContext.ReportDiagnostic(
                     Diagnostic.Create(
