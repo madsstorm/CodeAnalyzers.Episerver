@@ -39,7 +39,8 @@ namespace CodeAnalyzers.Episerver.DiagnosticAnalyzers.CSharp
                 operationContext.ReportDiagnostic(
                     Diagnostic.Create(
                         Descriptors.CAE1000_AvoidUsingDataFactory,
-                        operation.Syntax.GetLocation()));
+                        operation.Syntax.GetLocation(),
+                        dataFactory.ToDisplayString(SymbolDisplayFormat.CSharpErrorMessageFormat)));
             }
         }
     }

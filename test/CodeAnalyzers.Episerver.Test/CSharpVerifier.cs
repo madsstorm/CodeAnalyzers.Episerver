@@ -40,7 +40,8 @@ namespace CodeAnalyzers.Episerver.Test
                         .AddMetadataReference(projectId, MetadataReference.CreateFromFile(typeof(EPiServer.DataFactory).GetTypeInfo().Assembly.Location))
                         .AddMetadataReference(projectId, MetadataReference.CreateFromFile(typeof(EPiServer.Data.Entity.IReadOnly).GetTypeInfo().Assembly.Location))
                         .AddMetadataReference(projectId, MetadataReference.CreateFromFile(typeof(EPiServer.Web.Routing.IRoutable).GetTypeInfo().Assembly.Location))
-                        .AddMetadataReference(projectId, MetadataReference.CreateFromFile(typeof(EPiServer.Core.PageReference).GetTypeInfo().Assembly.Location));
+                        .AddMetadataReference(projectId, MetadataReference.CreateFromFile(typeof(EPiServer.Core.PageReference).GetTypeInfo().Assembly.Location))
+                        .AddMetadataReference(projectId, MetadataReference.CreateFromFile(typeof(Mediachase.Commerce.Currency).GetTypeInfo().Assembly.Location));
 
                     return solution;
                 });

@@ -57,7 +57,7 @@ namespace CodeAnalyzers.Episerver.Test
                     }
                 }";
 
-            var expected = Verify.Diagnostic().WithLocation(10, 43);
+            var expected = Verify.Diagnostic().WithLocation(10, 43).WithArguments("EPiServer.DataFactory");
 
             await Verify.VerifyAnalyzerAsync(test, expected);
         }
@@ -81,7 +81,7 @@ namespace CodeAnalyzers.Episerver.Test
                     }
                 }";
 
-            var expected = Verify.Diagnostic().WithLocation(12, 43);
+            var expected = Verify.Diagnostic().WithLocation(12, 43).WithArguments("EPiServer.DataFactory");
 
             await Verify.VerifyAnalyzerAsync(test, expected);
         }
@@ -103,7 +103,7 @@ namespace CodeAnalyzers.Episerver.Test
                     }
                 }";
 
-            var expected = Verify.Diagnostic().WithLocation(10, 43);
+            var expected = Verify.Diagnostic().WithLocation(10, 43).WithArguments("EPiServer.DataFactory");
 
             await Verify.VerifyAnalyzerAsync(test, expected);
         }
