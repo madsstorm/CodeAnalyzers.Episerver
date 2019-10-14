@@ -21,8 +21,8 @@ namespace CodeAnalyzers.Episerver
             return new DiagnosticDescriptor(id, title, messageFormat, categoryMapping.GetOrAdd(category, c => c.ToString()), defaultSeverity, isEnabledByDefault, description, helpLinkUri);
         }
 
-        internal static DiagnosticDescriptor EPI1000_AvoidUsingDataFactory { get; } =
-            Rule("EPI1000", "Avoid using DataFactory", Usage, Warning,
+        internal static DiagnosticDescriptor CAE1000_AvoidUsingDataFactory { get; } =
+            Rule("CAE1000", "Avoid using DataFactory", Usage, Warning,
                 "Avoid using DataFactory", "Legacy data source in EPiServer CMS. This API has been replaced by the IContentRepository, IContentEvents and a number of related interfaces.");
     }
 }

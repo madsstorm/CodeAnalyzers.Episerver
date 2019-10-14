@@ -11,7 +11,7 @@ namespace CodeAnalyzers.Episerver.DiagnosticAnalyzers.CSharp
         private const string TypeMetadataName = "EPiServer.DataFactory";
 
         public override ImmutableArray<DiagnosticDescriptor> SupportedDiagnostics =>
-            ImmutableArray.Create(Descriptors.EPI1000_AvoidUsingDataFactory);
+            ImmutableArray.Create(Descriptors.CAE1000_AvoidUsingDataFactory);
 
         public override void Initialize(AnalysisContext context)
         {
@@ -38,7 +38,7 @@ namespace CodeAnalyzers.Episerver.DiagnosticAnalyzers.CSharp
             {
                 operationContext.ReportDiagnostic(
                     Diagnostic.Create(
-                        Descriptors.EPI1000_AvoidUsingDataFactory,
+                        Descriptors.CAE1000_AvoidUsingDataFactory,
                         operation.Syntax.GetLocation()));
             }
         }
