@@ -24,6 +24,9 @@ namespace CodeAnalyzers.Episerver.DiagnosticAnalyzers.CSharp
                 return;
             }
 
+            context.ConfigureGeneratedCodeAnalysis(GeneratedCodeAnalysisFlags.Analyze | GeneratedCodeAnalysisFlags.ReportDiagnostics);
+            context.EnableConcurrentExecution();
+
             context.RegisterCompilationStartAction(compilationContext =>
             {
                 compilationContext.RegisterOperationAction(AnalyzePropertyReference, OperationKind.PropertyReference);

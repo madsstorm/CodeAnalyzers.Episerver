@@ -29,5 +29,9 @@ namespace CodeAnalyzers.Episerver
         internal static DiagnosticDescriptor CAE1001_AvoidUsingInternalNamespaces { get; } =
             Rule("CAE1001", "Avoid using internal namespaces", Usage, Warning,
                 "Avoid using namespace {0}", "Internal namespaces are not considered part of the public supported API.");
+
+        internal static DiagnosticDescriptor CAE1002_ContentTypeMustHaveGuid { get; } =
+            Rule("CAE1002", "Content type must have a valid GUID attribute", Usage, Error,
+                "Content type {0} does not have a valid GUID attribute");
     }
 }
