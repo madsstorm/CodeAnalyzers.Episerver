@@ -32,6 +32,6 @@ namespace CodeAnalyzers.Episerver
 
         internal static DiagnosticDescriptor CAE1002_ContentTypeMustHaveGuid { get; } =
             Rule("CAE1002", "Content type must have a valid GUID attribute", Usage, Error,
-                "Content type {0} does not have a valid GUID attribute");
+                "{0} does not have a valid GUID attribute");
     }
 }

@@ -2,9 +2,9 @@
 
 namespace CodeAnalyzers.Episerver.Extensions
 {
-    internal static class INamedTypeSymbolExtensions
+    internal static class ITypeSymbolExtensions
     {
-        public static bool InheritsOrIs(this INamedTypeSymbol symbol, ITypeSymbol type)
+        public static bool InheritsOrIs(this ITypeSymbol symbol, ITypeSymbol type)
         {
             if(symbol.Equals(type))
             {

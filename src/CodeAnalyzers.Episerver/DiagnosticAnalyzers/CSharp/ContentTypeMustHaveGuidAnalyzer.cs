@@ -1,10 +1,9 @@
-﻿using System.Collections.Generic;
-using System.Collections.Immutable;
-using System.Linq;
+﻿using System.Collections.Immutable;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.Diagnostics;
-using System;
 using CodeAnalyzers.Episerver.Extensions;
+using Microsoft.CodeAnalysis.CSharp;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace CodeAnalyzers.Episerver.DiagnosticAnalyzers.CSharp
 {
@@ -26,7 +25,6 @@ namespace CodeAnalyzers.Episerver.DiagnosticAnalyzers.CSharp
 
             context.ConfigureGeneratedCodeAnalysis(GeneratedCodeAnalysisFlags.Analyze | GeneratedCodeAnalysisFlags.ReportDiagnostics);
             context.EnableConcurrentExecution();
-
             context.RegisterCompilationStartAction(compilationContext =>
             {
                 var contentTypeAttribute = compilationContext.Compilation.GetTypeByMetadataName(TypeMetadataName);
@@ -35,64 +33,49 @@ namespace CodeAnalyzers.Episerver.DiagnosticAnalyzers.CSharp
                     return;
                 }
 
-                var analyzer = new CompilationAnalyzer(contentTypeAttribute);
-
-                compilationContext.RegisterSymbolAction(symbolContext =>
-                    analyzer.AnalyzeNamedType(symbolContext), SymbolKind.NamedType);
+                compilationContext.RegisterSyntaxNodeAction(syntaxContext =>
+                {
+                    AnalyzeAttributeNode(syntaxContext, contentTypeAttribute);
+                }, SyntaxKind.Attribute);
             });
 
         }
 
-        private class CompilationAnalyzer
+        private void AnalyzeAttributeNode(SyntaxNodeAnalysisContext syntaxContext, INamedTypeSymbol contentTypeAttribute)
         {
-            private readonly INamedTypeSymbol contentTypeAttribute;
-
-            public CompilationAnalyzer(INamedTypeSymbol contentTypeAttribute)
+            var attribute = syntaxContext.Node as AttributeSyntax;
+            if (attribute is null)
             {
-                this.contentTypeAttribute = contentTypeAttribute;
+                return;
             }
 
-            private readonly Dictionary<INamedTypeSymbol, bool> knownAttributeTypes = new Dictionary<INamedTypeSymbol, bool>();
-
-            public void AnalyzeNamedType(SymbolAnalysisContext symbolContext)
+            var attributeType = syntaxContext.SemanticModel?.GetTypeInfo(attribute).Type;
+            if(attributeType is null)
             {
-                INamedTypeSymbol namedType = (INamedTypeSymbol)symbolContext.Symbol;
-                if (namedType is null)
-                {
-                    return;
-                }
-
-                foreach(var attributeData in namedType.GetAttributes())
-                {
-                    if (knownAttributeTypes.TryGetValue(attributeData.AttributeClass, out bool isContentType))
-                    {
-                        if (isContentType)
-                        {
-                            ReporttIfInvalidGuid(symbolContext, attributeData);
-                        }
-
-                        continue;
-                    }
-
-                    isContentType = attributeData.AttributeClass.InheritsOrIs(contentTypeAttribute);
-
-                    if(isContentType)
-                    {
-                        ReporttIfInvalidGuid(symbolContext, attributeData);
-                    }
-
-                    knownAttributeTypes[attributeData.AttributeClass] = isContentType;
-                }
+                return;
+            }          
+            
+            if(!attributeType.InheritsOrIs(contentTypeAttribute))
+            {
+                return;
             }
 
-            private void ReporttIfInvalidGuid(SymbolAnalysisContext symbolContext, AttributeData attributeData)
+            var classDeclaration = attribute.Parent?.Parent as ClassDeclarationSyntax;
+            if(classDeclaration is null)
             {
-                // WIP
-                var arguments = attributeData.NamedArguments;
+                return;
+            }           
 
-                var guidArgument = arguments.FirstOrDefault(pair => string.Equals(pair.Key, GuidArgument, StringComparison.Ordinal));
+            var argumentList = attribute.ArgumentList;
+            if (argumentList is null || !argumentList.Arguments.Any())
+            {
+                var classType = syntaxContext.SemanticModel?.GetDeclaredSymbol(classDeclaration);
 
-                bool isValidGuid = Guid.TryParse(guidArgument.Value.Value.ToString(), out Guid guid);
+                syntaxContext.ReportDiagnostic(
+                        Diagnostic.Create(
+                            Descriptors.CAE1002_ContentTypeMustHaveGuid,
+                            attribute?.GetLocation(),
+                            classType.ToDisplayString(SymbolDisplayFormat.CSharpErrorMessageFormat)));
             }
         }
     }
