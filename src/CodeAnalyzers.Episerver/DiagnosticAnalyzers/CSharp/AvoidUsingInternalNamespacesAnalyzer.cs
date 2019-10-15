@@ -8,46 +8,23 @@ using Microsoft.CodeAnalysis.Diagnostics;
 namespace CodeAnalyzers.Episerver.DiagnosticAnalyzers.CSharp
 {
     [DiagnosticAnalyzer(LanguageNames.CSharp)]
-    public class AvoidUsingInternalNamespacesAnalyzer : DiagnosticAnalyzer
+    public class AvoidUsingInternalNamespacesAnalyzer : MemberExpressionAnalyzerBase
     {
         private const string InternalNamespace = "Internal";
 
         public override ImmutableArray<DiagnosticDescriptor> SupportedDiagnostics =>
             ImmutableArray.Create(Descriptors.CAE1001_AvoidUsingInternalNamespaces);
 
-        public override void Initialize(AnalysisContext context)
+        override protected void AnalyzeMemberAccess(SyntaxNodeAnalysisContext syntaxContext, ExpressionSyntax expression)
         {
-            if(context is null)
-            {
-                return;
-            }
+            var space = syntaxContext.SemanticModel?.GetTypeInfo(expression).Type?.ContainingNamespace;
 
-            context.ConfigureGeneratedCodeAnalysis(GeneratedCodeAnalysisFlags.Analyze | GeneratedCodeAnalysisFlags.ReportDiagnostics);
-            context.EnableConcurrentExecution();
-            context.RegisterSyntaxNodeAction(AnalyzeMemberAccess, SyntaxKind.SimpleMemberAccessExpression);
-        }
-
-        private void AnalyzeMemberAccess(SyntaxNodeAnalysisContext syntaxContext)
-        {
-            var syntax = syntaxContext.Node as MemberAccessExpressionSyntax;
-            if(syntax?.Expression is null)
-            {
-                return;
-            }
-
-            var space = syntaxContext.SemanticModel?.GetTypeInfo(syntax.Expression).Type?.ContainingNamespace;
-
-            ReportIfInternal(syntaxContext, space, syntax.Expression);
-        }
-
-        private static void ReportIfInternal(SyntaxNodeAnalysisContext syntaxContext, INamespaceSymbol space, ExpressionSyntax syntax)
-        {
             if (string.Equals(space?.MetadataName, InternalNamespace, StringComparison.Ordinal))
             {
                 syntaxContext.ReportDiagnostic(
                     Diagnostic.Create(
                         Descriptors.CAE1001_AvoidUsingInternalNamespaces,
-                        syntax.GetLocation(),
+                        expression?.GetLocation(),
                         space.ToDisplayString(SymbolDisplayFormat.CSharpErrorMessageFormat)));
             }
         }

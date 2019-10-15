@@ -8,41 +8,23 @@ using Microsoft.CodeAnalysis.Diagnostics;
 namespace CodeAnalyzers.Episerver.DiagnosticAnalyzers.CSharp
 {
     [DiagnosticAnalyzer(LanguageNames.CSharp)]
-    public class AvoidUsingDataFactoryAnalyzer : DiagnosticAnalyzer
+    public class AvoidUsingDataFactoryAnalyzer : MemberExpressionAnalyzerBase
     {
         private const string DataFactoryName = "DataFactory";
 
         public override ImmutableArray<DiagnosticDescriptor> SupportedDiagnostics =>
             ImmutableArray.Create(Descriptors.CAE1000_AvoidUsingDataFactory);
 
-        public override void Initialize(AnalysisContext context)
+        override protected void AnalyzeMemberAccess(SyntaxNodeAnalysisContext syntaxContext, ExpressionSyntax expression)
         {
-            if(context is null)
-            {
-                return;
-            }
-
-            context.ConfigureGeneratedCodeAnalysis(GeneratedCodeAnalysisFlags.Analyze | GeneratedCodeAnalysisFlags.ReportDiagnostics);
-            context.EnableConcurrentExecution();
-            context.RegisterSyntaxNodeAction(AnalyzeMemberAccess, SyntaxKind.SimpleMemberAccessExpression);
-        }
-
-        private void AnalyzeMemberAccess(SyntaxNodeAnalysisContext syntaxContext)
-        {
-            var syntax = syntaxContext.Node as MemberAccessExpressionSyntax;
-            if (syntax?.Expression is null)
-            {
-                return;
-            }
-
-            string typeName = syntaxContext.SemanticModel?.GetTypeInfo(syntax.Expression).Type?.MetadataName;
+            string typeName = syntaxContext.SemanticModel?.GetTypeInfo(expression).Type?.MetadataName;
 
             if (string.Equals(typeName, DataFactoryName, StringComparison.Ordinal))
             {
                 syntaxContext.ReportDiagnostic(
                     Diagnostic.Create(
                         Descriptors.CAE1000_AvoidUsingDataFactory,
-                        syntax.Expression.GetLocation()));
+                        expression?.GetLocation()));
             }
         }
     }
