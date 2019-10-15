@@ -1,7 +1,7 @@
-﻿using Microsoft.CodeAnalysis;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using Microsoft.CodeAnalysis;
 
-namespace CodeAnalyzers.Episerver.Utilities
+namespace CodeAnalyzers.Episerver.Extensions
 {
     internal static class INamedTypeSymbolExtensions
     {
@@ -16,7 +16,3 @@ namespace CodeAnalyzers.Episerver.Utilities
         }
     }
 }
-
-
-
-

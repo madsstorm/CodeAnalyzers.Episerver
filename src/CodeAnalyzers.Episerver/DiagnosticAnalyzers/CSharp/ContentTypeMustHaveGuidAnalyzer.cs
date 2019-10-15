@@ -3,8 +3,8 @@ using System.Collections.Immutable;
 using System.Linq;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.Diagnostics;
-using CodeAnalyzers.Episerver.Utilities;
 using System;
+using CodeAnalyzers.Episerver.Extensions;
 
 namespace CodeAnalyzers.Episerver.DiagnosticAnalyzers.CSharp
 {
@@ -85,7 +85,7 @@ namespace CodeAnalyzers.Episerver.DiagnosticAnalyzers.CSharp
                 }
             }
 
-            private void ReporttIfInvalidGuid(SymbolAnalysisContext symbolCcontext, AttributeData attributeData)
+            private void ReporttIfInvalidGuid(SymbolAnalysisContext symbolContext, AttributeData attributeData)
             {
                 // WIP
                 var arguments = attributeData.NamedArguments;
