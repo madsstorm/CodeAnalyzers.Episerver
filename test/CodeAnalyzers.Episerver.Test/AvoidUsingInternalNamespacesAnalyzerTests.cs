@@ -3,7 +3,6 @@
 using System.Threading.Tasks;
 using Xunit;
 
-
 namespace CodeAnalyzers.Episerver.Test
 {
     public class AvoidUsingInternalNamespacesAnalyzerTests
@@ -15,7 +14,49 @@ namespace CodeAnalyzers.Episerver.Test
         }
 
         [Fact]
-        public async Task CanDetectInternalPropertyReference()
+        public async Task CanIgnorePublicProperty()
+        {
+            var test = @"
+                using EPiServer.Web.Routing;
+
+                namespace Test
+                {
+                    public class TypeName
+                    {
+                        public void Test(IPageRouteHelper helper)
+                        {
+                            var page = helper.Page;
+                        }
+                    }
+                }";
+
+            await Verify.VerifyAnalyzerAsync(test);
+        }
+
+        [Fact]
+        public async Task CanIgnorePublicMethod()
+        {
+            var test = @"
+                using System;
+                using EPiServer;
+                using EPiServer.Core;
+
+                namespace Test
+                {
+                    public class TypeName
+                    {
+                        public void Test(IContentRepository repository)
+                        {
+                            repository.Get<PageData>(Guid.NewGuid());
+                        }
+                    }
+                }";
+
+            await Verify.VerifyAnalyzerAsync(test);
+        }
+
+        [Fact]
+        public async Task CanDetectInternalProperty()
         {
             var test = @"
                 using EPiServer.Web.Routing.Internal;
@@ -37,27 +78,7 @@ namespace CodeAnalyzers.Episerver.Test
         }
 
         [Fact]
-        public async Task CanIgnorePublicPropertyReference()
-        {
-            var test = @"
-                using EPiServer.Web.Routing;
-
-                namespace Test
-                {
-                    public class TypeName
-                    {
-                        public void Test(IPageRouteHelper helper)
-                        {
-                            var page = helper.Page;
-                        }
-                    }
-                }";
-
-            await Verify.VerifyAnalyzerAsync(test);
-        }
-
-        [Fact]
-        public async Task CanDetectInternalMethodInvocation()
+        public async Task CanDetectInternalMethod()
         {
             var test = @"
                 using System;
@@ -81,7 +102,7 @@ namespace CodeAnalyzers.Episerver.Test
         }
 
         [Fact]
-        public async Task CanDetectInternalMediachaseMethodInvocation()
+        public async Task CanDetectInternalMediachaseMethod()
         {
             var test = @"
                 using Mediachase.Commerce.Internal;
@@ -103,52 +124,26 @@ namespace CodeAnalyzers.Episerver.Test
         }
 
         [Fact]
-        public async Task CanIgnorePublicMethodInvocation()
+        public async Task CanDetectStaticUsingInternalEvent()
         {
             var test = @"
-                using System;
-                using EPiServer;
-                using EPiServer.Core;
+                using static EPiServer.Commerce.Order.Internal.DefaultOrderEvents;
 
                 namespace Test
                 {
-                    public class TypeName
-                    {
-                        public void Test(IContentRepository repository)
-                        {
-                            repository.Get<PageData>(Guid.NewGuid());
-                        }
-                    }
-                }";
-
-            await Verify.VerifyAnalyzerAsync(test);
-        }
-
-        [Fact]
-        public async Task CanIgnoreCustomInternalNamespace()
-        {
-            var test = @"
-                namespace Custom.Internal
-                {
-                    public class Repository
-                    {
-                        public static Repository Instance { get; }
-                    }
-                }
-
-                namespace Test
-                {
-                    using Custom.Internal;
                     public class TypeName
                     {
                         public void Test()
                         {
-                            var repository = Repository.Instance;
+                            var events = Instance;
+                            events.SavedOrder += null;
                         }
                     }
                 }";
 
-            await Verify.VerifyAnalyzerAsync(test);
+            var expected = Verify.Diagnostic().WithLocation(11, 29).WithArguments("EPiServer.Commerce.Order.Internal");
+
+            await Verify.VerifyAnalyzerAsync(test, expected);
         }
     }
 }

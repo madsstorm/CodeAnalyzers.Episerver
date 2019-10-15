@@ -1,14 +1,16 @@
-﻿using System.Collections.Immutable;
+﻿using System;
+using System.Collections.Immutable;
 using Microsoft.CodeAnalysis;
+using Microsoft.CodeAnalysis.CSharp;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Diagnostics;
-using Microsoft.CodeAnalysis.Operations;
 
 namespace CodeAnalyzers.Episerver.DiagnosticAnalyzers.CSharp
 {
     [DiagnosticAnalyzer(LanguageNames.CSharp)]
     public class AvoidUsingDataFactoryAnalyzer : DiagnosticAnalyzer
     {
-        private const string TypeMetadataName = "EPiServer.DataFactory";
+        private const string DataFactoryName = "DataFactory";
 
         public override ImmutableArray<DiagnosticDescriptor> SupportedDiagnostics =>
             ImmutableArray.Create(Descriptors.CAE1000_AvoidUsingDataFactory);
@@ -22,30 +24,25 @@ namespace CodeAnalyzers.Episerver.DiagnosticAnalyzers.CSharp
 
             context.ConfigureGeneratedCodeAnalysis(GeneratedCodeAnalysisFlags.Analyze | GeneratedCodeAnalysisFlags.ReportDiagnostics);
             context.EnableConcurrentExecution();
+            context.RegisterSyntaxNodeAction(AnalyzeMemberAccess, SyntaxKind.SimpleMemberAccessExpression);
+        }
 
-            context.RegisterCompilationStartAction(compilationContext =>
-            {
-                var dataFactory = compilationContext.Compilation.GetTypeByMetadataName(TypeMetadataName);
-                if (dataFactory == null)
-                {
-                    return;
-                }
-
-                compilationContext.RegisterOperationAction(operationContext =>
-                    AnalyzePropertyReference(operationContext, dataFactory), OperationKind.PropertyReference);
-            });
-        }       
-
-        private void AnalyzePropertyReference(OperationAnalysisContext operationContext, INamedTypeSymbol dataFactory)
+        private void AnalyzeMemberAccess(SyntaxNodeAnalysisContext syntaxContext)
         {
-            var operation = (IPropertyReferenceOperation)operationContext.Operation;
-            if (Equals(operation.Property?.Type, dataFactory))
+            var syntax = syntaxContext.Node as MemberAccessExpressionSyntax;
+            if (syntax?.Expression is null)
             {
-                operationContext.ReportDiagnostic(
+                return;
+            }
+
+            string typeName = syntaxContext.SemanticModel?.GetTypeInfo(syntax.Expression).Type?.MetadataName;
+
+            if (string.Equals(typeName, DataFactoryName, StringComparison.Ordinal))
+            {
+                syntaxContext.ReportDiagnostic(
                     Diagnostic.Create(
                         Descriptors.CAE1000_AvoidUsingDataFactory,
-                        operation.Syntax.GetLocation(),
-                        dataFactory.ToDisplayString(SymbolDisplayFormat.CSharpErrorMessageFormat)));
+                        syntax.Expression.GetLocation()));
             }
         }
     }

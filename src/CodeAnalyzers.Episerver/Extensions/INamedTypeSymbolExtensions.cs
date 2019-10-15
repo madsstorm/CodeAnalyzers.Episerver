@@ -1,18 +1,26 @@
-﻿using System.Collections.Generic;
-using Microsoft.CodeAnalysis;
+﻿using Microsoft.CodeAnalysis;
 
 namespace CodeAnalyzers.Episerver.Extensions
 {
     internal static class INamedTypeSymbolExtensions
     {
-        public static IEnumerable<INamedTypeSymbol> GetBaseTypesAndThis(this INamedTypeSymbol type)
+        public static bool InheritsOrIs(this INamedTypeSymbol symbol, ITypeSymbol type)
         {
-            INamedTypeSymbol current = type;
-            while (current != null)
+            if(symbol.Equals(type))
             {
-                yield return current;
-                current = current.BaseType;
+                return true;
             }
+
+            var baseType = symbol.BaseType;
+            while (baseType != null)
+            {
+                if (type.Equals(baseType))
+                    return true;
+
+                baseType = baseType.BaseType;
+            }
+
+            return false;
         }
     }
 }

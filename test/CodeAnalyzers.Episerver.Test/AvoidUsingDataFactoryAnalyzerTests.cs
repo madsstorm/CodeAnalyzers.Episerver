@@ -14,34 +14,7 @@ namespace CodeAnalyzers.Episerver.Test
         }
 
         [Fact]
-        public async Task CanIgnoreCustomDataFactoryClass()
-        {
-            var test = @"
-                namespace Custom
-                {
-                    public class DataFactory
-                    {
-                        public static DataFactory Instance { get; }
-                    }
-                }
-
-                namespace Test
-                {
-                    using Custom;
-                    public class TypeName
-                    {
-                        public void Test()
-                        {
-                            var factory = DataFactory.Instance;
-                        }
-                    }
-                }";
-
-            await Verify.VerifyAnalyzerAsync(test);
-        }
-
-        [Fact]
-        public async Task CanDetectPropertyReference()
+        public async Task CanDetectProperty()
         {
             var test = @"
                 using EPiServer;
@@ -57,7 +30,7 @@ namespace CodeAnalyzers.Episerver.Test
                     }
                 }";
 
-            var expected = Verify.Diagnostic().WithLocation(10, 43).WithArguments("EPiServer.DataFactory");
+            var expected = Verify.Diagnostic().WithLocation(10, 43);
 
             await Verify.VerifyAnalyzerAsync(test, expected);
         }
@@ -81,7 +54,7 @@ namespace CodeAnalyzers.Episerver.Test
                     }
                 }";
 
-            var expected = Verify.Diagnostic().WithLocation(12, 43).WithArguments("EPiServer.DataFactory");
+            var expected = Verify.Diagnostic().WithLocation(12, 43);
 
             await Verify.VerifyAnalyzerAsync(test, expected);
         }
@@ -99,11 +72,12 @@ namespace CodeAnalyzers.Episerver.Test
                         public void Test()
                         {
                             var factory = Instance;
+                            factory.GetChildren(null);
                         }
                     }
                 }";
 
-            var expected = Verify.Diagnostic().WithLocation(10, 43).WithArguments("EPiServer.DataFactory");
+            var expected = Verify.Diagnostic().WithLocation(11, 29);
 
             await Verify.VerifyAnalyzerAsync(test, expected);
         }

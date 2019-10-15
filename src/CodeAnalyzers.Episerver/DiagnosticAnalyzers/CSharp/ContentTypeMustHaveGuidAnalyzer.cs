@@ -74,7 +74,7 @@ namespace CodeAnalyzers.Episerver.DiagnosticAnalyzers.CSharp
                         continue;
                     }
 
-                    isContentType = attributeData.AttributeClass.GetBaseTypesAndThis().Any(type => Equals(type, contentTypeAttribute));
+                    isContentType = attributeData.AttributeClass.InheritsOrIs(contentTypeAttribute);
 
                     if(isContentType)
                     {

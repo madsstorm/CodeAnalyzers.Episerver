@@ -24,7 +24,7 @@ namespace CodeAnalyzers.Episerver
 
         internal static DiagnosticDescriptor CAE1000_AvoidUsingDataFactory { get; } =
             Rule("CAE1000", "Avoid using DataFactory", Usage, Warning,
-                "Avoid using {0}", "Legacy data source in EPiServer CMS. This API has been replaced by the IContentRepository, IContentEvents and a number of related interfaces.");
+                "Avoid using DataFactory", "Legacy data source in EPiServer CMS. This API has been replaced by the IContentRepository, IContentEvents and a number of related interfaces.");
 
         internal static DiagnosticDescriptor CAE1001_AvoidUsingInternalNamespaces { get; } =
             Rule("CAE1001", "Avoid using internal namespaces", Usage, Warning,
