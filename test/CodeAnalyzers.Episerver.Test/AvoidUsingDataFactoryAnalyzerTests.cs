@@ -36,6 +36,50 @@ namespace CodeAnalyzers.Episerver.Test
         }
 
         [Fact]
+        public async Task CanDetectMethod()
+        {
+            var test = @"
+                using EPiServer;
+
+                namespace Test
+                {
+                    public class TypeName
+                    {
+                        public void Test()
+                        {
+                            var factory = DataFactory.Instance.GetChildren(null);
+                        }
+                    }
+                }";
+
+            var expected = Verify.Diagnostic().WithLocation(10, 43);
+
+            await Verify.VerifyAnalyzerAsync(test, expected);
+        }
+
+        [Fact]
+        public async Task CanDetectEvent()
+        {
+            var test = @"
+                using EPiServer;
+
+                namespace Test
+                {
+                    public class TypeName
+                    {
+                        public void Test()
+                        {
+                            DataFactory.Instance.SavingContent += null;
+                        }
+                    }
+                }";
+
+            var expected = Verify.Diagnostic().WithLocation(10, 29);
+
+            await Verify.VerifyAnalyzerAsync(test, expected);
+        }
+
+        [Fact]
         public async Task CanDetectTypeAlias()
         {
             var test = @"

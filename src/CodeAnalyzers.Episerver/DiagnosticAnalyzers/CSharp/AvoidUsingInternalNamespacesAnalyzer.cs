@@ -8,23 +8,23 @@ using Microsoft.CodeAnalysis.Diagnostics;
 namespace CodeAnalyzers.Episerver.DiagnosticAnalyzers.CSharp
 {
     [DiagnosticAnalyzer(LanguageNames.CSharp)]
-    public class AvoidUsingInternalNamespacesAnalyzer : MemberExpressionAnalyzerBase
+    public class AvoidUsingInternalNamespacesAnalyzer : MemberAccessIdentifierNameAnalyzerBase
     {
         private const string InternalNamespace = "Internal";
 
         public override ImmutableArray<DiagnosticDescriptor> SupportedDiagnostics =>
             ImmutableArray.Create(Descriptors.CAE1001_AvoidUsingInternalNamespaces);
 
-        override protected void AnalyzeMemberAccess(SyntaxNodeAnalysisContext syntaxContext, ExpressionSyntax expression)
+        override protected void AnalyzeIdentifierName(SyntaxNodeAnalysisContext syntaxContext, IdentifierNameSyntax identifierName)
         {
-            var space = syntaxContext.SemanticModel?.GetTypeInfo(expression).Type?.ContainingNamespace;
+            var space = syntaxContext.SemanticModel?.GetTypeInfo(identifierName).Type?.ContainingNamespace;
 
             if (string.Equals(space?.MetadataName, InternalNamespace, StringComparison.Ordinal))
             {
                 syntaxContext.ReportDiagnostic(
                     Diagnostic.Create(
                         Descriptors.CAE1001_AvoidUsingInternalNamespaces,
-                        expression?.GetLocation(),
+                        identifierName?.GetLocation(),
                         space.ToDisplayString(SymbolDisplayFormat.CSharpErrorMessageFormat)));
             }
         }

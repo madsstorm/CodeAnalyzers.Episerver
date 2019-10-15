@@ -4,7 +4,7 @@ using Microsoft.CodeAnalysis.Diagnostics;
 
 namespace CodeAnalyzers.Episerver.DiagnosticAnalyzers.CSharp
 {
-    public abstract class MemberExpressionAnalyzerBase : DiagnosticAnalyzer
+    public abstract class MemberAccessIdentifierNameAnalyzerBase : DiagnosticAnalyzer
     {
         public override void Initialize(AnalysisContext context)
         {
@@ -20,15 +20,21 @@ namespace CodeAnalyzers.Episerver.DiagnosticAnalyzers.CSharp
 
         private void SyntaxNodeAction(SyntaxNodeAnalysisContext syntaxContext)
         {
-            var expression = (syntaxContext.Node as MemberAccessExpressionSyntax)?.Expression;
-            if (expression is null)
+            var memberAccess = syntaxContext.Node as MemberAccessExpressionSyntax;
+            if(memberAccess is null)
             {
                 return;
             }
 
-            AnalyzeMemberAccess(syntaxContext, expression);
+            var identifierName = memberAccess.Expression as IdentifierNameSyntax;
+            if(identifierName is null)
+            {
+                return;
+            }
+
+            AnalyzeIdentifierName(syntaxContext, identifierName);
         }
 
-        protected abstract void AnalyzeMemberAccess(SyntaxNodeAnalysisContext syntaxContext, ExpressionSyntax expression);
+        protected abstract void AnalyzeIdentifierName(SyntaxNodeAnalysisContext syntaxContext, IdentifierNameSyntax identifierName);
     }
 }
