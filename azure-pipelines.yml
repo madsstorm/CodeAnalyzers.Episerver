@@ -20,7 +20,7 @@ steps:
   inputs:
     command: 'test'
     projects: 'test/CodeAnalyzers.Episerver.Test/CodeAnalyzers.Episerver.Test.csproj'
-    arguments: '--configuration $(buildConfiguration) /p:CollectCoverage=true /p:CoverletOutputFormat=\"cobertura,opencover\" /p:CoverletOutput=$(Build.SourcesDirectory)/TestResults/Coverage/'
+    arguments: '--configuration $(buildConfiguration) /p:CollectCoverage=true /p:CoverletOutputFormat=cobertura /p:CoverletOutput=$(Build.SourcesDirectory)/TestResults/Coverage/'
 
 - task: reportgenerator@4
   displayName: 'Generate code coverage'
@@ -35,7 +35,7 @@ steps:
     summaryFileLocation: '$(Build.SourcesDirectory)/coveragereport/Cobertura.xml'
     reportDirectory: '$(Build.SourcesDirectory)/coveragereport'
 
-- script: '%USERPROFILE%\.nuget\packages\codecov\1.7.2\tools\codecov.exe -f "$(Build.SourcesDirectory)/TestResults/Coverage/coverage.opencover.xml" -t $(CODECOV_TOKEN)'   
+- script: '%USERPROFILE%\.nuget\packages\codecov\1.7.2\tools\codecov.exe -f "$(Build.SourcesDirectory)/TestResults/Coverage/coverage.cobertura.xml" -t $(CODECOV_TOKEN)'   
   displayName: Upload coverage to codecov.io   
 
 - task: CopyFiles@2
