@@ -4,5 +4,9 @@ branches:
 
 configuration: Release
 
-build:
-  project: src/CodeAnalyzers.Episerver/CodeAnalyzers.Episerver.csproj
+build_script:
+  - cmd: dotnet build src/CodeAnalyzers.Episerver/CodeAnalyzers.Episerver.csproj
+
+
+test_script:
+  - cmd: dotnet test test/CodeAnalyzers.Episerver.Test/CodeAnalyzers.Episerver.Test.csproj
