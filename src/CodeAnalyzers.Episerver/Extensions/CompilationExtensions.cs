@@ -7,7 +7,7 @@ namespace CodeAnalyzers.Episerver.Extensions
     {
         internal static bool IsAnalyzerSuppressed(this Compilation compilation, DiagnosticDescriptor descriptor)
         {
-            ReportDiagnostic reportDiagnostic = compilation
+            var reportDiagnostic = compilation
                 .Options
                 .SpecificDiagnosticOptions
                 .GetValueOrDefault(descriptor.Id);

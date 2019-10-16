@@ -15,7 +15,9 @@ namespace CodeAnalyzers.Episerver.Extensions
             while (baseType != null)
             {
                 if (type.Equals(baseType))
+                {
                     return true;
+                }
 
                 baseType = baseType.BaseType;
             }

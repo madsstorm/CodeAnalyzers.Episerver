@@ -15,7 +15,7 @@ namespace CodeAnalyzers.Episerver.DiagnosticAnalyzers.CSharp
         public override ImmutableArray<DiagnosticDescriptor> SupportedDiagnostics =>
             ImmutableArray.Create(Descriptors.CAE1000_AvoidUsingDataFactory);
 
-        override protected void AnalyzeIdentifierName(SyntaxNodeAnalysisContext syntaxContext, IdentifierNameSyntax identifierName)
+        protected override void AnalyzeIdentifierName(SyntaxNodeAnalysisContext syntaxContext, IdentifierNameSyntax identifierName)
         {
             string typeName = syntaxContext.SemanticModel?.GetTypeInfo(identifierName).Type?.ToDisplayString(SymbolDisplayFormat.CSharpErrorMessageFormat);
 

@@ -15,7 +15,7 @@ namespace CodeAnalyzers.Episerver.DiagnosticAnalyzers.CSharp
         public override ImmutableArray<DiagnosticDescriptor> SupportedDiagnostics =>
             ImmutableArray.Create(Descriptors.CAE1001_AvoidUsingInternalNamespaces);
 
-        override protected void AnalyzeIdentifierName(SyntaxNodeAnalysisContext syntaxContext, IdentifierNameSyntax identifierName)
+        protected override void AnalyzeIdentifierName(SyntaxNodeAnalysisContext syntaxContext, IdentifierNameSyntax identifierName)
         {
             var space = syntaxContext.SemanticModel?.GetTypeInfo(identifierName).Type?.ContainingNamespace;
 
@@ -25,7 +25,7 @@ namespace CodeAnalyzers.Episerver.DiagnosticAnalyzers.CSharp
                     Diagnostic.Create(
                         Descriptors.CAE1001_AvoidUsingInternalNamespaces,
                         identifierName?.GetLocation(),
-                        space.ToDisplayString(SymbolDisplayFormat.CSharpErrorMessageFormat)));
+                        space?.ToDisplayString(SymbolDisplayFormat.CSharpErrorMessageFormat)));
             }
         }
     }

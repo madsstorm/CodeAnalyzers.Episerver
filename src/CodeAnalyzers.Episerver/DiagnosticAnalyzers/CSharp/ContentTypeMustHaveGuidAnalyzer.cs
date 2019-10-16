@@ -75,7 +75,7 @@ namespace CodeAnalyzers.Episerver.DiagnosticAnalyzers.CSharp
                         Diagnostic.Create(
                             Descriptors.CAE1002_ContentTypeMustHaveGuid,
                             attribute?.GetLocation(),
-                            classType.ToDisplayString(SymbolDisplayFormat.CSharpErrorMessageFormat)));
+                            classType?.ToDisplayString(SymbolDisplayFormat.CSharpErrorMessageFormat)));
             }
         }
     }
