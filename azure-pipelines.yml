@@ -35,6 +35,9 @@ steps:
     summaryFileLocation: '$(Build.SourcesDirectory)/coveragereport/Cobertura.xml'
     reportDirectory: '$(Build.SourcesDirectory)/coveragereport'
 
+- script: '%USERPROFILE%\.nuget\packages\codecov\1.7.2\tools\codecov.exe -f "$(Build.SourcesDirectory)/TestResults/Coverage/coverage.cobertura.xml" -t $(CODECOV_TOKEN)'   
+  displayName: Upload coverage to codecov.io   
+
 - task: CopyFiles@2
   displayName: 'Copy package'
   inputs:
