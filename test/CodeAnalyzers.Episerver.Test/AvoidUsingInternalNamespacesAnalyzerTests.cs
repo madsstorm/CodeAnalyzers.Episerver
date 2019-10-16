@@ -2,6 +2,8 @@
 
 using System.Threading.Tasks;
 using Xunit;
+using Microsoft.CodeAnalysis.Diagnostics;
+using CodeAnalyzers.Episerver.DiagnosticAnalyzers.CSharp;
 
 namespace CodeAnalyzers.Episerver.Test
 {
@@ -164,6 +166,32 @@ namespace CodeAnalyzers.Episerver.Test
             var expected = Verify.Diagnostic().WithLocation(11, 29).WithArguments("EPiServer.Commerce.Order.Internal");
 
             await Verify.VerifyAnalyzerAsync(test, expected);
+        }
+
+        [Fact]
+        public void IgnoreEmptyAnalysisContext()
+        {
+            var analyzer = new AvoidUsingInternalNamespacesAnalyzer();
+
+            analyzer.Initialize(null);
+        }
+
+        [Fact]
+        public void IgnoreEmptySyntaxNode()
+        {
+            var analyzer = new AvoidUsingInternalNamespacesAnalyzer();
+            var syntaxContext = new SyntaxNodeAnalysisContext();
+
+            analyzer.SyntaxNodeAction(syntaxContext);
+        }
+
+        [Fact]
+        public void IgnoreEmptySemanticModel()
+        {
+            var analyzer = new AvoidUsingInternalNamespacesAnalyzer();
+            var syntaxContext = new SyntaxNodeAnalysisContext();
+
+            analyzer.AnalyzeIdentifierName(syntaxContext, null);
         }
     }
 }

@@ -3,6 +3,10 @@ using System.Collections.Concurrent;
 using static Microsoft.CodeAnalysis.DiagnosticSeverity;
 using static CodeAnalyzers.Episerver.Category;
 
+#if DEBUG
+[assembly: System.Runtime.CompilerServices.InternalsVisibleTo("CodeAnalyzers.Episerver.Test")]
+#endif
+
 namespace CodeAnalyzers.Episerver
 {
     internal enum Category

@@ -18,16 +18,14 @@ namespace CodeAnalyzers.Episerver.DiagnosticAnalyzers.CSharp
             context.RegisterSyntaxNodeAction(SyntaxNodeAction, SyntaxKind.SimpleMemberAccessExpression);
         }
 
-        private void SyntaxNodeAction(SyntaxNodeAnalysisContext syntaxContext)
+        internal void SyntaxNodeAction(SyntaxNodeAnalysisContext syntaxContext)
         {
-            var memberAccess = syntaxContext.Node as MemberAccessExpressionSyntax;
-            if(memberAccess is null)
+            if (!(syntaxContext.Node is MemberAccessExpressionSyntax memberAccess))
             {
                 return;
             }
 
-            var identifierName = memberAccess.Expression as IdentifierNameSyntax;
-            if(identifierName is null)
+            if (!(memberAccess.Expression is IdentifierNameSyntax identifierName))
             {
                 return;
             }
@@ -35,6 +33,6 @@ namespace CodeAnalyzers.Episerver.DiagnosticAnalyzers.CSharp
             AnalyzeIdentifierName(syntaxContext, identifierName);
         }
 
-        protected abstract void AnalyzeIdentifierName(SyntaxNodeAnalysisContext syntaxContext, IdentifierNameSyntax identifierName);
+        protected internal abstract void AnalyzeIdentifierName(SyntaxNodeAnalysisContext syntaxContext, IdentifierNameSyntax identifierName);
     }
 }

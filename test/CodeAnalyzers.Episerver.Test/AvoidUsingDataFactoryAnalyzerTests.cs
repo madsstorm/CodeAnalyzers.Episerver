@@ -1,7 +1,9 @@
 ﻿using Verify = CodeAnalyzers.Episerver.Test.CSharpVerifier<CodeAnalyzers.Episerver.DiagnosticAnalyzers.CSharp.AvoidUsingDataFactoryAnalyzer>;
 
+using CodeAnalyzers.Episerver.DiagnosticAnalyzers.CSharp;
 using System.Threading.Tasks;
 using Xunit;
+using Microsoft.CodeAnalysis.Diagnostics;
 
 namespace CodeAnalyzers.Episerver.Test
 {
@@ -152,6 +154,32 @@ namespace CodeAnalyzers.Episerver.Test
             var expected = Verify.Diagnostic().WithLocation(11, 29);
 
             await Verify.VerifyAnalyzerAsync(test, expected);
+        }
+
+        [Fact]
+        public void IgnoreEmptyAnalysisContext()
+        {
+            var analyzer = new AvoidUsingDataFactoryAnalyzer();
+
+            analyzer.Initialize(null);
+        }
+
+        [Fact]
+        public void IgnoreEmptySyntaxNode()
+        {
+            var analyzer = new AvoidUsingDataFactoryAnalyzer();
+            var syntaxContext = new SyntaxNodeAnalysisContext();
+
+            analyzer.SyntaxNodeAction(syntaxContext);
+        }
+
+        [Fact]
+        public void IgnoreEmptySemanticModel()
+        {
+            var analyzer = new AvoidUsingDataFactoryAnalyzer();
+            var syntaxContext = new SyntaxNodeAnalysisContext();
+
+            analyzer.AnalyzeIdentifierName(syntaxContext, null);
         }
     }
 }

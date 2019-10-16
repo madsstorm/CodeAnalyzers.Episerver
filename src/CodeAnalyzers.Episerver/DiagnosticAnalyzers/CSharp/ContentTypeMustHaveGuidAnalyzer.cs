@@ -43,28 +43,25 @@ namespace CodeAnalyzers.Episerver.DiagnosticAnalyzers.CSharp
 
         private void AnalyzeAttributeNode(SyntaxNodeAnalysisContext syntaxContext, INamedTypeSymbol contentTypeAttribute)
         {
-            var attribute = syntaxContext.Node as AttributeSyntax;
-            if (attribute is null)
+            if (!(syntaxContext.Node is AttributeSyntax attribute))
             {
                 return;
             }
 
-            var attributeType = syntaxContext.SemanticModel?.GetTypeInfo(attribute).Type;
-            if(attributeType is null)
+            if(!(syntaxContext.SemanticModel?.GetTypeInfo(attribute).Type is ITypeSymbol attributeType))
             {
                 return;
-            }          
-            
+            }
+           
             if(!attributeType.InheritsOrIs(contentTypeAttribute))
             {
                 return;
             }
 
-            var classDeclaration = attribute.Parent?.Parent as ClassDeclarationSyntax;
-            if(classDeclaration is null)
+            if (!(attribute.Parent?.Parent is ClassDeclarationSyntax classDeclaration))
             {
                 return;
-            }           
+            }
 
             var argumentList = attribute.ArgumentList;
             if (argumentList is null || !argumentList.Arguments.Any())
