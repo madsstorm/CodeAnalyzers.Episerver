@@ -1,7 +1,8 @@
 [![Build Status](https://dev.azure.com/madsstorm/CodeAnalyzers.Episerver/_apis/build/status/madsstorm.CodeAnalyzers.Episerver?branchName=master)](https://dev.azure.com/madsstorm/CodeAnalyzers.Episerver/_build/latest?definitionId=1&branchName=master)
 <!---
-The package can be found in the [EPiServer Nuget Feed](https://nuget.episerver.com/package/?id=CodeAnalyzers.Episerver).
+[![Nuget](https://img.shields.io/badge/nuget-install-blue)](https://nuget.episerver.com/package/?id=CodeAnalyzers.Episerver)
 --->
+
 # CodeAnalyzers.Episerver
 Code Analyzers for projects using Episerver.
 
