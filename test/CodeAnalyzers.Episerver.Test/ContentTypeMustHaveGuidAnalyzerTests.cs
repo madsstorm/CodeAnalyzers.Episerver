@@ -8,13 +8,13 @@ namespace CodeAnalyzers.Episerver.Test
     public class ContentTypeMustHaveGuidAnalyzerTests
     {
         [Fact]
-        public async Task CanIgnoreEmptySource()
+        public async Task IgnoreEmptySource()
         {
             await Verify.VerifyAnalyzerAsync("");
         }
 
         [Fact]
-        public async Task CanIgnoreOtherAttribute()
+        public async Task IgnoreOtherAttribute()
         {
             var test = @"
                 using System;
@@ -35,7 +35,7 @@ namespace CodeAnalyzers.Episerver.Test
         }
 
         [Fact]
-        public async Task CanIgnoreContentTypeWithGuid()
+        public async Task IgnoreContentTypeWithGuid()
         {
             var test = @"
                 using EPiServer.DataAnnotations;
@@ -52,7 +52,7 @@ namespace CodeAnalyzers.Episerver.Test
         }
 
         [Fact]
-        public async Task CanIgnoreCustomContentTypeWithGuid()
+        public async Task IgnoreCustomContentTypeWithGuid()
         {
             var test = @"
                 using EPiServer.DataAnnotations;
@@ -73,7 +73,7 @@ namespace CodeAnalyzers.Episerver.Test
         }
 
         [Fact]
-        public async Task CanDetectContentTypeWithNoArgumentList()
+        public async Task DetectContentTypeWithNoArgumentList()
         {
             var test = @"
                 using EPiServer.DataAnnotations;
@@ -92,7 +92,7 @@ namespace CodeAnalyzers.Episerver.Test
         }
 
         [Fact]
-        public async Task CanDetectCustomContentTypeWithNoArgumentList()
+        public async Task DetectCustomContentTypeWithNoArgumentList()
         {
             var test = @"
                 using EPiServer.DataAnnotations;
@@ -115,7 +115,7 @@ namespace CodeAnalyzers.Episerver.Test
         }
 
         [Fact]
-        public async Task CanDetectContentTypeWithEmptyArgumentList()
+        public async Task DetectContentTypeWithEmptyArgumentList()
         {
             var test = @"
                 using EPiServer.DataAnnotations;
@@ -134,7 +134,7 @@ namespace CodeAnalyzers.Episerver.Test
         }
 
         [Fact]
-        public async Task CanDetectCustomContentTypeWithEmptyArgumentList()
+        public async Task DetectCustomContentTypeWithEmptyArgumentList()
         {
             var test = @"
                 using EPiServer.DataAnnotations;
@@ -157,7 +157,7 @@ namespace CodeAnalyzers.Episerver.Test
         }
 
         [Fact(Skip = "TODO")]
-        public async Task CanDetectContentTypeWithEmptyGuid()
+        public async Task DetectContentTypeWithEmptyGuid()
         {
             var test = @"
                 using EPiServer.DataAnnotations;
@@ -176,7 +176,7 @@ namespace CodeAnalyzers.Episerver.Test
         }
 
         [Fact(Skip = "TODO")]
-        public async Task CanDetectCustomContentTypeWithEmptyGuid()
+        public async Task DetectCustomContentTypeWithEmptyGuid()
         {
             var test = @"
                 using EPiServer.DataAnnotations;
@@ -199,7 +199,7 @@ namespace CodeAnalyzers.Episerver.Test
         }
 
         [Fact(Skip = "TODO")]
-        public async Task CanDetectContentTypeWithInvalidGuid()
+        public async Task DetectContentTypeWithInvalidGuid()
         {
             var test = @"
                 using EPiServer.DataAnnotations;
@@ -218,7 +218,7 @@ namespace CodeAnalyzers.Episerver.Test
         }
 
         [Fact(Skip = "TODO")]
-        public async Task CanDetectCustomContentTypeWithInvalidGuid()
+        public async Task DetectCustomContentTypeWithInvalidGuid()
         {
             var test = @"
                 using EPiServer.DataAnnotations;

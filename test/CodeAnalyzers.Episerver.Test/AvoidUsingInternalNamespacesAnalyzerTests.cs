@@ -8,13 +8,13 @@ namespace CodeAnalyzers.Episerver.Test
     public class AvoidUsingInternalNamespacesAnalyzerTests
     {
         [Fact]
-        public async Task CanIgnoreEmptySource()
+        public async Task IgnoreEmptySource()
         {
             await Verify.VerifyAnalyzerAsync("");
         }
 
         [Fact]
-        public async Task CanIgnorePublicProperty()
+        public async Task IgnorePublicProperty()
         {
             var test = @"
                 using EPiServer.Web.Routing;
@@ -34,7 +34,7 @@ namespace CodeAnalyzers.Episerver.Test
         }
 
         [Fact]
-        public async Task CanIgnorePublicMethod()
+        public async Task IgnorePublicMethod()
         {
             var test = @"
                 using System;
@@ -56,7 +56,7 @@ namespace CodeAnalyzers.Episerver.Test
         }
 
         [Fact]
-        public async Task CanIgnorePublicEvent()
+        public async Task IgnorePublicEvent()
         {
             var test = @"
                 using EPiServer.Core;
@@ -76,7 +76,7 @@ namespace CodeAnalyzers.Episerver.Test
         }
 
         [Fact]
-        public async Task CanDetectInternalProperty()
+        public async Task DetectInternalProperty()
         {
             var test = @"
                 using EPiServer.Web.Routing.Internal;
@@ -98,7 +98,7 @@ namespace CodeAnalyzers.Episerver.Test
         }
 
         [Fact]
-        public async Task CanDetectInternalMethod()
+        public async Task DetectInternalMethod()
         {
             var test = @"
                 using System;
@@ -122,7 +122,7 @@ namespace CodeAnalyzers.Episerver.Test
         }
 
         [Fact]
-        public async Task CanDetectInternalMediachaseMethod()
+        public async Task DetectInternalMediachaseMethod()
         {
             var test = @"
                 using Mediachase.Commerce.Internal;
@@ -144,7 +144,7 @@ namespace CodeAnalyzers.Episerver.Test
         }
 
         [Fact]
-        public async Task CanDetectStaticUsingInternalEvent()
+        public async Task DetectStaticUsingInternalEvent()
         {
             var test = @"
                 using static EPiServer.Commerce.Order.Internal.DefaultOrderEvents;

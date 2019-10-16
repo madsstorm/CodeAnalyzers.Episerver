@@ -8,13 +8,13 @@ namespace CodeAnalyzers.Episerver.Test
     public class AvoidUsingDataFactoryAnalyzerTests
     {
         [Fact]
-        public async Task CanIgnoreEmptySource()
+        public async Task IgnoreEmptySource()
         {
             await Verify.VerifyAnalyzerAsync("");
         }
 
         [Fact]
-        public async Task CanIgnoreCustomDataFactory()
+        public async Task IgnoreCustomDataFactory()
         {
             var test = @"
                 namespace Custom
@@ -42,7 +42,7 @@ namespace CodeAnalyzers.Episerver.Test
         }
 
         [Fact]
-        public async Task CanDetectProperty()
+        public async Task DetectProperty()
         {
             var test = @"
                 using EPiServer;
@@ -64,7 +64,7 @@ namespace CodeAnalyzers.Episerver.Test
         }
 
         [Fact]
-        public async Task CanDetectMethod()
+        public async Task DetectMethod()
         {
             var test = @"
                 using EPiServer;
@@ -86,7 +86,7 @@ namespace CodeAnalyzers.Episerver.Test
         }
 
         [Fact]
-        public async Task CanDetectEvent()
+        public async Task DetectEvent()
         {
             var test = @"
                 using EPiServer;
@@ -108,7 +108,7 @@ namespace CodeAnalyzers.Episerver.Test
         }
 
         [Fact]
-        public async Task CanDetectTypeAlias()
+        public async Task DetectTypeAlias()
         {
             var test = @"
                 using MyFactory = EPiServer.DataFactory;
@@ -132,7 +132,7 @@ namespace CodeAnalyzers.Episerver.Test
         }
 
         [Fact]
-        public async Task CanDetectStaticUsing()
+        public async Task DetectStaticUsing()
         {
             var test = @"
                 using static EPiServer.DataFactory;
