@@ -10,14 +10,14 @@ namespace CodeAnalyzers.Episerver.DiagnosticAnalyzers.CSharp
     [DiagnosticAnalyzer(LanguageNames.CSharp)]
     public class AvoidUsingDataFactoryAnalyzer : MemberAccessIdentifierNameAnalyzerBase
     {
-        private const string DataFactoryName = "DataFactory";
+        private const string DataFactoryName = "EPiServer.DataFactory";
 
         public override ImmutableArray<DiagnosticDescriptor> SupportedDiagnostics =>
             ImmutableArray.Create(Descriptors.CAE1000_AvoidUsingDataFactory);
 
         override protected void AnalyzeIdentifierName(SyntaxNodeAnalysisContext syntaxContext, IdentifierNameSyntax identifierName)
         {
-            string typeName = syntaxContext.SemanticModel?.GetTypeInfo(identifierName).Type?.MetadataName;
+            string typeName = syntaxContext.SemanticModel?.GetTypeInfo(identifierName).Type?.ToDisplayString(SymbolDisplayFormat.CSharpErrorMessageFormat);
 
             if (string.Equals(typeName, DataFactoryName, StringComparison.Ordinal))
             {

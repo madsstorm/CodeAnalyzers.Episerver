@@ -14,6 +14,34 @@ namespace CodeAnalyzers.Episerver.Test
         }
 
         [Fact]
+        public async Task CanIgnoreCustomDataFactory()
+        {
+            var test = @"
+                namespace Custom
+                {
+                    public class DataFactory
+                    {
+                        public static DataFactory Instance {get;}
+                    }
+                }
+
+                namespace Test
+                {
+                    using Custom;
+
+                    public class TypeName
+                    {
+                        public void Test()
+                        {
+                            var factory = DataFactory.Instance;
+                        }
+                    }
+                }";
+
+            await Verify.VerifyAnalyzerAsync(test);
+        }
+
+        [Fact]
         public async Task CanDetectProperty()
         {
             var test = @"

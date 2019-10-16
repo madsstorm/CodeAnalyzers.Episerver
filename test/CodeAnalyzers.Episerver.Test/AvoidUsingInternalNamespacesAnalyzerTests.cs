@@ -56,6 +56,26 @@ namespace CodeAnalyzers.Episerver.Test
         }
 
         [Fact]
+        public async Task CanIgnorePublicEvent()
+        {
+            var test = @"
+                using EPiServer.Core;
+
+                namespace Test
+                {
+                    public class TypeName
+                    {
+                        public void Test(IContentEvents events)
+                        {
+                            events.SavedContent += null;
+                        }
+                    }
+                }";
+
+            await Verify.VerifyAnalyzerAsync(test);
+        }
+
+        [Fact]
         public async Task CanDetectInternalProperty()
         {
             var test = @"
