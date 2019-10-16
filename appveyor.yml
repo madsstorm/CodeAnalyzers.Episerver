@@ -3,3 +3,6 @@ branches:
     - master
 
 configuration: Release
+
+build:
+  project: src/CodeAnalyzers.Episerver/CodeAnalyzers.Episerver.csproj
