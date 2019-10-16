@@ -18,7 +18,7 @@ namespace CodeAnalyzers.Episerver.DiagnosticAnalyzers.CSharp
             context.RegisterSyntaxNodeAction(SyntaxNodeAction, SyntaxKind.SimpleMemberAccessExpression);
         }
 
-        internal void SyntaxNodeAction(SyntaxNodeAnalysisContext syntaxContext)
+        private void SyntaxNodeAction(SyntaxNodeAnalysisContext syntaxContext)
         {
             if (!(syntaxContext.Node is MemberAccessExpressionSyntax memberAccess))
             {
@@ -33,6 +33,6 @@ namespace CodeAnalyzers.Episerver.DiagnosticAnalyzers.CSharp
             AnalyzeIdentifierName(syntaxContext, identifierName);
         }
 
-        protected internal abstract void AnalyzeIdentifierName(SyntaxNodeAnalysisContext syntaxContext, IdentifierNameSyntax identifierName);
+        protected abstract void AnalyzeIdentifierName(SyntaxNodeAnalysisContext syntaxContext, IdentifierNameSyntax identifierName);
     }
 }

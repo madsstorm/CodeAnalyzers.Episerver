@@ -1,9 +1,6 @@
 ﻿using Verify = CodeAnalyzers.Episerver.Test.CSharpVerifier<CodeAnalyzers.Episerver.DiagnosticAnalyzers.CSharp.ContentTypeMustHaveGuidAnalyzer>;
-
 using System.Threading.Tasks;
 using Xunit;
-using CodeAnalyzers.Episerver.DiagnosticAnalyzers.CSharp;
-using Microsoft.CodeAnalysis.Diagnostics;
 
 namespace CodeAnalyzers.Episerver.Test
 {
@@ -240,23 +237,6 @@ namespace CodeAnalyzers.Episerver.Test
             var expected = Verify.Diagnostic().WithLocation(6, 22).WithArguments("Test.TypeName");
 
             await Verify.VerifyAnalyzerAsync(test, expected);
-        }
-
-        [Fact]
-        public void IgnoreEmptyAnalysisContext()
-        {
-            var analyzer = new ContentTypeMustHaveGuidAnalyzer();
-
-            analyzer.Initialize(null);
-        }
-
-        [Fact]
-        public void IgnoreEmptySyntaxNode()
-        {
-            var analyzer = new ContentTypeMustHaveGuidAnalyzer();
-            var syntaxContext = new SyntaxNodeAnalysisContext();
-
-            analyzer.AnalyzeAttributeNode(syntaxContext, null);
         }
     }
 }

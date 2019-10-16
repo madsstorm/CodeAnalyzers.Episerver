@@ -41,7 +41,7 @@ namespace CodeAnalyzers.Episerver.DiagnosticAnalyzers.CSharp
 
         }
 
-        internal void AnalyzeAttributeNode(SyntaxNodeAnalysisContext syntaxContext, INamedTypeSymbol contentTypeAttribute)
+        private void AnalyzeAttributeNode(SyntaxNodeAnalysisContext syntaxContext, INamedTypeSymbol contentTypeAttribute)
         {
             if (!(syntaxContext.Node is AttributeSyntax attribute))
             {
