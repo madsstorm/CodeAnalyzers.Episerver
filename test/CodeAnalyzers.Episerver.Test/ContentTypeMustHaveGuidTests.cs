@@ -4,7 +4,7 @@ using Xunit;
 
 namespace CodeAnalyzers.Episerver.Test
 {
-    public class ContentTypeMustHaveGuidAnalyzerTests
+    public class ContentTypeMustHaveGuidTests
     {
         [Fact]
         public async Task IgnoreEmptySource()

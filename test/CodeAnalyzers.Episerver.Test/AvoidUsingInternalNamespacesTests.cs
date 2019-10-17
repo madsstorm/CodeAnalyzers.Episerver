@@ -1,10 +1,10 @@
-﻿using Verify = CodeAnalyzers.Episerver.Test.CSharpVerifier<CodeAnalyzers.Episerver.DiagnosticAnalyzers.CSharp.AvoidUsingInternalNamespacesAnalyzer>;
+﻿using Verify = CodeAnalyzers.Episerver.Test.CSharpVerifier<CodeAnalyzers.Episerver.DiagnosticAnalyzers.CSharp.BannedApiAnalyzer>;
 using System.Threading.Tasks;
 using Xunit;
 
 namespace CodeAnalyzers.Episerver.Test
 {
-    public class AvoidUsingInternalNamespacesAnalyzerTests
+    public class AvoidUsingInternalNamespacesTests
     {
         [Fact]
         public async Task IgnoreEmptySource()
@@ -112,7 +112,7 @@ namespace CodeAnalyzers.Episerver.Test
                     }
                 }";
 
-            var expected = Verify.Diagnostic().WithLocation(10, 40).WithArguments("EPiServer.Web.Routing.Internal");
+            var expected = Verify.Diagnostic(Descriptors.Epi1001AvoidUsingInternalNamespaces).WithLocation(10, 40).WithArguments("EPiServer.Web.Routing.Internal");
 
             await Verify.VerifyAnalyzerAsync(test, expected);
         }
@@ -136,7 +136,7 @@ namespace CodeAnalyzers.Episerver.Test
                     }
                 }";
 
-            var expected = Verify.Diagnostic().WithLocation(12, 29).WithArguments("EPiServer.Core.Internal");
+            var expected = Verify.Diagnostic(Descriptors.Epi1001AvoidUsingInternalNamespaces).WithLocation(12, 29).WithArguments("EPiServer.Core.Internal");
 
             await Verify.VerifyAnalyzerAsync(test, expected);
         }
@@ -158,7 +158,7 @@ namespace CodeAnalyzers.Episerver.Test
                     }
                 }";
 
-            var expected = Verify.Diagnostic().WithLocation(10, 29).WithArguments("Mediachase.Commerce.Internal");
+            var expected = Verify.Diagnostic(Descriptors.Epi1001AvoidUsingInternalNamespaces).WithLocation(10, 29).WithArguments("Mediachase.Commerce.Internal");
 
             await Verify.VerifyAnalyzerAsync(test, expected);
         }
@@ -181,7 +181,30 @@ namespace CodeAnalyzers.Episerver.Test
                     }
                 }";
 
-            var expected = Verify.Diagnostic().WithLocation(11, 29).WithArguments("EPiServer.Commerce.Order.Internal");
+            var expected = Verify.Diagnostic(Descriptors.Epi1001AvoidUsingInternalNamespaces).WithLocation(11, 29).WithArguments("EPiServer.Commerce.Order.Internal");
+
+            await Verify.VerifyAnalyzerAsync(test, expected);
+        }
+
+        [Fact(Skip = "IOperation")]
+        public async Task DetectStaticUsingInternalMethod()
+        {
+            var test = @"
+                using static EPiServer.Core.Internal.PropertyDataExtensions;
+
+                namespace Test
+                {
+                    public class TypeName
+                    {
+                        public void Test()
+                        {
+                            GetContentLink(null);
+                        }
+                    }
+                }";
+
+
+            var expected = Verify.Diagnostic(Descriptors.Epi1001AvoidUsingInternalNamespaces).WithLocation(10, 29).WithArguments("EPiServer.Commerce.Order.Internal");
 
             await Verify.VerifyAnalyzerAsync(test, expected);
         }
