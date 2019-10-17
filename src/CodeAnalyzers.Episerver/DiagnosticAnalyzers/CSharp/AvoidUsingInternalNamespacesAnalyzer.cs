@@ -13,7 +13,7 @@ namespace CodeAnalyzers.Episerver.DiagnosticAnalyzers.CSharp
         private const string InternalNamespace = "Internal";
 
         public override ImmutableArray<DiagnosticDescriptor> SupportedDiagnostics =>
-            ImmutableArray.Create(Descriptors.CAE1001_AvoidUsingInternalNamespaces);
+            ImmutableArray.Create(Descriptors.Epi1001_AvoidUsingInternalNamespaces);
 
         protected override void AnalyzeIdentifierName(SyntaxNodeAnalysisContext syntaxContext, IdentifierNameSyntax identifierName)
         {
@@ -23,7 +23,7 @@ namespace CodeAnalyzers.Episerver.DiagnosticAnalyzers.CSharp
             {
                 syntaxContext.ReportDiagnostic(
                     Diagnostic.Create(
-                        Descriptors.CAE1001_AvoidUsingInternalNamespaces,
+                        Descriptors.Epi1001_AvoidUsingInternalNamespaces,
                         identifierName?.GetLocation(),
                         space?.ToDisplayString(SymbolDisplayFormat.CSharpErrorMessageFormat)));
             }

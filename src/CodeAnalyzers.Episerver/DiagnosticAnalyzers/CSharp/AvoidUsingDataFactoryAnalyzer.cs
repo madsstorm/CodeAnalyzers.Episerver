@@ -13,7 +13,7 @@ namespace CodeAnalyzers.Episerver.DiagnosticAnalyzers.CSharp
         private const string DataFactoryName = "EPiServer.DataFactory";
 
         public override ImmutableArray<DiagnosticDescriptor> SupportedDiagnostics =>
-            ImmutableArray.Create(Descriptors.CAE1000_AvoidUsingDataFactory);
+            ImmutableArray.Create(Descriptors.Epi1000_AvoidUsingDataFactory);
 
         protected override void AnalyzeIdentifierName(SyntaxNodeAnalysisContext syntaxContext, IdentifierNameSyntax identifierName)
         {
@@ -23,7 +23,7 @@ namespace CodeAnalyzers.Episerver.DiagnosticAnalyzers.CSharp
             {
                 syntaxContext.ReportDiagnostic(
                     Diagnostic.Create(
-                        Descriptors.CAE1000_AvoidUsingDataFactory,
+                        Descriptors.Epi1000_AvoidUsingDataFactory,
                         identifierName?.GetLocation()));
             }
         }
