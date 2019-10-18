@@ -72,9 +72,6 @@ namespace CodeAnalyzers.Episerver.DiagnosticAnalyzers.CSharp
                 case IArrayCreationOperation arrayCreation:
                     VerifyType(operationContext.ReportDiagnostic, arrayCreation.Type, operationContext.Operation.Syntax);
                     break;
-                
-                default:
-                    break;
             }
         }
 
@@ -157,7 +154,7 @@ namespace CodeAnalyzers.Episerver.DiagnosticAnalyzers.CSharp
             return true;
         }
 
-        void VerifyAttributes(Action<Diagnostic> reportDiagnostic, ImmutableArray<AttributeData> attributes)
+        private static void VerifyAttributes(Action<Diagnostic> reportDiagnostic, ImmutableArray<AttributeData> attributes)
         {
             foreach (var attribute in attributes)
             {
