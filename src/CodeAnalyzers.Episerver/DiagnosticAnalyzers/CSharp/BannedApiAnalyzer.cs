@@ -84,37 +84,57 @@ namespace CodeAnalyzers.Episerver.DiagnosticAnalyzers.CSharp
                     return true;
                 }
 
-                string typeName = type.ToDisplayString(SymbolDisplayFormat.CSharpErrorMessageFormat);
-
-                foreach (var pair in BannedTypes)
+                if(!VerifyTypeBanned(reportDiagnostic, type, syntaxNode))
                 {
-                    if (string.Equals(typeName, pair.Key, StringComparison.Ordinal))
-                    {
-                        reportDiagnostic(
-                            Diagnostic.Create(
-                                pair.Value,
-                                syntaxNode?.GetLocation()));
-
-                        return false;
-                    }
+                    return false;
                 }
 
-                var space = type.ContainingNamespace;
-
-                if (string.Equals(space?.MetadataName, InternalNamespace, StringComparison.Ordinal))
+                if(!VerifyTypeInternal(reportDiagnostic, type, syntaxNode))
                 {
-                    reportDiagnostic(
-                        Diagnostic.Create(
-                            Descriptors.Epi1000AvoidUsingInternalNamespaces,
-                            syntaxNode?.GetLocation(),
-                            type.ToDisplayString(SymbolDisplayFormat.CSharpErrorMessageFormat)));
-
                     return false;
                 }
 
                 type = type.ContainingType;
             }
             while (!(type is null));
+
+            return true;
+        }
+
+        private static bool VerifyTypeBanned(Action<Diagnostic> reportDiagnostic, ITypeSymbol type, SyntaxNode syntaxNode)
+        {
+            string typeName = type.ToDisplayString(SymbolDisplayFormat.CSharpErrorMessageFormat);
+
+            foreach (var pair in BannedTypes)
+            {
+                if (string.Equals(typeName, pair.Key, StringComparison.Ordinal))
+                {
+                    reportDiagnostic(
+                        Diagnostic.Create(
+                            pair.Value,
+                            syntaxNode?.GetLocation()));
+
+                    return false;
+                }
+            }
+
+            return true;
+        }
+
+        private static bool VerifyTypeInternal(Action<Diagnostic> reportDiagnostic, ITypeSymbol type, SyntaxNode syntaxNode)
+        {
+            var space = type.ContainingNamespace;
+
+            if (string.Equals(space?.MetadataName, InternalNamespace, StringComparison.Ordinal))
+            {
+                reportDiagnostic(
+                    Diagnostic.Create(
+                        Descriptors.Epi1000AvoidUsingInternalNamespaces,
+                        syntaxNode?.GetLocation(),
+                        type.ToDisplayString(SymbolDisplayFormat.CSharpErrorMessageFormat)));
+
+                return false;
+            }
 
             return true;
         }
