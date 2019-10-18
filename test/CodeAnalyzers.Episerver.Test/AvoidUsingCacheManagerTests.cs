@@ -151,7 +151,7 @@ namespace CodeAnalyzers.Episerver.Test
             await Verify.VerifyAnalyzerAsync(test, expected);
         }
 
-        [Fact(Skip = "IOperation")]
+        [Fact]
         public async Task DetectStaticUsingProperty()
         {
             var test = @"

@@ -95,7 +95,7 @@ namespace CodeAnalyzers.Episerver.Test
             await Verify.VerifyAnalyzerAsync(test);
         }
 
-        [Fact(Skip="MessageFormat")]
+        [Fact]
         public async Task DetectInternalProperty()
         {
             var test = @"
@@ -117,7 +117,7 @@ namespace CodeAnalyzers.Episerver.Test
             await Verify.VerifyAnalyzerAsync(test, expected);
         }
 
-        [Fact(Skip = "MessageFormat")]
+        [Fact]
         public async Task DetectInternalMethod()
         {
             var test = @"
@@ -141,7 +141,7 @@ namespace CodeAnalyzers.Episerver.Test
             await Verify.VerifyAnalyzerAsync(test, expected);
         }
 
-        [Fact(Skip = "MessageFormat")]
+        [Fact]
         public async Task DetectInternalMediachaseMethod()
         {
             var test = @"
@@ -163,7 +163,7 @@ namespace CodeAnalyzers.Episerver.Test
             await Verify.VerifyAnalyzerAsync(test, expected);
         }
 
-        [Fact(Skip = "MessageFormat")]
+        [Fact]
         public async Task DetectStaticUsingInternalEvent()
         {
             var test = @"
@@ -181,16 +181,17 @@ namespace CodeAnalyzers.Episerver.Test
                     }
                 }";
 
-            var expected = Verify.Diagnostic(Descriptors.Epi1000AvoidUsingInternalNamespaces).WithLocation(11, 29).WithArguments("DefaultOrderEvents", "EPiServer.Commerce.Order.Internal");
+            var expected = Verify.Diagnostic(Descriptors.Epi1000AvoidUsingInternalNamespaces).WithLocation(10, 42).WithArguments("DefaultOrderEvents", "EPiServer.Commerce.Order.Internal");
+            var expected2 = Verify.Diagnostic(Descriptors.Epi1000AvoidUsingInternalNamespaces).WithLocation(11, 29).WithArguments("DefaultOrderEvents", "EPiServer.Commerce.Order.Internal");
 
-            await Verify.VerifyAnalyzerAsync(test, expected);
+            await Verify.VerifyAnalyzerAsync(test, expected, expected2);
         }
 
-        [Fact(Skip = "IOperation")]
+        [Fact]
         public async Task DetectStaticUsingInternalMethod()
         {
             var test = @"
-                using static EPiServer.Core.Internal.PropertyDataExtensions;
+                using static EPiServer.Core.Internal.ThumbnailManager;
 
                 namespace Test
                 {
@@ -198,13 +199,141 @@ namespace CodeAnalyzers.Episerver.Test
                     {
                         public void Test()
                         {
-                            GetContentLink(null);
+                            CreateThumbnailUri(null,null);
                         }
                     }
                 }";
 
 
-            var expected = Verify.Diagnostic(Descriptors.Epi1000AvoidUsingInternalNamespaces).WithLocation(10, 29).WithArguments("PropertyDataExtensions", "EPiServer.Commerce.Order.Internal");
+            var expected = Verify.Diagnostic(Descriptors.Epi1000AvoidUsingInternalNamespaces).WithLocation(10, 29).WithArguments("ThumbnailManager", "EPiServer.Core.Internal");
+
+            await Verify.VerifyAnalyzerAsync(test, expected);
+        }
+
+        [Fact]
+        public async Task DetectInternalClassAttribute()
+        {
+            var test = @"
+                using EPiServer.Data.Dynamic.Internal;
+
+                namespace Test
+                {
+                    [Queryable]
+                    public class TypeName
+                    {
+                    }
+                }";
+
+            var expected = Verify.Diagnostic(Descriptors.Epi1000AvoidUsingInternalNamespaces).WithLocation(6, 22).WithArguments("QueryableAttribute", "EPiServer.Data.Dynamic.Internal");
+
+            await Verify.VerifyAnalyzerAsync(test, expected);
+        }
+
+        [Fact]
+        public async Task DetectInternalMethodAttribute()
+        {
+            var test = @"
+                using EPiServer.Cms.Shell.UI.Controllers.Internal;
+
+                namespace Test
+                {
+                    public class TypeName
+                    {
+                        [JsonErrorHandling]
+                        public void Test()
+                        {
+                        }
+                    }
+                }";
+
+            var expected = Verify.Diagnostic(Descriptors.Epi1000AvoidUsingInternalNamespaces).WithLocation(8, 26).WithArguments("JsonErrorHandlingAttribute", "EPiServer.Cms.Shell.UI.Controllers.Internal");
+
+            await Verify.VerifyAnalyzerAsync(test, expected);
+        }
+
+        [Fact]
+        public async Task DetectInternalPropertyAttribute()
+        {
+            var test = @"
+                using EPiServer.ContentApi.Core.Security.Internal;
+
+                namespace Test
+                {
+                    public class TypeName
+                    {
+                        [ContentApiCors]
+                        public string Text {get;set;}
+                    }
+                }";
+
+            var expected = Verify.Diagnostic(Descriptors.Epi1000AvoidUsingInternalNamespaces).WithLocation(8, 26).WithArguments("ContentApiCorsAttribute", "EPiServer.ContentApi.Core.Security.Internal");
+
+            await Verify.VerifyAnalyzerAsync(test, expected);
+        }
+
+        [Fact]
+        public async Task DetectInternalCreation()
+        {
+            var test = @"
+                using EPiServer.Web.Internal;
+
+                namespace Test
+                {
+                    public class TypeName
+                    {
+                        public void Test()
+                        {
+                            var segment = new UrlSegment(null);
+                        }
+                    }
+                }";
+
+            var expected = Verify.Diagnostic(Descriptors.Epi1000AvoidUsingInternalNamespaces).WithLocation(10, 43).WithArguments("UrlSegment", "EPiServer.Web.Internal");
+
+            await Verify.VerifyAnalyzerAsync(test, expected);
+        }
+
+        [Fact]
+        public async Task DetectInternalTypeParameterCreation()
+        {
+            var test = @"
+                using EPiServer.Web.Internal;
+                using System.Collections.Generic;
+
+                namespace Test
+                {
+                    public class TypeName
+                    {
+                        public void Test()
+                        {
+                            var list = new List<UrlSegment>();
+                        }                        
+                    }
+                }";
+
+            var expected = Verify.Diagnostic(Descriptors.Epi1000AvoidUsingInternalNamespaces).WithLocation(11, 40).WithArguments("UrlSegment", "EPiServer.Web.Internal");
+
+            await Verify.VerifyAnalyzerAsync(test, expected);
+        }
+
+        [Fact]
+        public async Task DetectInternalArrayCreation()
+        {
+            var test = @"
+                using EPiServer.Web.Internal;
+
+                namespace Test
+                {
+                    public class TypeName
+                    {
+                        public void Test()
+                        {
+                            var arr = new UrlSegment[0];
+                        }
+                    }
+                }";
+
+            var expected = Verify.Diagnostic(Descriptors.Epi1000AvoidUsingInternalNamespaces).WithLocation(10, 39).WithArguments("UrlSegment", "EPiServer.Web.Internal");
 
             await Verify.VerifyAnalyzerAsync(test, expected);
         }
