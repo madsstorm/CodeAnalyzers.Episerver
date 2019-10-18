@@ -2,8 +2,7 @@
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.Diagnostics;
 using CodeAnalyzers.Episerver.Extensions;
-using Microsoft.CodeAnalysis.CSharp;
-using Microsoft.CodeAnalysis.CSharp.Syntax;
+using System;
 
 namespace CodeAnalyzers.Episerver.DiagnosticAnalyzers.CSharp
 {
@@ -18,13 +17,9 @@ namespace CodeAnalyzers.Episerver.DiagnosticAnalyzers.CSharp
 
         public override void Initialize(AnalysisContext context)
         {
-            if (context is null)
-            {
-                return;
-            }
-
-            context.ConfigureGeneratedCodeAnalysis(GeneratedCodeAnalysisFlags.Analyze | GeneratedCodeAnalysisFlags.ReportDiagnostics);
+            context.ConfigureGeneratedCodeAnalysis(GeneratedCodeAnalysisFlags.None);
             context.EnableConcurrentExecution();
+
             context.RegisterCompilationStartAction(compilationContext =>
             {
                 var contentTypeAttribute = compilationContext.Compilation.GetTypeByMetadataName(TypeMetadataName);
@@ -33,46 +28,45 @@ namespace CodeAnalyzers.Episerver.DiagnosticAnalyzers.CSharp
                     return;
                 }
 
-                compilationContext.RegisterSyntaxNodeAction(syntaxContext =>
-                {
-                    AnalyzeAttributeNode(syntaxContext, contentTypeAttribute);
-                }, SyntaxKind.Attribute);
+                compilationContext.RegisterSymbolAction(
+                    symbolContext => VerifyAttributes(symbolContext.ReportDiagnostic, symbolContext.Symbol, contentTypeAttribute),
+                    SymbolKind.NamedType);
             });
-
         }
 
-        private static void AnalyzeAttributeNode(SyntaxNodeAnalysisContext syntaxContext, INamedTypeSymbol contentTypeAttribute)
+        private static void VerifyAttributes(Action<Diagnostic> reportDiagnostic, ISymbol namedTypeSymbol, INamedTypeSymbol contentTypeAttribute)
         {
-            if (!(syntaxContext.Node is AttributeSyntax attribute))
-            {
-                return;
-            }
+            var attributes = namedTypeSymbol.GetAttributes();
 
-            if(!(syntaxContext.SemanticModel?.GetTypeInfo(attribute).Type is ITypeSymbol attributeType))
+            foreach (var attribute in attributes)
             {
-                return;
-            }
-           
-            if(!attributeType.InheritsOrIs(contentTypeAttribute))
-            {
-                return;
-            }
+                if(attribute.AttributeClass.InheritsOrIs(contentTypeAttribute))
+                {
+                    TypedConstant guidValue = default;
 
-            if (!(attribute.Parent?.Parent is ClassDeclarationSyntax classDeclaration))
-            {
-                return;
-            }
+                    foreach(var namedArgument in attribute.NamedArguments)
+                    {
+                        if(string.Equals(namedArgument.Key, GuidArgument, StringComparison.Ordinal))
+                        {
+                            guidValue = namedArgument.Value;
+                            break;
+                        }
+                    }
 
-            var argumentList = attribute.ArgumentList;
-            if (argumentList is null || !argumentList.Arguments.Any())
-            {
-                var classType = syntaxContext.SemanticModel?.GetDeclaredSymbol(classDeclaration);
+                    if(!Guid.TryParse(guidValue.Value?.ToString(), out Guid value))
+                    {
+                        var node = attribute.ApplicationSyntaxReference?.GetSyntax();
+                        if (node != null)
+                        {
+                            reportDiagnostic(
+                                node.CreateDiagnostic(
+                                    Descriptors.Epi2000ContentTypeMustHaveGuid,
+                                    namedTypeSymbol.ToDisplayString(SymbolDisplayFormat.CSharpErrorMessageFormat)));
+                        }
+                    }
 
-                syntaxContext.ReportDiagnostic(
-                        Diagnostic.Create(
-                            Descriptors.Epi2000ContentTypeMustHaveGuid,
-                            attribute?.GetLocation(),
-                            classType?.ToDisplayString(SymbolDisplayFormat.CSharpErrorMessageFormat)));
+                    break;
+                }
             }
         }
     }

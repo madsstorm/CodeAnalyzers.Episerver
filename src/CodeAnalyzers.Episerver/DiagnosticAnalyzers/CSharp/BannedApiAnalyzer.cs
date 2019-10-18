@@ -21,17 +21,12 @@ namespace CodeAnalyzers.Episerver.DiagnosticAnalyzers.CSharp
 
         public override ImmutableArray<DiagnosticDescriptor> SupportedDiagnostics =>
             ImmutableArray.Create(
-                Descriptors.Epi3000AvoidUsingDataFactory,
                 Descriptors.Epi1000AvoidUsingInternalNamespaces,
+                Descriptors.Epi3000AvoidUsingDataFactory,
                 Descriptors.Epi3001AvoidUsingCacheManager);
 
         public override void Initialize(AnalysisContext analysisContext)
         {
-            if (analysisContext is null)
-            {
-                return;
-            }
-
             analysisContext.ConfigureGeneratedCodeAnalysis(GeneratedCodeAnalysisFlags.None);
             analysisContext.EnableConcurrentExecution();
 
@@ -112,8 +107,7 @@ namespace CodeAnalyzers.Episerver.DiagnosticAnalyzers.CSharp
                         Diagnostic.Create(
                             Descriptors.Epi1000AvoidUsingInternalNamespaces,
                             syntaxNode?.GetLocation(),
-                            type.ToDisplayString(SymbolDisplayFormat.CSharpShortErrorMessageFormat),
-                            space?.ToDisplayString(SymbolDisplayFormat.CSharpErrorMessageFormat)));
+                            type.ToDisplayString(SymbolDisplayFormat.CSharpErrorMessageFormat)));
 
                     return false;
                 }
@@ -168,8 +162,7 @@ namespace CodeAnalyzers.Episerver.DiagnosticAnalyzers.CSharp
                         reportDiagnostic(
                             node.CreateDiagnostic(
                                 Descriptors.Epi1000AvoidUsingInternalNamespaces,
-                                attribute.AttributeClass.ToDisplayString(SymbolDisplayFormat.CSharpShortErrorMessageFormat),
-                                space?.ToDisplayString(SymbolDisplayFormat.CSharpErrorMessageFormat)));
+                                attribute.AttributeClass.ToDisplayString(SymbolDisplayFormat.CSharpErrorMessageFormat)));
                     }
                 }
             }
