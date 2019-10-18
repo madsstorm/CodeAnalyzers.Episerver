@@ -26,7 +26,7 @@ namespace CodeAnalyzers.Episerver
 
         public static DiagnosticDescriptor Epi1000AvoidUsingInternalNamespaces { get; } =
             Rule("Epi1000", "Avoid using internal namespaces", Usage, Warning,
-                "Avoid using namespace {0}", "Internal namespaces are not considered part of the public supported API.");
+                "Avoid using {0} in namespace {1}", "Internal namespaces are not considered part of the public supported API.");
 
         #endregion
 
