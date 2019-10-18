@@ -53,7 +53,7 @@ namespace CodeAnalyzers.Episerver.DiagnosticAnalyzers.CSharp
                 SymbolKind.Event);
         }
 
-        private void OperationAction(OperationAnalysisContext operationContext)
+        private static void OperationAction(OperationAnalysisContext operationContext)
         {
             switch (operationContext.Operation)
             {
@@ -72,11 +72,13 @@ namespace CodeAnalyzers.Episerver.DiagnosticAnalyzers.CSharp
                 case IArrayCreationOperation arrayCreation:
                     VerifyType(operationContext.ReportDiagnostic, arrayCreation.Type, operationContext.Operation.Syntax);
                     break;
+                
+                default:
+                    break;
             }
         }
 
-
-        private bool VerifyType(Action<Diagnostic> reportDiagnostic, ITypeSymbol type, SyntaxNode syntaxNode)
+        private static bool VerifyType(Action<Diagnostic> reportDiagnostic, ITypeSymbol type, SyntaxNode syntaxNode)
         {
             do
             {
@@ -126,7 +128,7 @@ namespace CodeAnalyzers.Episerver.DiagnosticAnalyzers.CSharp
             return true;
         }
 
-        private bool VerifyTypeArguments(Action<Diagnostic> reportDiagnostic, ITypeSymbol type, SyntaxNode syntaxNode, out ITypeSymbol originalDefinition)
+        private static bool VerifyTypeArguments(Action<Diagnostic> reportDiagnostic, ITypeSymbol type, SyntaxNode syntaxNode, out ITypeSymbol originalDefinition)
         {
             switch (type)
             {
