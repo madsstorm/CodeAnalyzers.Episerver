@@ -15,15 +15,15 @@ namespace CodeAnalyzers.Episerver.DiagnosticAnalyzers.CSharp
 
         private static readonly Dictionary<string, DiagnosticDescriptor> bannedTypes = new Dictionary<string, DiagnosticDescriptor>
         {
-            { "EPiServer.DataFactory", Descriptors.Epi1000AvoidUsingDataFactory },
-            { "EPiServer.CacheManager", Descriptors.Epi1002AvoidUsingCacheManager }
+            { "EPiServer.DataFactory", Descriptors.Epi3000AvoidUsingDataFactory },
+            { "EPiServer.CacheManager", Descriptors.Epi3001AvoidUsingCacheManager }
         };
 
         public override ImmutableArray<DiagnosticDescriptor> SupportedDiagnostics =>
             ImmutableArray.Create(
-                Descriptors.Epi1000AvoidUsingDataFactory,
-                Descriptors.Epi1001AvoidUsingInternalNamespaces,
-                Descriptors.Epi1002AvoidUsingCacheManager);
+                Descriptors.Epi3000AvoidUsingDataFactory,
+                Descriptors.Epi1000AvoidUsingInternalNamespaces,
+                Descriptors.Epi3001AvoidUsingCacheManager);
 
         public override void Initialize(AnalysisContext context)
         {
@@ -121,7 +121,7 @@ namespace CodeAnalyzers.Episerver.DiagnosticAnalyzers.CSharp
             {
                 syntaxContext.ReportDiagnostic(
                     Diagnostic.Create(
-                        Descriptors.Epi1001AvoidUsingInternalNamespaces,
+                        Descriptors.Epi1000AvoidUsingInternalNamespaces,
                         identifierName?.GetLocation(),
                         space?.ToDisplayString(SymbolDisplayFormat.CSharpErrorMessageFormat)));
             }

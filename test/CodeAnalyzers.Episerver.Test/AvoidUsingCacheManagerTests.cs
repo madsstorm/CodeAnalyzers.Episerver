@@ -78,7 +78,7 @@ namespace CodeAnalyzers.Episerver.Test
                     }
                 }";
 
-            var expected = Verify.Diagnostic(Descriptors.Epi1002AvoidUsingCacheManager).WithLocation(10, 39);
+            var expected = Verify.Diagnostic(Descriptors.Epi3001AvoidUsingCacheManager).WithLocation(10, 39);
 
             await Verify.VerifyAnalyzerAsync(test, expected);
         }
@@ -100,7 +100,7 @@ namespace CodeAnalyzers.Episerver.Test
                     }
                 }";
 
-            var expected = Verify.Diagnostic(Descriptors.Epi1002AvoidUsingCacheManager).WithLocation(10, 29);
+            var expected = Verify.Diagnostic(Descriptors.Epi3001AvoidUsingCacheManager).WithLocation(10, 29);
 
             await Verify.VerifyAnalyzerAsync(test, expected);
         }
@@ -124,7 +124,7 @@ namespace CodeAnalyzers.Episerver.Test
                     }
                 }";
 
-            var expected = Verify.Diagnostic(Descriptors.Epi1002AvoidUsingCacheManager).WithLocation(12, 39);
+            var expected = Verify.Diagnostic(Descriptors.Epi3001AvoidUsingCacheManager).WithLocation(12, 39);
 
             await Verify.VerifyAnalyzerAsync(test, expected);
         }
@@ -146,7 +146,7 @@ namespace CodeAnalyzers.Episerver.Test
                     }
                 }";
 
-            var expected = Verify.Diagnostic(Descriptors.Epi1002AvoidUsingCacheManager).WithLocation(10, 29);
+            var expected = Verify.Diagnostic(Descriptors.Epi3001AvoidUsingCacheManager).WithLocation(10, 29);
 
             await Verify.VerifyAnalyzerAsync(test, expected);
         }
@@ -168,7 +168,7 @@ namespace CodeAnalyzers.Episerver.Test
                     }
                 }";
 
-            var expected = Verify.Diagnostic(Descriptors.Epi1002AvoidUsingCacheManager).WithLocation(10, 39);
+            var expected = Verify.Diagnostic(Descriptors.Epi3001AvoidUsingCacheManager).WithLocation(10, 39);
 
             await Verify.VerifyAnalyzerAsync(test, expected);
         }

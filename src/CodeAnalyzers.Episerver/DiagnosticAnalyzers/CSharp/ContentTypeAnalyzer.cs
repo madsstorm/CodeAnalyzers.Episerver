@@ -8,7 +8,7 @@ using Microsoft.CodeAnalysis.CSharp.Syntax;
 namespace CodeAnalyzers.Episerver.DiagnosticAnalyzers.CSharp
 {
     [DiagnosticAnalyzer(LanguageNames.CSharp)]
-    public class ContentTypeMustHaveGuidAnalyzer : DiagnosticAnalyzer
+    public class ContentTypeAnalyzer : DiagnosticAnalyzer
     {
         private const string TypeMetadataName = "EPiServer.DataAnnotations.ContentTypeAttribute";
         private const string GuidArgument = "GUID";
