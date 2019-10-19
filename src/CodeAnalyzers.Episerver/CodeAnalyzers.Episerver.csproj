@@ -13,7 +13,7 @@
     <PackageProjectUrl>https://github.com/madsstorm/CodeAnalyzers.Episerver</PackageProjectUrl>
     <RepositoryUrl>https://github.com/madsstorm/CodeAnalyzers.Episerver</RepositoryUrl>
     <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
-    <Description>Code Analyzers for projects using Episerver.</Description>
+    <Description>Code analyzers for Episerver.</Description>
     <PackageTags>CodeAnalyzers Episerver CodeAnalysis Analyzers Roslyn</PackageTags>
     <NoPackageAnalysis>true</NoPackageAnalysis>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>

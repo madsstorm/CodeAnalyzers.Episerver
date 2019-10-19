@@ -3,7 +3,7 @@
 [![Nuget](https://img.shields.io/badge/nuget-install-blue)](https://nuget.episerver.com/package/?id=CodeAnalyzers.Episerver)
 --->
 
-## Code Analyzers for projects using Episerver.
+### Code analyzers for Episerver.
 
 <!---
 ##### Integration test
