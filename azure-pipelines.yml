@@ -52,6 +52,13 @@ steps:
 - script: '%USERPROFILE%\.nuget\packages\codecov\1.7.2\tools\codecov.exe -f "$(Build.SourcesDirectory)/TestResults/Coverage/coverage.cobertura.xml" -t $(CODECOV_TOKEN)'   
   displayName: Upload coverage to codecov.io   
 
+- task: VSBuild@1
+  displayName: 'Integration test'
+  inputs:
+    solution: 'integration\CodeAnalyzers.Episerver.Integration\CodeAnalyzers.Episerver.Integration.sln'
+    configuration: 'Release'
+    clean: true
+
 - task: CopyFiles@2
   displayName: 'Copy package'
   inputs:
