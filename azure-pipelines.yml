@@ -19,7 +19,7 @@ steps:
   displayName: 'Test'
   inputs:
     command: 'test'
-    projects: 'test/CodeAnalyzers.Episerver.Test/CodeAnalyzers.Episerver.Test.csproj'
+    projects: 'test/CodeAnalyzers.Episerver.Test/*.csproj'
     arguments: '--configuration $(buildConfiguration) /p:CollectCoverage=true /p:CoverletOutputFormat=cobertura /p:CoverletOutput=$(Build.SourcesDirectory)/TestResults/Coverage/'
 
 - task: reportgenerator@4
