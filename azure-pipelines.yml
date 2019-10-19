@@ -19,7 +19,7 @@ steps:
   displayName: 'Test Cms 10'
   inputs:
     command: 'test'
-    projects: 'test/CodeAnalyzers.Episerver.Test/CodeAnalyzers.EpiserverCms10.Test.csproj'
+    projects: 'test/CodeAnalyzers.Episerver.Test/CodeAnalyzers.Episerver.Cms10.Test.csproj'
     arguments: '--configuration $(buildConfiguration) /p:CollectCoverage=true /p:CoverletOutput=$(Build.SourcesDirectory)/TestResults/Coverage/'
 
 
@@ -27,7 +27,7 @@ steps:
   displayName: 'Test Cms 11'
   inputs:
     command: 'test'
-    projects: 'test/CodeAnalyzers.Episerver.Test/CodeAnalyzers.EpiserverCms11.Test.csproj'
+    projects: 'test/CodeAnalyzers.Episerver.Test/CodeAnalyzers.Episerver.Cms11.Test.csproj'
     arguments: '--configuration $(buildConfiguration) /p:CollectCoverage=true /p:CoverletOutput=$(Build.SourcesDirectory)/TestResults/Coverage/ /p:MergeWith=$(Build.SourcesDirectory)/TestResults/Coverage/coverage.json /p:CoverletOutputFormat=cobertura'
 
 - task: reportgenerator@4
