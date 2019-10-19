@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.29409.12
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CodeAnalyzers.Episerver.Integration", "CodeAnalyzers.Episerver.Integration.csproj", "{AEABF0A4-E614-4557-A63E-466979D90E3E}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{AEABF0A4-E614-4557-A63E-466979D90E3E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AEABF0A4-E614-4557-A63E-466979D90E3E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AEABF0A4-E614-4557-A63E-466979D90E3E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AEABF0A4-E614-4557-A63E-466979D90E3E}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {0689331D-1E2D-47C6-9BBD-8F18DD2CB5E6}
+	EndGlobalSection
+EndGlobal
