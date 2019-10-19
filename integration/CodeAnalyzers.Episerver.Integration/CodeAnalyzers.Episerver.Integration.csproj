@@ -139,6 +139,7 @@
     <Reference Include="System.ComponentModel.Annotations, Version=4.2.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
       <HintPath>..\..\src\packages\System.ComponentModel.Annotations.4.4.0\lib\net461\System.ComponentModel.Annotations.dll</HintPath>
     </Reference>
+    <Reference Include="System.ComponentModel.Composition" />
     <Reference Include="System.Data.OracleClient" />
     <Reference Include="System.Data.SqlClient, Version=4.2.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
       <HintPath>..\..\src\packages\System.Data.SqlClient.4.4.0\lib\net461\System.Data.SqlClient.dll</HintPath>
@@ -216,22 +217,38 @@
   <Import Project="$(VSToolsPath)\WebApplications\Microsoft.WebApplication.targets" Condition="'$(VSToolsPath)' != ''" />
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v10.0\WebApplications\Microsoft.WebApplication.targets" Condition="false" />
   <ItemGroup>
+    <Compile Include="Business\Criterion\DefaultCriterion.cs" />
+    <Compile Include="Business\Criterion\DefaultCriterionModel.cs" />
+    <Compile Include="Business\InitializationModule.cs" />
+    <Compile Include="Business\Property\CustomProperty.cs" />
+    <Compile Include="Business\Property\CustomPropertyControl.cs" />
+    <Compile Include="Business\ScheduledJob.cs" />
+    <Compile Include="Controllers\DefaultBlockController.cs" />
+    <Compile Include="Controllers\DefaultPageController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Blocks\DefaultBlock.cs" />
+    <Compile Include="Models\Media\DefaultMedia.cs" />
+    <Compile Include="Models\Pages\DefaultPage.cs" />
+    <Compile Include="Plugins\AdminPlugin.aspx.cs">
+      <DependentUpon>AdminPlugin.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Plugins\AdminPlugin.aspx.designer.cs">
+      <DependentUpon>AdminPlugin.aspx</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Business\" />
-    <Folder Include="Controllers\" />
-    <Folder Include="Models\Blocks\" />
-    <Folder Include="Models\Media\" />
-    <Folder Include="Models\Pages\" />
     <Folder Include="Models\Properties\" />
     <Folder Include="Static\" />
     <Folder Include="Views\Shared\" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Business\Criterion\DefaultCriterion.js" />
+    <Content Include="Business\Criterion\Views\Shared\EditorTemplates\DefaultCriterionModel.ascx" />
+    <Content Include="Plugins\AdminPlugin.aspx" />
     <Content Include="Views\Web.config" />
     <Content Include="Global.asax" />
     <Content Include="Web.config" />
@@ -245,6 +262,8 @@
     <Content Include="modules\_protected\EPiServer.Cms.TinyMce\EPiServer.Cms.TinyMce.zip" />
     <Content Include="NuGet.config" />
     <None Include="packages.config" />
+    <Content Include="Views\DefaultPage.cshtml" />
+    <Content Include="Views\DefaultBlock.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
