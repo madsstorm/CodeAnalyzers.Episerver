@@ -121,32 +121,10 @@ namespace CodeAnalyzers.Episerver.Test
         }
 
         [Fact]
-        public async Task DetectInternalMediachaseMethod()
-        {
-            var test = @"
-                using Mediachase.Commerce.Internal;
-
-                namespace Test
-                {
-                    public class TypeName
-                    {
-                        public void Test(ConfigurationReader reader)
-                        {
-                            reader.ReadInt(null);
-                        }
-                    }
-                }";
-
-            var expected = Verify.Diagnostic(Descriptors.Epi1000AvoidUsingInternalNamespaces).WithLocation(10, 29).WithArguments("Mediachase.Commerce.Internal.ConfigurationReader");
-
-            await Verify.VerifyAnalyzerAsync(test, expected);
-        }
-
-        [Fact]
         public async Task DetectStaticUsingInternalEvent()
         {
             var test = @"
-                using static EPiServer.Commerce.Order.Internal.DefaultOrderEvents;
+                using static EPiServer.Core.Internal.DefaultContentEvents;
 
                 namespace Test
                 {
@@ -155,13 +133,13 @@ namespace CodeAnalyzers.Episerver.Test
                         public void Test()
                         {
                             var events = Instance;
-                            events.SavedOrder += null;
+                            events.SavedContent += null;
                         }
                     }
                 }";
 
-            var expected = Verify.Diagnostic(Descriptors.Epi1000AvoidUsingInternalNamespaces).WithLocation(10, 42).WithArguments("EPiServer.Commerce.Order.Internal.DefaultOrderEvents");
-            var expected2 = Verify.Diagnostic(Descriptors.Epi1000AvoidUsingInternalNamespaces).WithLocation(11, 29).WithArguments("EPiServer.Commerce.Order.Internal.DefaultOrderEvents");
+            var expected = Verify.Diagnostic(Descriptors.Epi1000AvoidUsingInternalNamespaces).WithLocation(10, 42).WithArguments("EPiServer.Core.Internal.DefaultContentEvents");
+            var expected2 = Verify.Diagnostic(Descriptors.Epi1000AvoidUsingInternalNamespaces).WithLocation(11, 29).WithArguments("EPiServer.Core.Internal.DefaultContentEvents");
 
             await Verify.VerifyAnalyzerAsync(test, expected, expected2);
         }
@@ -226,26 +204,6 @@ namespace CodeAnalyzers.Episerver.Test
                 }";
 
             var expected = Verify.Diagnostic(Descriptors.Epi1000AvoidUsingInternalNamespaces).WithLocation(8, 26).WithArguments("EPiServer.Cms.Shell.UI.Controllers.Internal.JsonErrorHandlingAttribute");
-
-            await Verify.VerifyAnalyzerAsync(test, expected);
-        }
-
-        [Fact]
-        public async Task DetectInternalPropertyAttribute()
-        {
-            var test = @"
-                using EPiServer.ContentApi.Core.Security.Internal;
-
-                namespace Test
-                {
-                    public class TypeName
-                    {
-                        [ContentApiCors]
-                        public string Text {get;set;}
-                    }
-                }";
-
-            var expected = Verify.Diagnostic(Descriptors.Epi1000AvoidUsingInternalNamespaces).WithLocation(8, 26).WithArguments("EPiServer.ContentApi.Core.Security.Internal.ContentApiCorsAttribute");
 
             await Verify.VerifyAnalyzerAsync(test, expected);
         }

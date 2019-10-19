@@ -5,7 +5,7 @@ VisualStudioVersion = 16.0.29326.143
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CodeAnalyzers.Episerver", "CodeAnalyzers.Episerver\CodeAnalyzers.Episerver.csproj", "{220C789C-6D2C-4F4B-8C5D-AFB9518AD071}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CodeAnalyzers.Episerver.Test", "..\test\CodeAnalyzers.Episerver.Test\CodeAnalyzers.Episerver.Test.csproj", "{3D1D7017-302D-465D-AF8A-7E5C7D9571D3}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CodeAnalyzers.Episerver.Cms11.Test", "..\test\CodeAnalyzers.Episerver.Test\CodeAnalyzers.Episerver.Cms11.Test.csproj", "{3D1D7017-302D-465D-AF8A-7E5C7D9571D3}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CodeAnalyzers.Episerver.Vsix", "CodeAnalyzers.Episerver.Vsix\CodeAnalyzers.Episerver.Vsix.csproj", "{196E7C95-EAFB-4A2B-94C1-D6A58D46208C}"
 EndProject
@@ -13,6 +13,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 	ProjectSection(SolutionItems) = preProject
 		..\azure-pipelines.yml = ..\azure-pipelines.yml
 	EndProjectSection
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CodeAnalyzers.Episerver.Cms10.Test", "..\test\CodeAnalyzers.Episerver.Test\CodeAnalyzers.Episerver.Cms10.Test.csproj", "{BF64BFE2-A280-4F66-8E76-12FF57EDC277}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -32,6 +34,10 @@ Global
 		{196E7C95-EAFB-4A2B-94C1-D6A58D46208C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{196E7C95-EAFB-4A2B-94C1-D6A58D46208C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{196E7C95-EAFB-4A2B-94C1-D6A58D46208C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BF64BFE2-A280-4F66-8E76-12FF57EDC277}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BF64BFE2-A280-4F66-8E76-12FF57EDC277}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BF64BFE2-A280-4F66-8E76-12FF57EDC277}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BF64BFE2-A280-4F66-8E76-12FF57EDC277}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
