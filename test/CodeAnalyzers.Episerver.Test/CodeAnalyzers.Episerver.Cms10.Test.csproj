@@ -4,18 +4,22 @@
     <BaseIntermediateOutputPath>obj\$(MSBuildProjectName)</BaseIntermediateOutputPath>
   </PropertyGroup>
 
-  <Import Project="Sdk.props" Sdk="Microsoft.NET.Sdk"/>
+  <Import Project="Sdk.props" Sdk="Microsoft.NET.Sdk" />
   
   <PropertyGroup>
     <TargetFramework>net461</TargetFramework>
     <OutputPath>bin\$(Configuration)\$(TargetFramework)\$(MSBuildProjectName)</OutputPath>
   </PropertyGroup>
+  
+  <PropertyGroup>
+    <DefineConstants>INTERNAL_NAMESPACES</DefineConstants>
+  </PropertyGroup>
 
-  <Import Project="Sdk.targets" Sdk="Microsoft.NET.Sdk"/>
+  <Import Project="Sdk.targets" Sdk="Microsoft.NET.Sdk" />
 
   <ItemGroup>
-    <Compile Remove="obj\\**\*"/>
-    <Compile Include="obj\$(MSBuildProjectName)\**\$(MSBuildProjectName).AssemblyInfo.cs"/>
+    <Compile Remove="obj\\**\*" />
+    <Compile Include="obj\$(MSBuildProjectName)\**\$(MSBuildProjectName).AssemblyInfo.cs" />
   </ItemGroup>
 
   <ItemGroup>

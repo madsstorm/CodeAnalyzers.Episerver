@@ -16,12 +16,18 @@ steps:
     arguments: '--configuration $(buildConfiguration)'
 
 - task: DotNetCoreCLI@2
+  displayName: 'Test Cms 9'
+  inputs:
+    command: 'test'
+    projects: 'test/CodeAnalyzers.Episerver.Test/CodeAnalyzers.Episerver.Cms9.Test.csproj'
+    arguments: '--configuration $(buildConfiguration) /p:CollectCoverage=true /p:CoverletOutput=$(Build.SourcesDirectory)/TestResults/Coverage/'
+
+- task: DotNetCoreCLI@2
   displayName: 'Test Cms 10'
   inputs:
     command: 'test'
     projects: 'test/CodeAnalyzers.Episerver.Test/CodeAnalyzers.Episerver.Cms10.Test.csproj'
-    arguments: '--configuration $(buildConfiguration) /p:CollectCoverage=true /p:CoverletOutput=$(Build.SourcesDirectory)/TestResults/Coverage/'
-
+    arguments: '--configuration $(buildConfiguration) /p:CollectCoverage=true /p:CoverletOutput=$(Build.SourcesDirectory)/TestResults/Coverage/ /p:MergeWith=$(Build.SourcesDirectory)/TestResults/Coverage/coverage.json'
 
 - task: DotNetCoreCLI@2
   displayName: 'Test Cms 11'

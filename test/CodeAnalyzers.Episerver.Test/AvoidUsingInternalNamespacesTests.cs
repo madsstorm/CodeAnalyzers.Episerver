@@ -1,4 +1,6 @@
-﻿using Verify = CodeAnalyzers.Episerver.Test.CSharpVerifier<CodeAnalyzers.Episerver.DiagnosticAnalyzers.CSharp.BannedApiAnalyzer>;
+﻿#if INTERNAL_NAMESPACES
+
+using Verify = CodeAnalyzers.Episerver.Test.CSharpVerifier<CodeAnalyzers.Episerver.DiagnosticAnalyzers.CSharp.BannedApiAnalyzer>;
 using System.Threading.Tasks;
 using Xunit;
 
@@ -276,3 +278,5 @@ namespace CodeAnalyzers.Episerver.Test
         }
     }
 }
+
+#endif
