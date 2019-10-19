@@ -18,6 +18,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CodeAnalyzers.Episerver.Cms
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CodeAnalyzers.Episerver.Cms9.Test", "..\test\CodeAnalyzers.Episerver.Test\CodeAnalyzers.Episerver.Cms9.Test.csproj", "{AE8A3667-BA13-4EAF-9D66-D53B6C74EAC5}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Test", "Test", "{1EE0E227-D799-4C81-8403-93F1ADB7C415}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -47,6 +49,11 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{3D1D7017-302D-465D-AF8A-7E5C7D9571D3} = {1EE0E227-D799-4C81-8403-93F1ADB7C415}
+		{BF64BFE2-A280-4F66-8E76-12FF57EDC277} = {1EE0E227-D799-4C81-8403-93F1ADB7C415}
+		{AE8A3667-BA13-4EAF-9D66-D53B6C74EAC5} = {1EE0E227-D799-4C81-8403-93F1ADB7C415}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {6513C72D-67E8-4EB6-8563-297920033F1B}
