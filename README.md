@@ -1,22 +1,23 @@
 # Code analyzers for Episerver
-#### Automatically inspect your Episerver code for best practices
 [![Build Status](https://dev.azure.com/madsstorm/CodeAnalyzers.Episerver/_apis/build/status/CodeAnalyzers.Episerver?branchName=master)](https://dev.azure.com/madsstorm/CodeAnalyzers.Episerver/_build/latest?definitionId=2&branchName=master)
 <!---
 [![Nuget](https://img.shields.io/badge/nuget-v1.0-blue)](https://nuget.episerver.com/package/?id=CodeAnalyzers.Episerver)
 --->
 
-### What is it?
-Roslyn based analyzers give you warnings and errors in Visual Studio as you type.
+**_Analyze your code for Episerver best practices_** :heavy_check_mark:
 
-### Examples
+### Description
+[Roslyn](https://docs.microsoft.com/dotnet/csharp/roslyn-sdk) analyzers can produce warnings in your code as you type.
+
+### Example
 Code | Problem | Severity
 -----|---------|:-------:
-`[ContentType()]`<br>`public class StartPage : PageData` | **_Missing GUID_**<br>**_Missing Description_** | :no_entry:<br>:warning:
-`DataFactory.Instance.GetChildren()` | **_Legacy API_** | :warning:
-`EPiServer.Core.Internal.DefaultContentRepository` | **_Internal namespace_** | :warning:
+`[ContentType(DisplayName="StartPage")]` | :x:**_GUID_**<br>:x:**_Description_** | :no_entry:<br>:warning:
+`DataFactory.Instance.GetChildren()` | **_Legacy_** | :warning:
+`EPiServer.Core.Internal.DefaultContentRepository` | **_Internal_** | :warning:
 
 <!---
-### Installation 
+### Install
 `Install-Package CodeAnalyzers.Episerver`
 --->
 
