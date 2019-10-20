@@ -13,7 +13,9 @@ namespace CodeAnalyzers.Episerver.DiagnosticAnalyzers.CSharp
         private const string GuidArgument = "GUID";
 
         public override ImmutableArray<DiagnosticDescriptor> SupportedDiagnostics =>
-            ImmutableArray.Create(Descriptors.Epi2000ContentTypeMustHaveGuid);
+            ImmutableArray.Create(
+                Descriptors.Epi1000ContentTypeMustHaveValidGuid,
+                Descriptors.Epi1001ContentTypeMustHaveUniqueGuid);
 
         public override void Initialize(AnalysisContext context)
         {
@@ -60,7 +62,7 @@ namespace CodeAnalyzers.Episerver.DiagnosticAnalyzers.CSharp
                         {
                             reportDiagnostic(
                                 node.CreateDiagnostic(
-                                    Descriptors.Epi2000ContentTypeMustHaveGuid,
+                                    Descriptors.Epi1000ContentTypeMustHaveValidGuid,
                                     namedTypeSymbol.ToDisplayString(SymbolDisplayFormat.CSharpErrorMessageFormat)));
                         }
                     }

@@ -24,17 +24,21 @@ namespace CodeAnalyzers.Episerver
 
         #region Usage 1xxx
 
-        public static DiagnosticDescriptor Epi1000AvoidUsingInternalNamespaces { get; } =
-            Rule("Epi1000", "Avoid using internal namespaces", Usage, Warning,
+        public static DiagnosticDescriptor Epi1000ContentTypeMustHaveValidGuid { get; } =
+            Rule("Epi1000", "Content type must have a valid GUID property", Usage, Error,
+                "Content type {0} does not have a valid GUID property", "All content types must be identified by a valid GUID property.");
+
+        public static DiagnosticDescriptor Epi1001ContentTypeMustHaveUniqueGuid { get; } =
+            Rule("Epi1001", "Content type must have a unique GUID property", Usage, Error,
+                "Content type {0} does not have a unique GUID property", "All content types must be identified by a unique GUID property.");
+
+        public static DiagnosticDescriptor Epi1002AvoidUsingInternalNamespaces { get; } =
+            Rule("Epi1002", "Avoid using internal namespaces", Usage, Warning,
                 "Avoid using internal type {0}", "Internal namespaces are not considered part of the public supported API.");
 
         #endregion
 
         #region Content 2xxx
-
-        public static DiagnosticDescriptor Epi2000ContentTypeMustHaveGuid { get; } =
-            Rule("Epi2000", "Content type must have a valid GUID property", Content, Error,
-                "Content type {0} does not have a valid GUID property", "All content types must be identified by a valid GUID property.");
 
         #endregion
 

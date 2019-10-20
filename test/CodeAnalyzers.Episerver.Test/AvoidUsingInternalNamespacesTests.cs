@@ -93,7 +93,7 @@ namespace CodeAnalyzers.Episerver.Test
                     }
                 }";
 
-            var expected = Verify.Diagnostic(Descriptors.Epi1000AvoidUsingInternalNamespaces).WithLocation(10, 40).WithArguments("EPiServer.Web.Routing.Internal.DefaultPageRouteHelper");
+            var expected = Verify.Diagnostic(Descriptors.Epi1002AvoidUsingInternalNamespaces).WithLocation(10, 40).WithArguments("EPiServer.Web.Routing.Internal.DefaultPageRouteHelper");
 
             await Verify.VerifyAnalyzerAsync(test, expected);
         }
@@ -117,7 +117,7 @@ namespace CodeAnalyzers.Episerver.Test
                     }
                 }";
 
-            var expected = Verify.Diagnostic(Descriptors.Epi1000AvoidUsingInternalNamespaces).WithLocation(12, 29).WithArguments("EPiServer.Core.Internal.DefaultContentRepository");
+            var expected = Verify.Diagnostic(Descriptors.Epi1002AvoidUsingInternalNamespaces).WithLocation(12, 29).WithArguments("EPiServer.Core.Internal.DefaultContentRepository");
 
             await Verify.VerifyAnalyzerAsync(test, expected);
         }
@@ -140,8 +140,8 @@ namespace CodeAnalyzers.Episerver.Test
                     }
                 }";
 
-            var expected = Verify.Diagnostic(Descriptors.Epi1000AvoidUsingInternalNamespaces).WithLocation(10, 42).WithArguments("EPiServer.Core.Internal.DefaultContentEvents");
-            var expected2 = Verify.Diagnostic(Descriptors.Epi1000AvoidUsingInternalNamespaces).WithLocation(11, 29).WithArguments("EPiServer.Core.Internal.DefaultContentEvents");
+            var expected = Verify.Diagnostic(Descriptors.Epi1002AvoidUsingInternalNamespaces).WithLocation(10, 42).WithArguments("EPiServer.Core.Internal.DefaultContentEvents");
+            var expected2 = Verify.Diagnostic(Descriptors.Epi1002AvoidUsingInternalNamespaces).WithLocation(11, 29).WithArguments("EPiServer.Core.Internal.DefaultContentEvents");
 
             await Verify.VerifyAnalyzerAsync(test, expected, expected2);
         }
@@ -164,7 +164,7 @@ namespace CodeAnalyzers.Episerver.Test
                 }";
 
 
-            var expected = Verify.Diagnostic(Descriptors.Epi1000AvoidUsingInternalNamespaces).WithLocation(10, 29).WithArguments("EPiServer.Core.Internal.ThumbnailManager");
+            var expected = Verify.Diagnostic(Descriptors.Epi1002AvoidUsingInternalNamespaces).WithLocation(10, 29).WithArguments("EPiServer.Core.Internal.ThumbnailManager");
 
             await Verify.VerifyAnalyzerAsync(test, expected);
         }
@@ -183,7 +183,7 @@ namespace CodeAnalyzers.Episerver.Test
                     }
                 }";
 
-            var expected = Verify.Diagnostic(Descriptors.Epi1000AvoidUsingInternalNamespaces).WithLocation(6, 22).WithArguments("EPiServer.Data.Dynamic.Internal.QueryableAttribute");
+            var expected = Verify.Diagnostic(Descriptors.Epi1002AvoidUsingInternalNamespaces).WithLocation(6, 22).WithArguments("EPiServer.Data.Dynamic.Internal.QueryableAttribute");
 
             await Verify.VerifyAnalyzerAsync(test, expected);
         }
@@ -205,7 +205,7 @@ namespace CodeAnalyzers.Episerver.Test
                     }
                 }";
 
-            var expected = Verify.Diagnostic(Descriptors.Epi1000AvoidUsingInternalNamespaces).WithLocation(8, 26).WithArguments("EPiServer.Cms.Shell.UI.Controllers.Internal.JsonErrorHandlingAttribute");
+            var expected = Verify.Diagnostic(Descriptors.Epi1002AvoidUsingInternalNamespaces).WithLocation(8, 26).WithArguments("EPiServer.Cms.Shell.UI.Controllers.Internal.JsonErrorHandlingAttribute");
 
             await Verify.VerifyAnalyzerAsync(test, expected);
         }
@@ -227,7 +227,7 @@ namespace CodeAnalyzers.Episerver.Test
                     }
                 }";
 
-            var expected = Verify.Diagnostic(Descriptors.Epi1000AvoidUsingInternalNamespaces).WithLocation(10, 43).WithArguments("EPiServer.Web.Internal.UrlSegment");
+            var expected = Verify.Diagnostic(Descriptors.Epi1002AvoidUsingInternalNamespaces).WithLocation(10, 43).WithArguments("EPiServer.Web.Internal.UrlSegment");
 
             await Verify.VerifyAnalyzerAsync(test, expected);
         }
@@ -250,7 +250,7 @@ namespace CodeAnalyzers.Episerver.Test
                     }
                 }";
 
-            var expected = Verify.Diagnostic(Descriptors.Epi1000AvoidUsingInternalNamespaces).WithLocation(11, 40).WithArguments("EPiServer.Web.Internal.UrlSegment");
+            var expected = Verify.Diagnostic(Descriptors.Epi1002AvoidUsingInternalNamespaces).WithLocation(11, 40).WithArguments("EPiServer.Web.Internal.UrlSegment");
 
             await Verify.VerifyAnalyzerAsync(test, expected);
         }
@@ -272,7 +272,7 @@ namespace CodeAnalyzers.Episerver.Test
                     }
                 }";
 
-            var expected = Verify.Diagnostic(Descriptors.Epi1000AvoidUsingInternalNamespaces).WithLocation(10, 39).WithArguments("EPiServer.Web.Internal.UrlSegment");
+            var expected = Verify.Diagnostic(Descriptors.Epi1002AvoidUsingInternalNamespaces).WithLocation(10, 39).WithArguments("EPiServer.Web.Internal.UrlSegment");
 
             await Verify.VerifyAnalyzerAsync(test, expected);
         }

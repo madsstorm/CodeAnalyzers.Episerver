@@ -21,7 +21,7 @@ namespace CodeAnalyzers.Episerver.DiagnosticAnalyzers.CSharp
 
         public override ImmutableArray<DiagnosticDescriptor> SupportedDiagnostics =>
             ImmutableArray.Create(
-                Descriptors.Epi1000AvoidUsingInternalNamespaces,
+                Descriptors.Epi1002AvoidUsingInternalNamespaces,
                 Descriptors.Epi3000AvoidUsingDataFactory,
                 Descriptors.Epi3001AvoidUsingCacheManager);
 
@@ -129,7 +129,7 @@ namespace CodeAnalyzers.Episerver.DiagnosticAnalyzers.CSharp
             {
                 reportDiagnostic(
                     Diagnostic.Create(
-                        Descriptors.Epi1000AvoidUsingInternalNamespaces,
+                        Descriptors.Epi1002AvoidUsingInternalNamespaces,
                         syntaxNode?.GetLocation(),
                         type.ToDisplayString(SymbolDisplayFormat.CSharpErrorMessageFormat)));
 
@@ -181,7 +181,7 @@ namespace CodeAnalyzers.Episerver.DiagnosticAnalyzers.CSharp
                     {
                         reportDiagnostic(
                             node.CreateDiagnostic(
-                                Descriptors.Epi1000AvoidUsingInternalNamespaces,
+                                Descriptors.Epi1002AvoidUsingInternalNamespaces,
                                 attribute.AttributeClass.ToDisplayString(SymbolDisplayFormat.CSharpErrorMessageFormat)));
                     }
                 }
