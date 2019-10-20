@@ -1,5 +1,6 @@
 # Code analyzers for Episerver
 #### Automatically inspect your Episerver code for best practices
+
 <!---
 [![Nuget](https://img.shields.io/badge/nuget-v1.0-blue)](https://nuget.episerver.com/package/?id=CodeAnalyzers.Episerver)
 --->
@@ -8,8 +9,9 @@
 
 Code | Problem | Severity
 -----|---------|:-------:
-`[ContentType(DisplayName = "StartPage")]`<br>`public classs StartPage : PageData` | Missing GUID property | :no_entry:
+`[ContentType()]`<br>`public class StartPage : PageData` | Missing GUID<br>Missing Description | :no_entry:<br>:warning:
 `DataFactory.Instance.GetChildren()` | Legacy API | :warning:
+`EPiServer.Core.Internal.DefaultContentRepository` | Internal namespace | :warning:
 
 <!---
 ## Installation 
