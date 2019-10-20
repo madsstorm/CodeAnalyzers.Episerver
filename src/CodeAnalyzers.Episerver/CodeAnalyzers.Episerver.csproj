@@ -12,6 +12,7 @@
     <Authors>Mads Storm Hansen</Authors>
     <PackageProjectUrl>https://github.com/madsstorm/CodeAnalyzers.Episerver</PackageProjectUrl>
     <RepositoryUrl>https://github.com/madsstorm/CodeAnalyzers.Episerver</RepositoryUrl>
+    <PackageIconUrl>https://github.com/madsstorm/CodeAnalyzers.Episerver/raw/master/docs/icon/icon.png</PackageIconUrl>
     <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
     <Description>Code analyzers for Episerver.</Description>
     <PackageTags>CodeAnalyzers Episerver CodeAnalysis Analyzers Roslyn</PackageTags>
