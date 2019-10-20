@@ -1,4 +1,4 @@
-<img src="docs/icon/icon.png" align="right" />
+<img src="docs/icon/icon64.png" align="right" />
 
 # Code analyzers for Episerver
 [![Build Status](https://dev.azure.com/madsstorm/CodeAnalyzers.Episerver/_apis/build/status/CodeAnalyzers.Episerver?branchName=master)](https://dev.azure.com/madsstorm/CodeAnalyzers.Episerver/_build/latest?definitionId=2&branchName=master)
