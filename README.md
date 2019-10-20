@@ -14,9 +14,9 @@
 ### Example
 Code | Problem | Severity
 -----|---------|:-------:
-`[ContentType(DisplayName="StartPage")]` | :x:**_GUID_**<br>:x:**_Description_** | :no_entry:<br>:warning:
-`DataFactory.Instance.GetChildren()` | **_Legacy_** | :warning:
-`EPiServer.Core.Internal.DefaultContentRepository` | **_Internal_** | :warning:
+`[ContentType(DisplayName="StartPage")]` | **_No GUID_**<br>**_No Description_** | :no_entry:<br>:warning:
+`DataFactory.Instance.GetChildren()` | **_Legacy type_** | :warning:
+`EPiServer.Core.Internal.DefaultContentRepository` | **_Internal type_** | :warning:
 
 <!---
 ### Install
