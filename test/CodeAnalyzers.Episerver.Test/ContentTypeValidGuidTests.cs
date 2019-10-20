@@ -34,7 +34,7 @@ namespace CodeAnalyzers.Episerver.Test
         }
 
         [Fact]
-        public async Task IgnoreContentTypeWithGuid()
+        public async Task IgnoreContentTypesWithGuids()
         {
             var test = @"
                 using EPiServer.DataAnnotations;
@@ -42,12 +42,22 @@ namespace CodeAnalyzers.Episerver.Test
                 namespace Test
                 {
                     [ContentType(GUID = ""1F218487-9C23-4944-A0E6-76FC1995CBF0"")]
-                    public class TypeName
+                    public class PlainType
+                    {
+                    }
+
+                    [ContentType(GUID = ""{9B2399B3-1840-4FFC-975F-F140BCB1D72C}"")]
+                    public class CurlyType
+                    {
+                    }
+
+                    [ContentType(GUID = ""(41364022-AED5-4294-B20D-5352AFCCEEB3)"")]
+                    public class ParensType
                     {
                     }
                 }";
 
-            await Verify.VerifyAnalyzerAsync(test);
+        await Verify.VerifyAnalyzerAsync(test);
         }
 
         [Fact]

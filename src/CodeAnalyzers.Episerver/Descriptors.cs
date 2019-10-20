@@ -30,7 +30,7 @@ namespace CodeAnalyzers.Episerver
 
         public static DiagnosticDescriptor Epi1001ContentTypeMustHaveUniqueGuid { get; } =
             Rule("Epi1001", "Content type must have a unique GUID property", Usage, Error,
-                "Content type {0} does not have a unique GUID property", "All content types must be identified by a unique GUID property.");
+                "Content type {0} has the same GUID as {1}", "All content types must be identified by a unique GUID property.");
 
         public static DiagnosticDescriptor Epi1002AvoidUsingInternalNamespaces { get; } =
             Rule("Epi1002", "Avoid using internal namespaces", Usage, Warning,

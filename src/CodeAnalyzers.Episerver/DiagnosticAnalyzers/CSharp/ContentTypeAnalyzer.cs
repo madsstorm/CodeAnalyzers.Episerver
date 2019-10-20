@@ -3,6 +3,7 @@ using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.Diagnostics;
 using CodeAnalyzers.Episerver.Extensions;
 using System;
+using System.Collections.Concurrent;
 
 namespace CodeAnalyzers.Episerver.DiagnosticAnalyzers.CSharp
 {
@@ -30,44 +31,98 @@ namespace CodeAnalyzers.Episerver.DiagnosticAnalyzers.CSharp
                     return;
                 }
 
-                compilationContext.RegisterSymbolAction(
-                    symbolContext => VerifyAttributes(symbolContext.ReportDiagnostic, symbolContext.Symbol, contentTypeAttribute),
-                    SymbolKind.NamedType);
+                CompilationAnalyzer analyzer = new CompilationAnalyzer(contentTypeAttribute);
+
+                compilationContext.RegisterSymbolAction(analyzer.AnalyzeSymbol, SymbolKind.NamedType);
             });
         }
 
-        private static void VerifyAttributes(Action<Diagnostic> reportDiagnostic, ISymbol namedTypeSymbol, INamedTypeSymbol contentTypeAttribute)
+        private class CompilationAnalyzer
         {
-            var attributes = namedTypeSymbol.GetAttributes();
+            private readonly INamedTypeSymbol _contentTypeAttribute;
 
-            foreach (var attribute in attributes)
+            private readonly ConcurrentDictionary<Guid, (INamedTypeSymbol Type, AttributeData Attribute)> _contentTypeGuids =
+                new ConcurrentDictionary<Guid, (INamedTypeSymbol Type, AttributeData Attribute)>();
+
+            public CompilationAnalyzer(INamedTypeSymbol contentTypeAttribute)
             {
-                if(attribute.AttributeClass.InheritsOrIs(contentTypeAttribute))
+                _contentTypeAttribute = contentTypeAttribute;               
+            }
+
+            internal void AnalyzeSymbol(SymbolAnalysisContext symbolContext)
+            {
+                if(!(symbolContext.Symbol is INamedTypeSymbol namedTypeSymbol))
                 {
-                    TypedConstant guidValue = default;
+                    return;
+                }
 
-                    foreach(var namedArgument in attribute.NamedArguments)
+                if (!(namedTypeSymbol?.GetAttributes() is ImmutableArray<AttributeData> attributes))
+                {
+                    return;
+                }
+
+                foreach (var attribute in attributes)
+                {
+                    if (attribute.AttributeClass.InheritsOrIs(_contentTypeAttribute))
                     {
-                        if(string.Equals(namedArgument.Key, GuidArgument, StringComparison.Ordinal))
-                        {
-                            guidValue = namedArgument.Value;
-                            break;
-                        }
+                        VerifyContentTypeGuid(symbolContext, namedTypeSymbol, attribute);
+                        break;
                     }
+                }
+            }
 
-                    if(!Guid.TryParse(guidValue.Value?.ToString(), out Guid value))
+            private void VerifyContentTypeGuid(SymbolAnalysisContext symbolContext, INamedTypeSymbol namedTypeSymbol, AttributeData attribute)
+            {
+                TypedConstant guidValue = default;
+
+                foreach (var namedArgument in attribute.NamedArguments)
+                {
+                    if (string.Equals(namedArgument.Key, GuidArgument, StringComparison.Ordinal))
+                    {
+                        guidValue = namedArgument.Value;
+                        break;
+                    }
+                }
+
+                bool validGuid = Guid.TryParse(guidValue.Value?.ToString(), out Guid contentGuid);
+
+                if (validGuid)
+                {
+                    var (existingType, existingAttribute) = _contentTypeGuids.GetOrAdd(contentGuid, (namedTypeSymbol, attribute));
+
+                    if(existingType != namedTypeSymbol)
                     {
                         var node = attribute.ApplicationSyntaxReference?.GetSyntax();
                         if (node != null)
                         {
-                            reportDiagnostic(
+                            symbolContext.ReportDiagnostic(
                                 node.CreateDiagnostic(
-                                    Descriptors.Epi1000ContentTypeMustHaveValidGuid,
+                                    Descriptors.Epi1001ContentTypeMustHaveUniqueGuid,
+                                    namedTypeSymbol.ToDisplayString(SymbolDisplayFormat.CSharpErrorMessageFormat),
+                                    existingType.ToDisplayString(SymbolDisplayFormat.CSharpErrorMessageFormat)));
+                        }
+
+                        var existingNode = existingAttribute.ApplicationSyntaxReference?.GetSyntax();
+                        if(existingNode != null)
+                        {
+                            symbolContext.ReportDiagnostic(
+                                existingNode.CreateDiagnostic(
+                                    Descriptors.Epi1001ContentTypeMustHaveUniqueGuid,
+                                    existingType.ToDisplayString(SymbolDisplayFormat.CSharpErrorMessageFormat),
                                     namedTypeSymbol.ToDisplayString(SymbolDisplayFormat.CSharpErrorMessageFormat)));
                         }
                     }
-
-                    break;
+                }
+                else
+                {
+                    var node = attribute.ApplicationSyntaxReference?.GetSyntax();
+                    if (node != null)
+                    {
+                        symbolContext.ReportDiagnostic(
+                            node.CreateDiagnostic(
+                                Descriptors.Epi1000ContentTypeMustHaveValidGuid,
+                                namedTypeSymbol.ToDisplayString(SymbolDisplayFormat.CSharpErrorMessageFormat)));
+                    }
                 }
             }
         }

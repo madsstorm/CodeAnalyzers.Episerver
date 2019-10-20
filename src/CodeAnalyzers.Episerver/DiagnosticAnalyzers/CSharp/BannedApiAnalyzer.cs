@@ -1,7 +1,6 @@
 ﻿using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.Diagnostics;
 using System;
-using System.Collections.Generic;
 using System.Collections.Immutable;
 using CodeAnalyzers.Episerver.Extensions;
 using Microsoft.CodeAnalysis.Operations;
@@ -13,11 +12,10 @@ namespace CodeAnalyzers.Episerver.DiagnosticAnalyzers.CSharp
     {
         private const string InternalNamespace = "Internal";
 
-        private static readonly Dictionary<string, DiagnosticDescriptor> BannedTypes = new Dictionary<string, DiagnosticDescriptor>
-        {
-            { "EPiServer.DataFactory", Descriptors.Epi3000AvoidUsingDataFactory },
-            { "EPiServer.CacheManager", Descriptors.Epi3001AvoidUsingCacheManager }
-        };
+        private readonly ImmutableArray<(string TypeName, DiagnosticDescriptor Descriptor)> BannedTypes =
+            ImmutableArray.Create(
+                ("EPiServer.DataFactory", Descriptors.Epi3000AvoidUsingDataFactory),
+                ("EPiServer.CacheManager", Descriptors.Epi3001AvoidUsingCacheManager));
 
         public override ImmutableArray<DiagnosticDescriptor> SupportedDiagnostics =>
             ImmutableArray.Create(
@@ -48,7 +46,7 @@ namespace CodeAnalyzers.Episerver.DiagnosticAnalyzers.CSharp
                 SymbolKind.Event);
         }
 
-        private static void OperationAction(OperationAnalysisContext operationContext)
+        private void OperationAction(OperationAnalysisContext operationContext)
         {
             switch (operationContext.Operation)
             {
@@ -70,7 +68,7 @@ namespace CodeAnalyzers.Episerver.DiagnosticAnalyzers.CSharp
             }
         }
 
-        private static bool VerifyType(Action<Diagnostic> reportDiagnostic, ITypeSymbol type, SyntaxNode syntaxNode)
+        private bool VerifyType(Action<Diagnostic> reportDiagnostic, ITypeSymbol type, SyntaxNode syntaxNode)
         {
             do
             {
@@ -101,17 +99,17 @@ namespace CodeAnalyzers.Episerver.DiagnosticAnalyzers.CSharp
             return true;
         }
 
-        private static bool VerifyTypeBanned(Action<Diagnostic> reportDiagnostic, ITypeSymbol type, SyntaxNode syntaxNode)
+        private bool VerifyTypeBanned(Action<Diagnostic> reportDiagnostic, ITypeSymbol type, SyntaxNode syntaxNode)
         {
             string typeName = type.ToDisplayString(SymbolDisplayFormat.CSharpErrorMessageFormat);
 
             foreach (var pair in BannedTypes)
             {
-                if (string.Equals(typeName, pair.Key, StringComparison.Ordinal))
+                if (string.Equals(typeName, pair.TypeName, StringComparison.Ordinal))
                 {
                     reportDiagnostic(
                         Diagnostic.Create(
-                            pair.Value,
+                            pair.Descriptor,
                             syntaxNode?.GetLocation()));
 
                     return false;
@@ -121,7 +119,7 @@ namespace CodeAnalyzers.Episerver.DiagnosticAnalyzers.CSharp
             return true;
         }
 
-        private static bool VerifyTypeInternal(Action<Diagnostic> reportDiagnostic, ITypeSymbol type, SyntaxNode syntaxNode)
+        private bool VerifyTypeInternal(Action<Diagnostic> reportDiagnostic, ITypeSymbol type, SyntaxNode syntaxNode)
         {
             var space = type.ContainingNamespace;
 
@@ -139,7 +137,7 @@ namespace CodeAnalyzers.Episerver.DiagnosticAnalyzers.CSharp
             return true;
         }
 
-        private static bool VerifyTypeArguments(Action<Diagnostic> reportDiagnostic, ITypeSymbol type, SyntaxNode syntaxNode, out ITypeSymbol originalDefinition)
+        private bool VerifyTypeArguments(Action<Diagnostic> reportDiagnostic, ITypeSymbol type, SyntaxNode syntaxNode, out ITypeSymbol originalDefinition)
         {
             switch (type)
             {
@@ -168,7 +166,7 @@ namespace CodeAnalyzers.Episerver.DiagnosticAnalyzers.CSharp
             return true;
         }
 
-        private static void VerifyAttributes(Action<Diagnostic> reportDiagnostic, ImmutableArray<AttributeData> attributes)
+        private void VerifyAttributes(Action<Diagnostic> reportDiagnostic, ImmutableArray<AttributeData> attributes)
         {
             foreach (var attribute in attributes)
             {
