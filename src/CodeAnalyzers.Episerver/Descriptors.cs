@@ -26,15 +26,15 @@ namespace CodeAnalyzers.Episerver
 
         public static DiagnosticDescriptor Epi1000ContentTypeMustHaveValidGuid { get; } =
             Rule("Epi1000", "Content type must have a valid GUID property", Usage, Error,
-                "Content type {0} does not have a valid GUID property", "All content types must be identified by a valid GUID property.");
+                "Content type '{0}' is missing a valid GUID property", "All content types must be identified by a valid GUID property.");
 
         public static DiagnosticDescriptor Epi1001ContentTypeMustHaveUniqueGuid { get; } =
             Rule("Epi1001", "Content type must have a unique GUID property", Usage, Error,
-                "Content type {0} has the same GUID as {1}", "All content types must be identified by a unique GUID property.");
+                "Content type '{0}' has the same GUID as '{1}'", "All content types must be identified by a unique GUID property.");
 
         public static DiagnosticDescriptor Epi1002AvoidUsingInternalNamespaces { get; } =
             Rule("Epi1002", "Avoid using internal namespaces", Usage, Warning,
-                "Avoid using internal type {0}", "Internal namespaces are not considered part of the public supported API.");
+                "Avoid using internal type '{0}'", "Internal namespaces are not considered part of the public supported API.");
 
         #endregion
 
@@ -46,11 +46,11 @@ namespace CodeAnalyzers.Episerver
 
         public static DiagnosticDescriptor Epi3000AvoidUsingDataFactory { get; } =
             Rule("Epi3000", "Avoid using EPiServer.DataFactory", Legacy, Warning,
-                "Avoid using EPiServer.DataFactory", "Legacy data source in Episerver. This API has been replaced by the IContentRepository, IContentEvents and a number of related interfaces.");
+                "Avoid using legacy DataFactory", "Legacy data source in Episerver. This API has been replaced by the IContentRepository, IContentEvents and a number of related interfaces.");
 
         public static DiagnosticDescriptor Epi3001AvoidUsingCacheManager { get; } =
             Rule("Epi3001", "Avoid using EPiServer.CacheManager", Legacy, Warning,
-                "Avoid using EPiServer.CacheManager", "Legacy cache manager in Episerver. This API has been replaced by the ISynchronizedObjectInstanceCache and IObjectInstanceCache interfaces.");
+                "Avoid using legacy CacheManager", "Legacy cache manager in Episerver. This API has been replaced by the ISynchronizedObjectInstanceCache and IObjectInstanceCache interfaces.");
 
         #endregion
 

@@ -129,7 +129,7 @@ namespace CodeAnalyzers.Episerver.DiagnosticAnalyzers.CSharp
                     Diagnostic.Create(
                         Descriptors.Epi1002AvoidUsingInternalNamespaces,
                         syntaxNode?.GetLocation(),
-                        type.ToDisplayString(SymbolDisplayFormat.CSharpErrorMessageFormat)));
+                        type.ToDisplayString(SymbolDisplayFormat.CSharpShortErrorMessageFormat)));
 
                 return false;
             }
@@ -180,7 +180,7 @@ namespace CodeAnalyzers.Episerver.DiagnosticAnalyzers.CSharp
                         reportDiagnostic(
                             node.CreateDiagnostic(
                                 Descriptors.Epi1002AvoidUsingInternalNamespaces,
-                                attribute.AttributeClass.ToDisplayString(SymbolDisplayFormat.CSharpErrorMessageFormat)));
+                                attribute.AttributeClass.ToDisplayString(SymbolDisplayFormat.CSharpShortErrorMessageFormat)));
                     }
                 }
             }

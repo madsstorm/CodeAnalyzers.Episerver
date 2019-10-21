@@ -98,8 +98,8 @@ namespace CodeAnalyzers.Episerver.DiagnosticAnalyzers.CSharp
                             symbolContext.ReportDiagnostic(
                                 node.CreateDiagnostic(
                                     Descriptors.Epi1001ContentTypeMustHaveUniqueGuid,
-                                    namedTypeSymbol.ToDisplayString(SymbolDisplayFormat.CSharpErrorMessageFormat),
-                                    existingType.ToDisplayString(SymbolDisplayFormat.CSharpErrorMessageFormat)));
+                                    namedTypeSymbol.ToDisplayString(SymbolDisplayFormat.CSharpShortErrorMessageFormat),
+                                    existingType.ToDisplayString(SymbolDisplayFormat.CSharpShortErrorMessageFormat)));
                         }
 
                         var existingNode = existingAttribute.ApplicationSyntaxReference?.GetSyntax();
@@ -108,8 +108,8 @@ namespace CodeAnalyzers.Episerver.DiagnosticAnalyzers.CSharp
                             symbolContext.ReportDiagnostic(
                                 existingNode.CreateDiagnostic(
                                     Descriptors.Epi1001ContentTypeMustHaveUniqueGuid,
-                                    existingType.ToDisplayString(SymbolDisplayFormat.CSharpErrorMessageFormat),
-                                    namedTypeSymbol.ToDisplayString(SymbolDisplayFormat.CSharpErrorMessageFormat)));
+                                    existingType.ToDisplayString(SymbolDisplayFormat.CSharpShortErrorMessageFormat),
+                                    namedTypeSymbol.ToDisplayString(SymbolDisplayFormat.CSharpShortErrorMessageFormat)));
                         }
                     }
                 }
@@ -121,7 +121,7 @@ namespace CodeAnalyzers.Episerver.DiagnosticAnalyzers.CSharp
                         symbolContext.ReportDiagnostic(
                             node.CreateDiagnostic(
                                 Descriptors.Epi1000ContentTypeMustHaveValidGuid,
-                                namedTypeSymbol.ToDisplayString(SymbolDisplayFormat.CSharpErrorMessageFormat)));
+                                namedTypeSymbol.ToDisplayString(SymbolDisplayFormat.CSharpShortErrorMessageFormat)));
                     }
                 }
             }
