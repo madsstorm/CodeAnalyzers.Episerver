@@ -188,5 +188,38 @@ namespace CodeAnalyzers.Episerver.Cms10.Test
 
             await Verify.VerifyAnalyzerAsync(test, expected, expected2);
         }
+
+        [Fact(Skip = "TODO: Semantic")]
+        public async Task DetectInheritedSameGuid()
+        {
+            var test = @"
+                using EPiServer.DataAnnotations;
+
+                namespace Test
+                {
+                    public class CustomContentTypeAttribute : ContentTypeAttribute
+                    {
+                        public CustomContentTypeAttribute()
+                        {
+                            GUID = ""1F218487-9C23-4944-A0E6-76FC1995CBF0"";
+                        }
+                    }
+
+                    [CustomContentType]
+                    public class TypeName
+                    {
+                    }
+
+                    [CustomContentType]
+                    public class OtherTypeName
+                    {
+                    }
+                }";
+
+            var expected = Verify.Diagnostic(Descriptors.Epi1001ContentTypeMustHaveUniqueGuid).WithLocation(10, 22).WithArguments("Test.TypeName", "Test.OtherTypeName");
+            var expected2 = Verify.Diagnostic(Descriptors.Epi1001ContentTypeMustHaveUniqueGuid).WithLocation(15, 22).WithArguments("Test.OtherTypeName", "Test.TypeName");
+
+            await Verify.VerifyAnalyzerAsync(test, expected, expected2);
+        }
     }
 }
