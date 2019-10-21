@@ -40,6 +40,10 @@ namespace CodeAnalyzers.Episerver
 
         #region Content 2xxx
 
+        public static DiagnosticDescriptor Epi2000ContentTypeShouldHaveDisplayName { get; } =
+            Rule("Epi2000", "Content type should have a DisplayName", Content, Warning,
+                "Content type '{0}' is missing a DisplayName", "Content types should have a readable DisplayName shown in edit view.");
+
         #endregion
 
         #region Legacy 3xxx
