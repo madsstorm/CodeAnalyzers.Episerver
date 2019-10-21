@@ -107,6 +107,31 @@ namespace CodeAnalyzers.Episerver.Cms10.Test
         }
 
         [Fact]
+        public async Task DetectSameGuidWithDifferentFormat()
+        {
+            var test = @"
+                using EPiServer.DataAnnotations;
+
+                namespace Test
+                {
+                    [ContentType(GUID = ""1F218487-9C23-4944-A0E6-76FC1995CBF0"")]
+                    public class TypeName
+                    {
+                    }
+
+                    [ContentType(GUID = ""{1F218487-9C23-4944-A0E6-76FC1995CBF0}"")]
+                    public class OtherTypeName
+                    {
+                    }
+                }";
+
+            var expected = Verify.Diagnostic(Descriptors.Epi1001ContentTypeMustHaveUniqueGuid).WithLocation(6, 22).WithArguments("Test.TypeName", "Test.OtherTypeName");
+            var expected2 = Verify.Diagnostic(Descriptors.Epi1001ContentTypeMustHaveUniqueGuid).WithLocation(11, 22).WithArguments("Test.OtherTypeName", "Test.TypeName");
+
+            await Verify.VerifyAnalyzerAsync(test, expected, expected2);
+        }
+
+        [Fact]
         public async Task DetectCustomContentTypesWithSameGuid()
         {
             var test = @"
