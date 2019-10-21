@@ -1,25 +1,27 @@
 ﻿using Microsoft.CodeAnalysis;
+using System.Linq;
 
 namespace CodeAnalyzers.Episerver.Extensions
 {
     internal static class ITypeSymbolExtensions
     {
-        public static bool InheritsOrIs(this ITypeSymbol symbol, ITypeSymbol type)
+        internal static bool IsAssignableFrom(this ITypeSymbol targetType, ITypeSymbol sourceType, bool exactMatch = false)
         {
-            if(symbol.Equals(type))
+            if (targetType != null)
             {
-                return true;
-            }
-
-            var baseType = symbol.BaseType;
-            while (baseType != null)
-            {
-                if (type.Equals(baseType))
+                while (sourceType != null)
                 {
-                    return true;
-                }
+                    if (sourceType.Equals(targetType))
+                        return true;
 
-                baseType = baseType.BaseType;
+                    if (exactMatch)
+                        return false;
+
+                    if (targetType.TypeKind == TypeKind.Interface)
+                        return sourceType.AllInterfaces.Any(i => i.Equals(targetType));
+
+                    sourceType = sourceType.BaseType;
+                }
             }
 
             return false;

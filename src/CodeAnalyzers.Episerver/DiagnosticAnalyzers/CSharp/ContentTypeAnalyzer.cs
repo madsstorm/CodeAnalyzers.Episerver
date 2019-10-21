@@ -41,14 +41,14 @@ namespace CodeAnalyzers.Episerver.DiagnosticAnalyzers.CSharp
 
         private class CompilationAnalyzer
         {
-            private readonly INamedTypeSymbol _contentTypeAttribute;
+            private readonly INamedTypeSymbol contentTypeAttribute;
 
-            private readonly ConcurrentDictionary<Guid, (INamedTypeSymbol Type, AttributeData Attribute)> _contentTypeGuids =
+            private readonly ConcurrentDictionary<Guid, (INamedTypeSymbol Type, AttributeData Attribute)> contentTypeGuids =
                 new ConcurrentDictionary<Guid, (INamedTypeSymbol Type, AttributeData Attribute)>();
 
             public CompilationAnalyzer(INamedTypeSymbol contentTypeAttribute)
             {
-                _contentTypeAttribute = contentTypeAttribute;               
+                this.contentTypeAttribute = contentTypeAttribute;
             }
 
             internal void AnalyzeSymbol(SymbolAnalysisContext symbolContext)
@@ -58,7 +58,7 @@ namespace CodeAnalyzers.Episerver.DiagnosticAnalyzers.CSharp
 
                 foreach (var attribute in attributes)
                 {
-                    if (attribute.AttributeClass.InheritsOrIs(_contentTypeAttribute))
+                    if(contentTypeAttribute.IsAssignableFrom(attribute.AttributeClass))
                     {
                         VerifyContentTypeGuid(symbolContext, namedTypeSymbol, attribute);
                         break;
@@ -70,7 +70,7 @@ namespace CodeAnalyzers.Episerver.DiagnosticAnalyzers.CSharp
             {
                 if (TryGetGuidFromAttribute(attribute, out Guid contentGuid))
                 {
-                    var (existingType, existingAttribute) = _contentTypeGuids.GetOrAdd(contentGuid, (namedTypeSymbol, attribute));
+                    var (existingType, existingAttribute) = contentTypeGuids.GetOrAdd(contentGuid, (namedTypeSymbol, attribute));
 
                     if(existingType != namedTypeSymbol)
                     {
