@@ -45,11 +45,11 @@ namespace CodeAnalyzers.Episerver
         #region Legacy 3xxx
 
         public static DiagnosticDescriptor Epi3000AvoidUsingDataFactory { get; } =
-            Rule("Epi3000", "Avoid using EPiServer.DataFactory", Legacy, Warning,
+            Rule("Epi3000", "Avoid using legacy DataFactory", Legacy, Warning,
                 "Avoid using legacy DataFactory", "Legacy data source in Episerver. This API has been replaced by the IContentRepository, IContentEvents and a number of related interfaces.");
 
         public static DiagnosticDescriptor Epi3001AvoidUsingCacheManager { get; } =
-            Rule("Epi3001", "Avoid using EPiServer.CacheManager", Legacy, Warning,
+            Rule("Epi3001", "Avoid using legacy CacheManager", Legacy, Warning,
                 "Avoid using legacy CacheManager", "Legacy cache manager in Episerver. This API has been replaced by the ISynchronizedObjectInstanceCache and IObjectInstanceCache interfaces.");
 
         #endregion
