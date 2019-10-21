@@ -28,6 +28,75 @@ namespace CodeAnalyzers.Episerver.Test
         }
 
         [Fact(Skip = "TODO")]
+        public async Task DetectContentTypeWithMissingValues()
+        {
+            var test = @"
+                using EPiServer.DataAnnotations;
+
+                namespace Test
+                {
+                    [ContentType(GUID = ""1F218487-9C23-4944-A0E6-76FC1995CBF0"")]
+                    public class TypeName
+                    {
+                    }
+                }";
+
+            await Verify.VerifyAnalyzerAsync(test,
+                Verify.Diagnostic(Descriptors.Epi2000ContentTypeShouldHaveDisplayName).WithLocation(6, 22).WithArguments("TypeName"),
+                Verify.Diagnostic(Descriptors.Epi2001ContentTypeShouldHaveDescription).WithLocation(6, 22).WithArguments("TypeName"),
+                Verify.Diagnostic(Descriptors.Epi2002ContentTypeShouldHaveGroupName).WithLocation(6, 22).WithArguments("TypeName"),
+                Verify.Diagnostic(Descriptors.Epi2003ContentTypeShouldHaveOrder).WithLocation(6, 22).WithArguments("TypeName"));
+        }
+
+        [Fact(Skip = "TODO")]
+        public async Task DetectContentTypeWithNullValues()
+        {
+            var test = @"
+                using EPiServer.DataAnnotations;
+
+                namespace Test
+                {
+                    [ContentType(GUID = ""1F218487-9C23-4944-A0E6-76FC1995CBF0"",
+                                 DisplayName = null,
+                                 Description = null,
+                                 GroupName = null,
+                                 Order = 100)]
+                    public class TypeName
+                    {
+                    }
+                }";
+
+            await Verify.VerifyAnalyzerAsync(test,
+                Verify.Diagnostic(Descriptors.Epi2000ContentTypeShouldHaveDisplayName).WithLocation(6, 22).WithArguments("TypeName"),
+                Verify.Diagnostic(Descriptors.Epi2001ContentTypeShouldHaveDescription).WithLocation(6, 22).WithArguments("TypeName"),
+                Verify.Diagnostic(Descriptors.Epi2002ContentTypeShouldHaveGroupName).WithLocation(6, 22).WithArguments("TypeName"));
+        }
+
+        [Fact(Skip = "TODO")]
+        public async Task DetectContentTypeWithEmptyValues()
+        {
+            var test = @"
+                using EPiServer.DataAnnotations;
+
+                namespace Test
+                {
+                    [ContentType(GUID = ""1F218487-9C23-4944-A0E6-76FC1995CBF0"",
+                                 DisplayName = """",
+                                 Description = """",
+                                 GroupName = """",
+                                 Order = 100)]
+                    public class TypeName
+                    {
+                    }
+                }";
+
+            await Verify.VerifyAnalyzerAsync(test,
+                Verify.Diagnostic(Descriptors.Epi2000ContentTypeShouldHaveDisplayName).WithLocation(6, 22).WithArguments("TypeName"),
+                Verify.Diagnostic(Descriptors.Epi2001ContentTypeShouldHaveDescription).WithLocation(6, 22).WithArguments("TypeName"),
+                Verify.Diagnostic(Descriptors.Epi2002ContentTypeShouldHaveGroupName).WithLocation(6, 22).WithArguments("TypeName"));
+        }
+
+        [Fact(Skip = "TODO")]
         public async Task DetectContentTypeWithMissingDisplayName()
         {
             var test = @"
@@ -44,9 +113,8 @@ namespace CodeAnalyzers.Episerver.Test
                     }
                 }";
 
-            var expected = Verify.Diagnostic(Descriptors.Epi2000ContentTypeShouldHaveDisplayName).WithLocation(6, 22).WithArguments("TypeName");
-
-            await Verify.VerifyAnalyzerAsync(test, expected);
+            await Verify.VerifyAnalyzerAsync(test,
+                Verify.Diagnostic(Descriptors.Epi2000ContentTypeShouldHaveDisplayName).WithLocation(6, 22).WithArguments("TypeName"));
         }
 
         [Fact(Skip = "TODO")]
@@ -66,9 +134,8 @@ namespace CodeAnalyzers.Episerver.Test
                     }
                 }";
 
-            var expected = Verify.Diagnostic(Descriptors.Epi2001ContentTypeShouldHaveDescription).WithLocation(6, 22).WithArguments("TypeName");
-
-            await Verify.VerifyAnalyzerAsync(test, expected);
+            await Verify.VerifyAnalyzerAsync(test,
+                Verify.Diagnostic(Descriptors.Epi2001ContentTypeShouldHaveDescription).WithLocation(6, 22).WithArguments("TypeName"));
         }
 
         [Fact(Skip = "TODO")]
@@ -88,9 +155,8 @@ namespace CodeAnalyzers.Episerver.Test
                     }
                 }";
 
-            var expected = Verify.Diagnostic(Descriptors.Epi2002ContentTypeShouldHaveGroupName).WithLocation(6, 22).WithArguments("TypeName");
-
-            await Verify.VerifyAnalyzerAsync(test, expected);
+            await Verify.VerifyAnalyzerAsync(test,
+                Verify.Diagnostic(Descriptors.Epi2002ContentTypeShouldHaveGroupName).WithLocation(6, 22).WithArguments("TypeName"));
         }
 
         [Fact(Skip = "TODO")]
@@ -110,9 +176,8 @@ namespace CodeAnalyzers.Episerver.Test
                     }
                 }";
 
-            var expected = Verify.Diagnostic(Descriptors.Epi2003ContentTypeShouldHaveOrder).WithLocation(6, 22).WithArguments("TypeName");
-
-            await Verify.VerifyAnalyzerAsync(test, expected);
+            await Verify.VerifyAnalyzerAsync(test,
+                Verify.Diagnostic(Descriptors.Epi2003ContentTypeShouldHaveOrder).WithLocation(6, 22).WithArguments("TypeName"));
         }
 
         [Fact(Skip = "TODO")]
@@ -142,10 +207,9 @@ namespace CodeAnalyzers.Episerver.Test
                     }
                 }";
 
-            var expected = Verify.Diagnostic(Descriptors.Epi2004ContentTypeShouldHaveUniqueOrder).WithLocation(6, 22).WithArguments("TypeName", "OtherType");
-            var expected2 = Verify.Diagnostic(Descriptors.Epi2004ContentTypeShouldHaveUniqueOrder).WithLocation(15, 22).WithArguments("OtherType", "TypeName");
-
-            await Verify.VerifyAnalyzerAsync(test, expected, expected2);
+            await Verify.VerifyAnalyzerAsync(test,
+                Verify.Diagnostic(Descriptors.Epi2004ContentTypeShouldHaveUniqueOrder).WithLocation(6, 22).WithArguments("TypeName", "OtherType"),
+                Verify.Diagnostic(Descriptors.Epi2004ContentTypeShouldHaveUniqueOrder).WithLocation(15, 22).WithArguments("OtherType", "TypeName"));
         }
     }
 }

@@ -122,9 +122,8 @@ namespace CodeAnalyzers.Episerver.Test
                     }
                 }";
 
-            var expected = Verify.Diagnostic(Descriptors.Epi2005ContentTypeShouldHaveImageUrl).WithLocation(6, 22).WithArguments("TypeName");
-
-            await Verify.VerifyAnalyzerAsync(test, expected);
+            await Verify.VerifyAnalyzerAsync(test,
+                Verify.Diagnostic(Descriptors.Epi2005ContentTypeShouldHaveImageUrl).WithLocation(6, 22).WithArguments("TypeName"));
         }
 
         [Fact(Skip = "TODO")]
@@ -146,9 +145,8 @@ namespace CodeAnalyzers.Episerver.Test
                     }
                 }";
 
-            var expected = Verify.Diagnostic(Descriptors.Epi2005ContentTypeShouldHaveImageUrl).WithLocation(6, 22).WithArguments("TypeName");
-
-            await Verify.VerifyAnalyzerAsync(test, expected);
+            await Verify.VerifyAnalyzerAsync(test,
+                Verify.Diagnostic(Descriptors.Epi2005ContentTypeShouldHaveImageUrl).WithLocation(6, 22).WithArguments("TypeName"));
         }
 
         [Fact(Skip = "TODO")]
@@ -170,9 +168,8 @@ namespace CodeAnalyzers.Episerver.Test
                     }
                 }";
 
-            var expected = Verify.Diagnostic(Descriptors.Epi2005ContentTypeShouldHaveImageUrl).WithLocation(6, 22).WithArguments("TypeName");
-
-            await Verify.VerifyAnalyzerAsync(test, expected);
+            await Verify.VerifyAnalyzerAsync(test,
+                Verify.Diagnostic(Descriptors.Epi2005ContentTypeShouldHaveImageUrl).WithLocation(6, 22).WithArguments("TypeName"));
         }
     }
 }

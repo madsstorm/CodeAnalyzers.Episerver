@@ -79,10 +79,9 @@ namespace CodeAnalyzers.Episerver.Test
                     }
                 }";
 
-            var expected = Verify.Diagnostic(Descriptors.Epi3000AvoidUsingDataFactory).WithLocation(10, 43);
-            var expected2 = Verify.Diagnostic(Descriptors.Epi3000AvoidUsingDataFactory).WithLocation(10, 43);
-
-            await Verify.VerifyAnalyzerAsync(test, expected, expected2);
+            await Verify.VerifyAnalyzerAsync(test,
+                Verify.Diagnostic(Descriptors.Epi3000AvoidUsingDataFactory).WithLocation(10, 43),
+                Verify.Diagnostic(Descriptors.Epi3000AvoidUsingDataFactory).WithLocation(10, 43));
         }
 
         [Fact]
@@ -149,10 +148,9 @@ namespace CodeAnalyzers.Episerver.Test
                     }
                 }";
 
-            var expected = Verify.Diagnostic(Descriptors.Epi3000AvoidUsingDataFactory).WithLocation(10, 43);
-            var expected2 = Verify.Diagnostic(Descriptors.Epi3000AvoidUsingDataFactory).WithLocation(11, 29);
-
-            await Verify.VerifyAnalyzerAsync(test, expected, expected2);
+            await Verify.VerifyAnalyzerAsync(test,
+                Verify.Diagnostic(Descriptors.Epi3000AvoidUsingDataFactory).WithLocation(10, 43),
+                Verify.Diagnostic(Descriptors.Epi3000AvoidUsingDataFactory).WithLocation(11, 29));
         }
     }
 }

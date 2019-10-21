@@ -95,9 +95,8 @@ namespace CodeAnalyzers.Episerver.Test
                     }
                 }";
 
-            var expected = Verify.Diagnostic(Descriptors.Epi1000ContentTypeMustHaveValidGuid).WithLocation(6, 22).WithArguments("TypeName");
-
-            await Verify.VerifyAnalyzerAsync(test, expected);
+            await Verify.VerifyAnalyzerAsync(test,
+                Verify.Diagnostic(Descriptors.Epi1000ContentTypeMustHaveValidGuid).WithLocation(6, 22).WithArguments("TypeName"));
         }
 
         [Fact]
@@ -118,9 +117,8 @@ namespace CodeAnalyzers.Episerver.Test
                     }
                 }";
 
-            var expected = Verify.Diagnostic(Descriptors.Epi1000ContentTypeMustHaveValidGuid).WithLocation(10, 22).WithArguments("TypeName");
-
-            await Verify.VerifyAnalyzerAsync(test, expected);
+            await Verify.VerifyAnalyzerAsync(test,
+                Verify.Diagnostic(Descriptors.Epi1000ContentTypeMustHaveValidGuid).WithLocation(10, 22).WithArguments("TypeName"));
         }
 
         [Fact]
@@ -137,9 +135,8 @@ namespace CodeAnalyzers.Episerver.Test
                     }
                 }";
 
-            var expected = Verify.Diagnostic(Descriptors.Epi1000ContentTypeMustHaveValidGuid).WithLocation(6, 22).WithArguments("TypeName");
-
-            await Verify.VerifyAnalyzerAsync(test, expected);
+            await Verify.VerifyAnalyzerAsync(test,
+                Verify.Diagnostic(Descriptors.Epi1000ContentTypeMustHaveValidGuid).WithLocation(6, 22).WithArguments("TypeName"));
         }
 
         [Fact]
@@ -160,9 +157,8 @@ namespace CodeAnalyzers.Episerver.Test
                     }
                 }";
 
-            var expected = Verify.Diagnostic(Descriptors.Epi1000ContentTypeMustHaveValidGuid).WithLocation(10, 22).WithArguments("TypeName");
-
-            await Verify.VerifyAnalyzerAsync(test, expected);
+            await Verify.VerifyAnalyzerAsync(test,
+                Verify.Diagnostic(Descriptors.Epi1000ContentTypeMustHaveValidGuid).WithLocation(10, 22).WithArguments("TypeName"));
         }
 
         [Fact]
@@ -179,9 +175,8 @@ namespace CodeAnalyzers.Episerver.Test
                     }
                 }";
 
-            var expected = Verify.Diagnostic(Descriptors.Epi1000ContentTypeMustHaveValidGuid).WithLocation(6, 22).WithArguments("TypeName");
-
-            await Verify.VerifyAnalyzerAsync(test, expected);
+            await Verify.VerifyAnalyzerAsync(test,
+                Verify.Diagnostic(Descriptors.Epi1000ContentTypeMustHaveValidGuid).WithLocation(6, 22).WithArguments("TypeName"));
         }
 
         [Fact]
@@ -202,9 +197,8 @@ namespace CodeAnalyzers.Episerver.Test
                     }
                 }";
 
-            var expected = Verify.Diagnostic(Descriptors.Epi1000ContentTypeMustHaveValidGuid).WithLocation(10, 22).WithArguments("TypeName");
-
-            await Verify.VerifyAnalyzerAsync(test, expected);
+            await Verify.VerifyAnalyzerAsync(test,
+                Verify.Diagnostic(Descriptors.Epi1000ContentTypeMustHaveValidGuid).WithLocation(10, 22).WithArguments("TypeName"));
         }
 
         [Fact]
@@ -221,9 +215,8 @@ namespace CodeAnalyzers.Episerver.Test
                     }
                 }";
 
-            var expected = Verify.Diagnostic(Descriptors.Epi1000ContentTypeMustHaveValidGuid).WithLocation(6, 22).WithArguments("TypeName");
-
-            await Verify.VerifyAnalyzerAsync(test, expected);
+            await Verify.VerifyAnalyzerAsync(test,
+                Verify.Diagnostic(Descriptors.Epi1000ContentTypeMustHaveValidGuid).WithLocation(6, 22).WithArguments("TypeName"));
         }
 
         [Fact]
@@ -244,9 +237,8 @@ namespace CodeAnalyzers.Episerver.Test
                     }
                 }";
 
-            var expected = Verify.Diagnostic(Descriptors.Epi1000ContentTypeMustHaveValidGuid).WithLocation(10, 22).WithArguments("TypeName");
-
-            await Verify.VerifyAnalyzerAsync(test, expected);
+            await Verify.VerifyAnalyzerAsync(test,
+                Verify.Diagnostic(Descriptors.Epi1000ContentTypeMustHaveValidGuid).WithLocation(10, 22).WithArguments("TypeName"));
         }
     }
 }

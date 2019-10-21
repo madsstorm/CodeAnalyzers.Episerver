@@ -99,11 +99,9 @@ namespace CodeAnalyzers.Episerver.Cms10.Test
                     {
                     }
                 }";
-
-            var expected = Verify.Diagnostic(Descriptors.Epi1001ContentTypeMustHaveUniqueGuid).WithLocation(6, 22).WithArguments("TypeName", "OtherTypeName");
-            var expected2 = Verify.Diagnostic(Descriptors.Epi1001ContentTypeMustHaveUniqueGuid).WithLocation(11, 22).WithArguments("OtherTypeName", "TypeName");
-
-            await Verify.VerifyAnalyzerAsync(test, expected, expected2);
+            await Verify.VerifyAnalyzerAsync(test,
+                Verify.Diagnostic(Descriptors.Epi1001ContentTypeMustHaveUniqueGuid).WithLocation(6, 22).WithArguments("TypeName", "OtherTypeName"),
+                Verify.Diagnostic(Descriptors.Epi1001ContentTypeMustHaveUniqueGuid).WithLocation(11, 22).WithArguments("OtherTypeName", "TypeName"));
         }
 
         [Fact]
@@ -124,11 +122,9 @@ namespace CodeAnalyzers.Episerver.Cms10.Test
                     {
                     }
                 }";
-
-            var expected = Verify.Diagnostic(Descriptors.Epi1001ContentTypeMustHaveUniqueGuid).WithLocation(6, 22).WithArguments("TypeName", "OtherTypeName");
-            var expected2 = Verify.Diagnostic(Descriptors.Epi1001ContentTypeMustHaveUniqueGuid).WithLocation(11, 22).WithArguments("OtherTypeName", "TypeName");
-
-            await Verify.VerifyAnalyzerAsync(test, expected, expected2);
+            await Verify.VerifyAnalyzerAsync(test,
+                Verify.Diagnostic(Descriptors.Epi1001ContentTypeMustHaveUniqueGuid).WithLocation(6, 22).WithArguments("TypeName", "OtherTypeName"),
+                Verify.Diagnostic(Descriptors.Epi1001ContentTypeMustHaveUniqueGuid).WithLocation(11, 22).WithArguments("OtherTypeName", "TypeName"));
         }
 
         [Fact]
@@ -154,10 +150,9 @@ namespace CodeAnalyzers.Episerver.Cms10.Test
                     }
                 }";
 
-            var expected = Verify.Diagnostic(Descriptors.Epi1001ContentTypeMustHaveUniqueGuid).WithLocation(10, 22).WithArguments("TypeName", "OtherTypeName");
-            var expected2 = Verify.Diagnostic(Descriptors.Epi1001ContentTypeMustHaveUniqueGuid).WithLocation(15, 22).WithArguments("OtherTypeName", "TypeName");
-
-            await Verify.VerifyAnalyzerAsync(test, expected, expected2);
+            await Verify.VerifyAnalyzerAsync(test,
+                Verify.Diagnostic(Descriptors.Epi1001ContentTypeMustHaveUniqueGuid).WithLocation(10, 22).WithArguments("TypeName", "OtherTypeName"),
+                Verify.Diagnostic(Descriptors.Epi1001ContentTypeMustHaveUniqueGuid).WithLocation(15, 22).WithArguments("OtherTypeName", "TypeName"));
         }
 
         [Fact]
@@ -183,10 +178,9 @@ namespace CodeAnalyzers.Episerver.Cms10.Test
                     }
                 }";
 
-            var expected = Verify.Diagnostic(Descriptors.Epi1001ContentTypeMustHaveUniqueGuid).WithLocation(10, 22).WithArguments("TypeName", "OtherTypeName");
-            var expected2 = Verify.Diagnostic(Descriptors.Epi1001ContentTypeMustHaveUniqueGuid).WithLocation(15, 22).WithArguments("OtherTypeName", "TypeName");
-
-            await Verify.VerifyAnalyzerAsync(test, expected, expected2);
+            await Verify.VerifyAnalyzerAsync(test,
+                Verify.Diagnostic(Descriptors.Epi1001ContentTypeMustHaveUniqueGuid).WithLocation(10, 22).WithArguments("TypeName", "OtherTypeName"),
+                Verify.Diagnostic(Descriptors.Epi1001ContentTypeMustHaveUniqueGuid).WithLocation(15, 22).WithArguments("OtherTypeName", "TypeName"));
         }
     }
 }
