@@ -73,6 +73,25 @@ namespace CodeAnalyzers.Episerver.DiagnosticAnalyzers.CSharp
 
             private void VerifyContentTypeGuid(SymbolAnalysisContext symbolContext, INamedTypeSymbol namedTypeSymbol, AttributeData attribute)
             {
+                if (TryGetGuidFromAttribute(attribute, out Guid contentGuid))
+                {
+                    var (existingType, existingAttribute) = _contentTypeGuids.GetOrAdd(contentGuid, (namedTypeSymbol, attribute));
+
+                    if(existingType != namedTypeSymbol)
+                    {
+                        ReportDuplicateGuid(symbolContext, namedTypeSymbol, attribute, existingType);
+
+                        ReportDuplicateGuid(symbolContext, existingType, existingAttribute, namedTypeSymbol);
+                    }
+                }
+                else
+                {
+                    ReportInvalidGuid(symbolContext, namedTypeSymbol, attribute);
+                }
+            }
+
+            private static bool TryGetGuidFromAttribute(AttributeData attribute, out Guid guid)
+            {
                 TypedConstant guidValue = default;
 
                 foreach (var namedArgument in attribute.NamedArguments)
@@ -84,45 +103,32 @@ namespace CodeAnalyzers.Episerver.DiagnosticAnalyzers.CSharp
                     }
                 }
 
-                bool validGuid = Guid.TryParse(guidValue.Value?.ToString(), out Guid contentGuid);
+                return Guid.TryParse(guidValue.Value?.ToString(), out guid);
+            }
 
-                if (validGuid)
+            private static void ReportDuplicateGuid(SymbolAnalysisContext symbolContext, INamedTypeSymbol namedType,
+                AttributeData attribute, INamedTypeSymbol matchingType)
+            {
+                var node = attribute.ApplicationSyntaxReference?.GetSyntax();
+                if (node != null)
                 {
-                    var (existingType, existingAttribute) = _contentTypeGuids.GetOrAdd(contentGuid, (namedTypeSymbol, attribute));
-
-                    if(existingType != namedTypeSymbol)
-                    {
-                        var node = attribute.ApplicationSyntaxReference?.GetSyntax();
-                        if (node != null)
-                        {
-                            symbolContext.ReportDiagnostic(
-                                node.CreateDiagnostic(
-                                    Descriptors.Epi1001ContentTypeMustHaveUniqueGuid,
-                                    namedTypeSymbol.ToDisplayString(SymbolDisplayFormat.CSharpShortErrorMessageFormat),
-                                    existingType.ToDisplayString(SymbolDisplayFormat.CSharpShortErrorMessageFormat)));
-                        }
-
-                        var existingNode = existingAttribute.ApplicationSyntaxReference?.GetSyntax();
-                        if(existingNode != null)
-                        {
-                            symbolContext.ReportDiagnostic(
-                                existingNode.CreateDiagnostic(
-                                    Descriptors.Epi1001ContentTypeMustHaveUniqueGuid,
-                                    existingType.ToDisplayString(SymbolDisplayFormat.CSharpShortErrorMessageFormat),
-                                    namedTypeSymbol.ToDisplayString(SymbolDisplayFormat.CSharpShortErrorMessageFormat)));
-                        }
-                    }
+                    symbolContext.ReportDiagnostic(
+                        node.CreateDiagnostic(
+                            Descriptors.Epi1001ContentTypeMustHaveUniqueGuid,
+                            namedType.ToDisplayString(SymbolDisplayFormat.CSharpShortErrorMessageFormat),
+                            matchingType.ToDisplayString(SymbolDisplayFormat.CSharpShortErrorMessageFormat)));
                 }
-                else
+            }
+
+            private static void ReportInvalidGuid(SymbolAnalysisContext symbolContext, INamedTypeSymbol namedType, AttributeData attribute)
+            {
+                var node = attribute.ApplicationSyntaxReference?.GetSyntax();
+                if (node != null)
                 {
-                    var node = attribute.ApplicationSyntaxReference?.GetSyntax();
-                    if (node != null)
-                    {
-                        symbolContext.ReportDiagnostic(
-                            node.CreateDiagnostic(
-                                Descriptors.Epi1000ContentTypeMustHaveValidGuid,
-                                namedTypeSymbol.ToDisplayString(SymbolDisplayFormat.CSharpShortErrorMessageFormat)));
-                    }
+                    symbolContext.ReportDiagnostic(
+                        node.CreateDiagnostic(
+                            Descriptors.Epi1000ContentTypeMustHaveValidGuid,
+                            namedType.ToDisplayString(SymbolDisplayFormat.CSharpShortErrorMessageFormat)));
                 }
             }
         }
