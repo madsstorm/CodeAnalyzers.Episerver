@@ -26,7 +26,8 @@ _Available at [nuget.episerver.com][nuget]_
 --->
 
 ### Requirements
-   :computer: Visual Studio 2019  
-   :computer: Visual Studio 2017 (15.5)+
+[![vs2019](docs/icon/vs2019.png)](#.#) **Visual Studio 2019**
+
+[![vs2017](docs/icon/vs2017.png)](#.#) **Visual Studio 2017 (15.5)+**
 
 [nuget]: https://nuget.episerver.com/package/?id=CodeAnalyzers.Episerver
