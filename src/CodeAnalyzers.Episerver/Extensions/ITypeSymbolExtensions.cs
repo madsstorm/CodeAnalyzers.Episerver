@@ -12,13 +12,19 @@ namespace CodeAnalyzers.Episerver.Extensions
                 while (sourceType != null)
                 {
                     if (sourceType.Equals(targetType))
+                    {
                         return true;
+                    }
 
                     if (exactMatch)
+                    {
                         return false;
+                    }
 
                     if (targetType.TypeKind == TypeKind.Interface)
+                    {
                         return sourceType.AllInterfaces.Any(i => i.Equals(targetType));
+                    }
 
                     sourceType = sourceType.BaseType;
                 }
