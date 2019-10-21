@@ -42,7 +42,27 @@ namespace CodeAnalyzers.Episerver
 
         public static DiagnosticDescriptor Epi2000ContentTypeShouldHaveDisplayName { get; } =
             Rule("Epi2000", "Content type should have a DisplayName", Content, Warning,
-                "Content type '{0}' is missing a DisplayName", "Content types should have a readable DisplayName shown in edit view.");
+                "Content type '{0}' is missing DisplayName", "Content types should have a readable DisplayName shown in edit view.");
+
+        public static DiagnosticDescriptor Epi2001ContentTypeShouldHaveDescription { get; } =
+            Rule("Epi2001", "Content type should have a Description", Content, Warning,
+                "Content type '{0}' is missing Description", "Content types should have a Description shown in edit view.");
+
+        public static DiagnosticDescriptor Epi2002ContentTypeShouldHaveGroupName { get; } =
+            Rule("Epi2002", "Content type should have a GroupName", Content, Warning,
+                "Content type '{0}' is missing GroupName", "Content types should have a GroupName for grouping in edit view.");
+
+        public static DiagnosticDescriptor Epi2003ContentTypeShouldHaveOrder { get; } =
+            Rule("Epi2003", "Content type should have an Order", Content, Warning,
+                "Content type '{0}' is missing Order", "Content types should have an Order for sorting in edit view.");
+
+        public static DiagnosticDescriptor Epi2004ContentTypeShouldHaveUniqueOrder { get; } =
+            Rule("Epi2004", "Content type should have a unique Order", Content, Warning,
+                "Content type '{0}' has the same Order as '{1}'", "Content type Orders should be unique for sorting in edit view.");
+
+        public static DiagnosticDescriptor Epi2005ContentTypeShouldHaveImageUrl { get; } =
+            Rule("Epi2005", "Content type should have an ImageUrl", Content, Warning,
+                "Content type '{0}' is missing an ImageUrl attribute", "Content types should have an ImageUrl attribute for showing an icon in edit view.");
 
         #endregion
 
