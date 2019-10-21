@@ -20,6 +20,8 @@ namespace CodeAnalyzers.Episerver.DiagnosticAnalyzers.CSharp
 
         public override void Initialize(AnalysisContext context)
         {
+            if (context is null) { return; }
+
             context.ConfigureGeneratedCodeAnalysis(GeneratedCodeAnalysisFlags.None);
             context.EnableConcurrentExecution();
 
@@ -51,15 +53,8 @@ namespace CodeAnalyzers.Episerver.DiagnosticAnalyzers.CSharp
 
             internal void AnalyzeSymbol(SymbolAnalysisContext symbolContext)
             {
-                if(!(symbolContext.Symbol is INamedTypeSymbol namedTypeSymbol))
-                {
-                    return;
-                }
-
-                if (!(namedTypeSymbol?.GetAttributes() is ImmutableArray<AttributeData> attributes))
-                {
-                    return;
-                }
+                var namedTypeSymbol = (INamedTypeSymbol)symbolContext.Symbol;               
+                var attributes = namedTypeSymbol.GetAttributes();
 
                 foreach (var attribute in attributes)
                 {
@@ -80,7 +75,6 @@ namespace CodeAnalyzers.Episerver.DiagnosticAnalyzers.CSharp
                     if(existingType != namedTypeSymbol)
                     {
                         ReportDuplicateGuid(symbolContext, namedTypeSymbol, attribute, existingType);
-
                         ReportDuplicateGuid(symbolContext, existingType, existingAttribute, namedTypeSymbol);
                     }
                 }

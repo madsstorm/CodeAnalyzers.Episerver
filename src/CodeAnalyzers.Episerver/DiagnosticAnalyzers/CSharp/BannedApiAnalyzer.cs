@@ -25,6 +25,8 @@ namespace CodeAnalyzers.Episerver.DiagnosticAnalyzers.CSharp
 
         public override void Initialize(AnalysisContext analysisContext)
         {
+            if (analysisContext is null) { return; }
+
             analysisContext.ConfigureGeneratedCodeAnalysis(GeneratedCodeAnalysisFlags.None);
             analysisContext.EnableConcurrentExecution();
 
@@ -119,7 +121,7 @@ namespace CodeAnalyzers.Episerver.DiagnosticAnalyzers.CSharp
             return true;
         }
 
-        private bool VerifyTypeInternal(Action<Diagnostic> reportDiagnostic, ITypeSymbol type, SyntaxNode syntaxNode)
+        private static bool VerifyTypeInternal(Action<Diagnostic> reportDiagnostic, ITypeSymbol type, SyntaxNode syntaxNode)
         {
             var space = type.ContainingNamespace;
 
