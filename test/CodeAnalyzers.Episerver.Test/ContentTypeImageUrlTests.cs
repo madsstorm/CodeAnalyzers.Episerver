@@ -11,6 +11,7 @@ namespace CodeAnalyzers.Episerver.Test
         {
             var test = @"
                 using EPiServer.DataAnnotations;
+                using EPiServer.Core;
 
                 namespace Test
                 {
@@ -20,7 +21,7 @@ namespace CodeAnalyzers.Episerver.Test
                                  GroupName = ""GroupName"",
                                  Order = 100)]
                     [ImageUrl(""image.png"")]
-                    public class TypeName
+                    public class TypeName : PageData
                     {
                     }
                 }";
@@ -33,6 +34,7 @@ namespace CodeAnalyzers.Episerver.Test
         {
             var test = @"
                 using EPiServer.DataAnnotations;
+                using EPiServer.Core;
 
                 namespace Custom
                 {
@@ -58,7 +60,7 @@ namespace CodeAnalyzers.Episerver.Test
                                  GroupName = ""GroupName"",
                                  Order = 100)]
                     [CustomImageUrl(""image.png"")]
-                    public class TypeName
+                    public class TypeName : PageData
                     {
                     }
                 }";
@@ -71,6 +73,7 @@ namespace CodeAnalyzers.Episerver.Test
         {
             var test = @"
                 using EPiServer.DataAnnotations;
+                using EPiServer.Core;
 
                 namespace Custom
                 {
@@ -96,7 +99,7 @@ namespace CodeAnalyzers.Episerver.Test
                                  GroupName = ""GroupName"",
                                  Order = 100)]
                     [CustomImageUrl]
-                    public class TypeName
+                    public class TypeName : PageData
                     {
                     }
                 }";
@@ -109,6 +112,7 @@ namespace CodeAnalyzers.Episerver.Test
         {
             var test = @"
                 using EPiServer.DataAnnotations;
+                using EPiServer.Core;
 
                 namespace Test
                 {
@@ -117,13 +121,13 @@ namespace CodeAnalyzers.Episerver.Test
                                  Description = ""Description"",
                                  GroupName = ""GroupName"",
                                  Order = 100)]
-                    public class TypeName
+                    public class TypeName : PageData
                     {
                     }
                 }";
 
             await Verify.VerifyAnalyzerAsync(test,
-                Verify.Diagnostic(Descriptors.Epi2005ContentTypeShouldHaveImageUrl).WithLocation(6, 22).WithArguments("TypeName"));
+                Verify.Diagnostic(Descriptors.Epi2005ContentTypeShouldHaveImageUrl).WithLocation(7, 22).WithArguments("TypeName"));
         }
 
         [Fact(Skip = "TODO")]
@@ -131,6 +135,7 @@ namespace CodeAnalyzers.Episerver.Test
         {
             var test = @"
                 using EPiServer.DataAnnotations;
+                using EPiServer.Core;
 
                 namespace Test
                 {
@@ -140,13 +145,13 @@ namespace CodeAnalyzers.Episerver.Test
                                  GroupName = ""GroupName"",
                                  Order = 100)]
                     [ImageUrl(null)]
-                    public class TypeName
+                    public class TypeName : PageData
                     {
                     }
                 }";
 
             await Verify.VerifyAnalyzerAsync(test,
-                Verify.Diagnostic(Descriptors.Epi2005ContentTypeShouldHaveImageUrl).WithLocation(6, 22).WithArguments("TypeName"));
+                Verify.Diagnostic(Descriptors.Epi2005ContentTypeShouldHaveImageUrl).WithLocation(7, 22).WithArguments("TypeName"));
         }
 
         [Fact(Skip = "TODO")]
@@ -154,6 +159,7 @@ namespace CodeAnalyzers.Episerver.Test
         {
             var test = @"
                 using EPiServer.DataAnnotations;
+                using EPiServer.Core;
 
                 namespace Test
                 {
@@ -163,13 +169,13 @@ namespace CodeAnalyzers.Episerver.Test
                                  GroupName = ""GroupName"",
                                  Order = 100)]
                     [ImageUrl("""")]
-                    public class TypeName
+                    public class TypeName : PageData
                     {
                     }
                 }";
 
             await Verify.VerifyAnalyzerAsync(test,
-                Verify.Diagnostic(Descriptors.Epi2005ContentTypeShouldHaveImageUrl).WithLocation(6, 22).WithArguments("TypeName"));
+                Verify.Diagnostic(Descriptors.Epi2005ContentTypeShouldHaveImageUrl).WithLocation(7, 22).WithArguments("TypeName"));
         }
     }
 }

@@ -10,13 +10,15 @@ namespace CodeAnalyzers.Episerver.DiagnosticAnalyzers.CSharp
     [DiagnosticAnalyzer(LanguageNames.CSharp)]
     public class ContentTypeAnalyzer : DiagnosticAnalyzer
     {
-        private const string TypeMetadataName = "EPiServer.DataAnnotations.ContentTypeAttribute";
+        private const string ContentTypeMetadataName = "EPiServer.DataAnnotations.ContentTypeAttribute";
+        private const string IContentDataMetadataName = "EPiServer.Core.IContentData";
         private const string GuidArgument = "GUID";
 
         public override ImmutableArray<DiagnosticDescriptor> SupportedDiagnostics =>
             ImmutableArray.Create(
                 Descriptors.Epi1000ContentTypeMustHaveValidGuid,
-                Descriptors.Epi1001ContentTypeMustHaveUniqueGuid);
+                Descriptors.Epi1001ContentTypeMustHaveUniqueGuid,
+                Descriptors.Epi1003ContentTypeMustImplementContentData);
 
         public override void Initialize(AnalysisContext context)
         {
@@ -27,13 +29,19 @@ namespace CodeAnalyzers.Episerver.DiagnosticAnalyzers.CSharp
 
             context.RegisterCompilationStartAction(compilationContext =>
             {
-                var contentTypeAttribute = compilationContext.Compilation.GetTypeByMetadataName(TypeMetadataName);
+                var contentTypeAttribute = compilationContext.Compilation.GetTypeByMetadataName(ContentTypeMetadataName);
                 if (contentTypeAttribute == null)
                 {
                     return;
                 }
 
-                CompilationAnalyzer analyzer = new CompilationAnalyzer(contentTypeAttribute);
+                var iContentDataType = compilationContext.Compilation.GetTypeByMetadataName(IContentDataMetadataName);
+                if(iContentDataType == null)
+                {
+                    return;
+                }
+
+                CompilationAnalyzer analyzer = new CompilationAnalyzer(contentTypeAttribute, iContentDataType);
 
                 compilationContext.RegisterSymbolAction(analyzer.AnalyzeSymbol, SymbolKind.NamedType);
             });
@@ -42,13 +50,15 @@ namespace CodeAnalyzers.Episerver.DiagnosticAnalyzers.CSharp
         private class CompilationAnalyzer
         {
             private readonly INamedTypeSymbol contentTypeAttribute;
+            private readonly INamedTypeSymbol iContentDataType;
 
             private readonly ConcurrentDictionary<Guid, (INamedTypeSymbol Type, AttributeData Attribute)> contentTypeGuids =
                 new ConcurrentDictionary<Guid, (INamedTypeSymbol Type, AttributeData Attribute)>();
 
-            public CompilationAnalyzer(INamedTypeSymbol contentTypeAttribute)
+            public CompilationAnalyzer(INamedTypeSymbol contentTypeAttribute, INamedTypeSymbol iContentDataType)
             {
                 this.contentTypeAttribute = contentTypeAttribute;
+                this.iContentDataType = iContentDataType;
             }
 
             internal void AnalyzeSymbol(SymbolAnalysisContext symbolContext)
@@ -61,11 +71,12 @@ namespace CodeAnalyzers.Episerver.DiagnosticAnalyzers.CSharp
                     if(contentTypeAttribute.IsAssignableFrom(attribute.AttributeClass))
                     {
                         VerifyContentTypeGuid(symbolContext, namedTypeSymbol, attribute);
+                        VerifyContentDataType(symbolContext, namedTypeSymbol, attribute);
                         break;
                     }
                 }
             }
-
+           
             private void VerifyContentTypeGuid(SymbolAnalysisContext symbolContext, INamedTypeSymbol namedTypeSymbol, AttributeData attribute)
             {
                 if (TryGetGuidFromAttribute(attribute, out Guid contentGuid))
@@ -81,6 +92,14 @@ namespace CodeAnalyzers.Episerver.DiagnosticAnalyzers.CSharp
                 else
                 {
                     ReportInvalidGuid(symbolContext, namedTypeSymbol, attribute);
+                }
+            }
+
+            private void VerifyContentDataType(SymbolAnalysisContext symbolContext, INamedTypeSymbol namedTypeSymbol, AttributeData attribute)
+            {
+                if(namedTypeSymbol.IsAbstract || !(iContentDataType.IsAssignableFrom(namedTypeSymbol)))
+                {
+                    ReportInvalidContentDataType(symbolContext, namedTypeSymbol, attribute);
                 }
             }
 
@@ -122,6 +141,18 @@ namespace CodeAnalyzers.Episerver.DiagnosticAnalyzers.CSharp
                     symbolContext.ReportDiagnostic(
                         node.CreateDiagnostic(
                             Descriptors.Epi1000ContentTypeMustHaveValidGuid,
+                            namedType.ToDisplayString(SymbolDisplayFormat.CSharpShortErrorMessageFormat)));
+                }
+            }
+
+            private void ReportInvalidContentDataType(SymbolAnalysisContext symbolContext, INamedTypeSymbol namedType, AttributeData attribute)
+            {
+                var node = attribute.ApplicationSyntaxReference?.GetSyntax();
+                if (node != null)
+                {
+                    symbolContext.ReportDiagnostic(
+                        node.CreateDiagnostic(
+                            Descriptors.Epi1003ContentTypeMustImplementContentData,
                             namedType.ToDisplayString(SymbolDisplayFormat.CSharpShortErrorMessageFormat)));
                 }
             }

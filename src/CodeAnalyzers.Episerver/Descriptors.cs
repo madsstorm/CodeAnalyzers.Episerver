@@ -25,16 +25,20 @@ namespace CodeAnalyzers.Episerver
         #region Usage 1xxx
 
         public static DiagnosticDescriptor Epi1000ContentTypeMustHaveValidGuid { get; } =
-            Rule("Epi1000", "Content type must have a valid GUID property", Usage, Error,
+            Rule("Epi1000", "Content type must have a valid GUID", Usage, Error,
                 "Content type '{0}' is missing a valid GUID property", "All content types must be identified by a valid GUID property.");
 
         public static DiagnosticDescriptor Epi1001ContentTypeMustHaveUniqueGuid { get; } =
-            Rule("Epi1001", "Content type must have a unique GUID property", Usage, Error,
+            Rule("Epi1001", "Content type must have a unique GUID", Usage, Error,
                 "Content type '{0}' has the same GUID as '{1}'", "All content types must be identified by a unique GUID property.");
 
         public static DiagnosticDescriptor Epi1002AvoidUsingInternalNamespaces { get; } =
             Rule("Epi1002", "Avoid using internal namespaces", Usage, Warning,
                 "Avoid using internal type '{0}'", "Internal namespaces are not considered part of the public supported API.");
+
+        public static DiagnosticDescriptor Epi1003ContentTypeMustImplementContentData { get; } =
+            Rule("Epi1003", "Content type must implement content data", Usage, Error,
+                "Content type '{0}' must implement a content data type", "Content types must be non-abstract classes that implement a content data type such as PageData, BlockData and MediaData.");
 
         #endregion
 

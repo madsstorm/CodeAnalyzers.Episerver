@@ -12,16 +12,17 @@ namespace CodeAnalyzers.Episerver.Cms10.Test
         {
             var test = @"
                 using EPiServer.DataAnnotations;
+                using EPiServer.Core;
 
                 namespace Test
                 {
                     [ContentType(GUID = ""1F218487-9C23-4944-A0E6-76FC1995CBF0"")]
-                    public class TypeName
+                    public class TypeName : PageData
                     {
                     }
 
                     [ContentType(GUID = ""71D42C7D-FBA6-420C-A837-49C2330AA5C1"")]
-                    public class OtherTypeName
+                    public class OtherTypeName : PageData
                     {
                     }
                 }";
@@ -34,6 +35,7 @@ namespace CodeAnalyzers.Episerver.Cms10.Test
         {
             var test = @"
                 using EPiServer.DataAnnotations;
+                using EPiServer.Core;
 
                 namespace Test
                 {
@@ -42,12 +44,12 @@ namespace CodeAnalyzers.Episerver.Cms10.Test
                     }
 
                     [CustomContentType(GUID = ""1F218487-9C23-4944-A0E6-76FC1995CBF0"")]
-                    public class TypeName
+                    public class TypeName : PageData
                     {
                     }
 
                     [CustomContentType(GUID = ""71D42C7D-FBA6-420C-A837-49C2330AA5C1"")]
-                    public class OtherTypeName
+                    public class OtherTypeName : PageData
                     {
                     }
                 }";
@@ -60,6 +62,7 @@ namespace CodeAnalyzers.Episerver.Cms10.Test
         {
             var test = @"
                 using EPiServer.DataAnnotations;
+                using EPiServer.Core;
 
                 namespace Test
                 {
@@ -68,12 +71,12 @@ namespace CodeAnalyzers.Episerver.Cms10.Test
                     }
 
                     [ContentType(GUID = ""1F218487-9C23-4944-A0E6-76FC1995CBF0"")]
-                    public class TypeName
+                    public class TypeName : PageData
                     {
                     }
 
                     [CustomContentType(GUID = ""71D42C7D-FBA6-420C-A837-49C2330AA5C1"")]
-                    public class OtherTypeName
+                    public class OtherTypeName : PageData
                     {
                     }
                 }";
@@ -86,22 +89,23 @@ namespace CodeAnalyzers.Episerver.Cms10.Test
         {
             var test = @"
                 using EPiServer.DataAnnotations;
+                using EPiServer.Core;
 
                 namespace Test
                 {
                     [ContentType(GUID = ""1F218487-9C23-4944-A0E6-76FC1995CBF0"")]
-                    public class TypeName
+                    public class TypeName : PageData
                     {
                     }
 
                     [ContentType(GUID = ""1F218487-9C23-4944-A0E6-76FC1995CBF0"")]
-                    public class OtherTypeName
+                    public class OtherTypeName : PageData
                     {
                     }
                 }";
             await Verify.VerifyAnalyzerAsync(test,
-                Verify.Diagnostic(Descriptors.Epi1001ContentTypeMustHaveUniqueGuid).WithLocation(6, 22).WithArguments("TypeName", "OtherTypeName"),
-                Verify.Diagnostic(Descriptors.Epi1001ContentTypeMustHaveUniqueGuid).WithLocation(11, 22).WithArguments("OtherTypeName", "TypeName"));
+                Verify.Diagnostic(Descriptors.Epi1001ContentTypeMustHaveUniqueGuid).WithLocation(7, 22).WithArguments("TypeName", "OtherTypeName"),
+                Verify.Diagnostic(Descriptors.Epi1001ContentTypeMustHaveUniqueGuid).WithLocation(12, 22).WithArguments("OtherTypeName", "TypeName"));
         }
 
         [Fact]
@@ -109,22 +113,23 @@ namespace CodeAnalyzers.Episerver.Cms10.Test
         {
             var test = @"
                 using EPiServer.DataAnnotations;
+                using EPiServer.Core;
 
                 namespace Test
                 {
                     [ContentType(GUID = ""1F218487-9C23-4944-A0E6-76FC1995CBF0"")]
-                    public class TypeName
+                    public class TypeName : PageData
                     {
                     }
 
                     [ContentType(GUID = ""{1F218487-9C23-4944-A0E6-76FC1995CBF0}"")]
-                    public class OtherTypeName
+                    public class OtherTypeName : PageData
                     {
                     }
                 }";
             await Verify.VerifyAnalyzerAsync(test,
-                Verify.Diagnostic(Descriptors.Epi1001ContentTypeMustHaveUniqueGuid).WithLocation(6, 22).WithArguments("TypeName", "OtherTypeName"),
-                Verify.Diagnostic(Descriptors.Epi1001ContentTypeMustHaveUniqueGuid).WithLocation(11, 22).WithArguments("OtherTypeName", "TypeName"));
+                Verify.Diagnostic(Descriptors.Epi1001ContentTypeMustHaveUniqueGuid).WithLocation(7, 22).WithArguments("TypeName", "OtherTypeName"),
+                Verify.Diagnostic(Descriptors.Epi1001ContentTypeMustHaveUniqueGuid).WithLocation(12, 22).WithArguments("OtherTypeName", "TypeName"));
         }
 
         [Fact]
@@ -132,6 +137,7 @@ namespace CodeAnalyzers.Episerver.Cms10.Test
         {
             var test = @"
                 using EPiServer.DataAnnotations;
+                using EPiServer.Core;
 
                 namespace Test
                 {
@@ -140,19 +146,19 @@ namespace CodeAnalyzers.Episerver.Cms10.Test
                     }
 
                     [CustomContentType(GUID = ""1F218487-9C23-4944-A0E6-76FC1995CBF0"")]
-                    public class TypeName
+                    public class TypeName : PageData
                     {
                     }
 
                     [CustomContentType(GUID = ""1F218487-9C23-4944-A0E6-76FC1995CBF0"")]
-                    public class OtherTypeName
+                    public class OtherTypeName : PageData
                     {
                     }
                 }";
 
             await Verify.VerifyAnalyzerAsync(test,
-                Verify.Diagnostic(Descriptors.Epi1001ContentTypeMustHaveUniqueGuid).WithLocation(10, 22).WithArguments("TypeName", "OtherTypeName"),
-                Verify.Diagnostic(Descriptors.Epi1001ContentTypeMustHaveUniqueGuid).WithLocation(15, 22).WithArguments("OtherTypeName", "TypeName"));
+                Verify.Diagnostic(Descriptors.Epi1001ContentTypeMustHaveUniqueGuid).WithLocation(11, 22).WithArguments("TypeName", "OtherTypeName"),
+                Verify.Diagnostic(Descriptors.Epi1001ContentTypeMustHaveUniqueGuid).WithLocation(16, 22).WithArguments("OtherTypeName", "TypeName"));
         }
 
         [Fact]
@@ -160,6 +166,7 @@ namespace CodeAnalyzers.Episerver.Cms10.Test
         {
             var test = @"
                 using EPiServer.DataAnnotations;
+                using EPiServer.Core;
 
                 namespace Test
                 {
@@ -168,19 +175,19 @@ namespace CodeAnalyzers.Episerver.Cms10.Test
                     }
 
                     [ContentType(GUID = ""1F218487-9C23-4944-A0E6-76FC1995CBF0"")]
-                    public class TypeName
+                    public class TypeName : PageData
                     {
                     }
 
                     [CustomContentType(GUID = ""1F218487-9C23-4944-A0E6-76FC1995CBF0"")]
-                    public class OtherTypeName
+                    public class OtherTypeName : PageData
                     {
                     }
                 }";
 
             await Verify.VerifyAnalyzerAsync(test,
-                Verify.Diagnostic(Descriptors.Epi1001ContentTypeMustHaveUniqueGuid).WithLocation(10, 22).WithArguments("TypeName", "OtherTypeName"),
-                Verify.Diagnostic(Descriptors.Epi1001ContentTypeMustHaveUniqueGuid).WithLocation(15, 22).WithArguments("OtherTypeName", "TypeName"));
+                Verify.Diagnostic(Descriptors.Epi1001ContentTypeMustHaveUniqueGuid).WithLocation(11, 22).WithArguments("TypeName", "OtherTypeName"),
+                Verify.Diagnostic(Descriptors.Epi1001ContentTypeMustHaveUniqueGuid).WithLocation(16, 22).WithArguments("OtherTypeName", "TypeName"));
         }
     }
 }
