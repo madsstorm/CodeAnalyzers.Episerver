@@ -4,6 +4,7 @@ using Microsoft.CodeAnalysis.Diagnostics;
 using CodeAnalyzers.Episerver.Extensions;
 using System;
 using System.Collections.Concurrent;
+using System.Linq;
 
 namespace CodeAnalyzers.Episerver.DiagnosticAnalyzers.CSharp
 {
@@ -12,13 +13,15 @@ namespace CodeAnalyzers.Episerver.DiagnosticAnalyzers.CSharp
     {
         private const string ContentTypeMetadataName = "EPiServer.DataAnnotations.ContentTypeAttribute";
         private const string IContentDataMetadataName = "EPiServer.Core.IContentData";
+        private const string ImageUrlMetadataName = "EPiServer.DataAnnotations.ImageUrlAttribute";
         private const string GuidArgument = "GUID";
 
         public override ImmutableArray<DiagnosticDescriptor> SupportedDiagnostics =>
             ImmutableArray.Create(
                 Descriptors.Epi1000ContentTypeMustHaveValidGuid,
                 Descriptors.Epi1001ContentTypeMustHaveUniqueGuid,
-                Descriptors.Epi1003ContentTypeMustImplementContentData);
+                Descriptors.Epi1003ContentTypeMustImplementContentData,
+                Descriptors.Epi2005ContentTypeShouldHaveImageUrl);
 
         public override void Initialize(AnalysisContext context)
         {
@@ -30,18 +33,24 @@ namespace CodeAnalyzers.Episerver.DiagnosticAnalyzers.CSharp
             context.RegisterCompilationStartAction(compilationContext =>
             {
                 var contentTypeAttribute = compilationContext.Compilation.GetTypeByMetadataName(ContentTypeMetadataName);
-                if (contentTypeAttribute == null)
+                if (contentTypeAttribute is null)
                 {
                     return;
                 }
 
                 var iContentDataType = compilationContext.Compilation.GetTypeByMetadataName(IContentDataMetadataName);
-                if(iContentDataType == null)
+                if(iContentDataType is null)
                 {
                     return;
                 }
 
-                CompilationAnalyzer analyzer = new CompilationAnalyzer(contentTypeAttribute, iContentDataType);
+                var imageUrlType = compilationContext.Compilation.GetTypeByMetadataName(ImageUrlMetadataName);
+                if(imageUrlType is null)
+                {
+                    return;
+                }
+
+                CompilationAnalyzer analyzer = new CompilationAnalyzer(contentTypeAttribute, iContentDataType, imageUrlType);
 
                 compilationContext.RegisterSymbolAction(analyzer.AnalyzeSymbol, SymbolKind.NamedType);
             });
@@ -51,14 +60,16 @@ namespace CodeAnalyzers.Episerver.DiagnosticAnalyzers.CSharp
         {
             private readonly INamedTypeSymbol contentTypeAttribute;
             private readonly INamedTypeSymbol iContentDataType;
+            private readonly INamedTypeSymbol imageUrlType;
 
             private readonly ConcurrentDictionary<Guid, (INamedTypeSymbol Type, AttributeData Attribute)> contentTypeGuids =
                 new ConcurrentDictionary<Guid, (INamedTypeSymbol Type, AttributeData Attribute)>();
 
-            public CompilationAnalyzer(INamedTypeSymbol contentTypeAttribute, INamedTypeSymbol iContentDataType)
+            public CompilationAnalyzer(INamedTypeSymbol contentTypeAttribute, INamedTypeSymbol iContentDataType, INamedTypeSymbol imageUrlType)
             {
                 this.contentTypeAttribute = contentTypeAttribute;
                 this.iContentDataType = iContentDataType;
+                this.imageUrlType = imageUrlType;
             }
 
             internal void AnalyzeSymbol(SymbolAnalysisContext symbolContext)
@@ -66,17 +77,31 @@ namespace CodeAnalyzers.Episerver.DiagnosticAnalyzers.CSharp
                 var namedTypeSymbol = (INamedTypeSymbol)symbolContext.Symbol;               
                 var attributes = namedTypeSymbol.GetAttributes();
 
-                foreach (var attribute in attributes)
+                var contentAttribute = attributes.FirstOrDefault(attr => contentTypeAttribute.IsAssignableFrom(attr.AttributeClass));
+                if(contentAttribute is null)
                 {
-                    if(contentTypeAttribute.IsAssignableFrom(attribute.AttributeClass))
-                    {
-                        VerifyContentTypeGuid(symbolContext, namedTypeSymbol, attribute);
-                        VerifyContentDataType(symbolContext, namedTypeSymbol, attribute);
-                        break;
-                    }
+                    return;
                 }
+
+                var imageUrlAttribute = attributes.FirstOrDefault(attr => imageUrlType.IsAssignableFrom(attr.AttributeClass));
+                if(imageUrlAttribute is null)
+                {
+                    ReportMissingImageUrl(symbolContext, namedTypeSymbol, contentAttribute);
+                }
+                else
+                {
+                    VerifyImageUrl(symbolContext, namedTypeSymbol, imageUrlAttribute);
+                }
+
+                VerifyContentTypeGuid(symbolContext, namedTypeSymbol, contentAttribute);
+                VerifyContentDataType(symbolContext, namedTypeSymbol);
             }
-           
+
+            private void VerifyImageUrl(SymbolAnalysisContext symbolContext, INamedTypeSymbol namedTypeSymbol, AttributeData imageUrlAttribute)
+            {
+                //throw new NotImplementedException();
+            }
+
             private void VerifyContentTypeGuid(SymbolAnalysisContext symbolContext, INamedTypeSymbol namedTypeSymbol, AttributeData attribute)
             {
                 if (TryGetGuidFromAttribute(attribute, out Guid contentGuid))
@@ -95,11 +120,11 @@ namespace CodeAnalyzers.Episerver.DiagnosticAnalyzers.CSharp
                 }
             }
 
-            private void VerifyContentDataType(SymbolAnalysisContext symbolContext, INamedTypeSymbol namedTypeSymbol, AttributeData attribute)
+            private void VerifyContentDataType(SymbolAnalysisContext symbolContext, INamedTypeSymbol namedTypeSymbol)
             {
                 if(namedTypeSymbol.IsAbstract || !(iContentDataType.IsAssignableFrom(namedTypeSymbol)))
                 {
-                    ReportInvalidContentDataType(symbolContext, namedTypeSymbol, attribute);
+                    ReportInvalidContentDataType(symbolContext, namedTypeSymbol);
                 }
             }
 
@@ -145,14 +170,22 @@ namespace CodeAnalyzers.Episerver.DiagnosticAnalyzers.CSharp
                 }
             }
 
-            private void ReportInvalidContentDataType(SymbolAnalysisContext symbolContext, INamedTypeSymbol namedType, AttributeData attribute)
+            private void ReportInvalidContentDataType(SymbolAnalysisContext symbolContext, INamedTypeSymbol namedType)
+            {
+                symbolContext.ReportDiagnostic(
+                    namedType.CreateDiagnostic(
+                        Descriptors.Epi1003ContentTypeMustImplementContentData,
+                        namedType.ToDisplayString(SymbolDisplayFormat.CSharpShortErrorMessageFormat)));
+            }
+
+            private void ReportMissingImageUrl(SymbolAnalysisContext symbolContext, INamedTypeSymbol namedType, AttributeData attribute)
             {
                 var node = attribute.ApplicationSyntaxReference?.GetSyntax();
                 if (node != null)
                 {
                     symbolContext.ReportDiagnostic(
                         node.CreateDiagnostic(
-                            Descriptors.Epi1003ContentTypeMustImplementContentData,
+                            Descriptors.Epi2005ContentTypeShouldHaveImageUrl,
                             namedType.ToDisplayString(SymbolDisplayFormat.CSharpShortErrorMessageFormat)));
                 }
             }

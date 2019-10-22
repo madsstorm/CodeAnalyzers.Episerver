@@ -20,6 +20,7 @@ namespace CodeAnalyzers.Episerver.Test
                                  Description = ""Description"",
                                  GroupName = ""GroupName"",
                                  Order = 100)]
+                    [ImageUrl(""image.png"")]
                     public class TypeName : PageData
                     {
                     }

@@ -20,13 +20,14 @@ namespace CodeAnalyzers.Episerver.Test
                                  Description = ""Description"",
                                  GroupName = ""GroupName"",
                                  Order = 100)]
+                    [ImageUrl(""image.png"")]
                     public abstract class TypeName : PageData
                     {
                     }
                 }";
 
             await Verify.VerifyAnalyzerAsync(test,
-                Verify.Diagnostic(Descriptors.Epi1003ContentTypeMustImplementContentData).WithLocation(7, 22).WithArguments("TypeName"));
+                Verify.Diagnostic(Descriptors.Epi1003ContentTypeMustImplementContentData).WithLocation(13, 43).WithArguments("TypeName"));
         }
 
         [Fact]
@@ -43,13 +44,14 @@ namespace CodeAnalyzers.Episerver.Test
                                  Description = ""Description"",
                                  GroupName = ""GroupName"",
                                  Order = 100)]
+                    [ImageUrl(""image.png"")]
                     public class TypeName : object
                     {
                     }
                 }";
 
             await Verify.VerifyAnalyzerAsync(test,
-                Verify.Diagnostic(Descriptors.Epi1003ContentTypeMustImplementContentData).WithLocation(7, 22).WithArguments("TypeName"));
+                Verify.Diagnostic(Descriptors.Epi1003ContentTypeMustImplementContentData).WithLocation(13, 34).WithArguments("TypeName"));
         }
     }
 }
