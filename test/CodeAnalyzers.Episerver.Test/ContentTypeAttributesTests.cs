@@ -20,13 +20,14 @@ namespace CodeAnalyzers.Episerver.Test
                                  Description = ""Description"",
                                  GroupName = ""GroupName"",
                                  Order = 100)]
-                    [ImageUrl(""image.png"")]
                     public class TypeName : PageData
                     {
                     }
                 }";
 
-            await Verify.VerifyAnalyzerAsync(test);
+            await Verify
+                .Ignore(Descriptors.Epi2005ContentTypeShouldHaveImageUrl)
+                .VerifyAnalyzerAsync(test);
         }
 
         [Fact(Skip = "TODO")]
@@ -123,7 +124,7 @@ namespace CodeAnalyzers.Episerver.Test
                 Verify.Diagnostic(Descriptors.Epi2000ContentTypeShouldHaveDisplayName).WithLocation(7, 22).WithArguments("TypeName"));
         }
 
-        [Fact(Skip = "TODO")]
+        [Fact]
         public async Task DetectContentTypeWithMissingDescription()
         {
             var test = @"
@@ -141,7 +142,9 @@ namespace CodeAnalyzers.Episerver.Test
                     }
                 }";
 
-            await Verify.VerifyAnalyzerAsync(test,
+            await Verify
+                .Ignore(Descriptors.Epi2005ContentTypeShouldHaveImageUrl)
+                .VerifyAnalyzerAsync(test,
                 Verify.Diagnostic(Descriptors.Epi2001ContentTypeShouldHaveDescription).WithLocation(7, 22).WithArguments("TypeName"));
         }
 

@@ -15,12 +15,14 @@ namespace CodeAnalyzers.Episerver.DiagnosticAnalyzers.CSharp
         private const string IContentDataMetadataName = "EPiServer.Core.IContentData";
         private const string ImageUrlMetadataName = "EPiServer.DataAnnotations.ImageUrlAttribute";
         private const string GuidArgument = "GUID";
+        private const string DescriptionArgument = "Description";
 
         public override ImmutableArray<DiagnosticDescriptor> SupportedDiagnostics =>
             ImmutableArray.Create(
                 Descriptors.Epi1000ContentTypeMustHaveValidGuid,
                 Descriptors.Epi1001ContentTypeMustHaveUniqueGuid,
                 Descriptors.Epi1003ContentTypeMustImplementContentData,
+                Descriptors.Epi2001ContentTypeShouldHaveDescription,
                 Descriptors.Epi2005ContentTypeShouldHaveImageUrl);
 
         public override void Initialize(AnalysisContext context)
@@ -94,6 +96,8 @@ namespace CodeAnalyzers.Episerver.DiagnosticAnalyzers.CSharp
                 }
 
                 VerifyContentTypeGuid(symbolContext, namedTypeSymbol, contentAttribute);
+                VerifyContentTypeDescription(symbolContext, namedTypeSymbol, contentAttribute);
+
                 VerifyContentDataType(symbolContext, namedTypeSymbol);
             }
 
@@ -130,6 +134,19 @@ namespace CodeAnalyzers.Episerver.DiagnosticAnalyzers.CSharp
                 else
                 {
                     ReportInvalidGuid(symbolContext, namedTypeSymbol, attribute);
+                }
+            }
+
+            private void VerifyContentTypeDescription(SymbolAnalysisContext symbolContext, INamedTypeSymbol namedTypeSymbol, AttributeData contentAttribute)
+            {
+                var descriptionArgument = contentAttribute.NamedArguments
+                    .FirstOrDefault(arg => string.Equals(arg.Key, DescriptionArgument, StringComparison.Ordinal));
+
+                string description = descriptionArgument.Value.Value?.ToString();
+
+                if(string.IsNullOrEmpty(description))
+                {
+                    ReportInvalidDescription(symbolContext, namedTypeSymbol, contentAttribute);
                 }
             }
 
@@ -199,6 +216,18 @@ namespace CodeAnalyzers.Episerver.DiagnosticAnalyzers.CSharp
                     symbolContext.ReportDiagnostic(
                         node.CreateDiagnostic(
                             Descriptors.Epi2005ContentTypeShouldHaveImageUrl,
+                            namedType.ToDisplayString(SymbolDisplayFormat.CSharpShortErrorMessageFormat)));
+                }
+            }
+
+            private void ReportInvalidDescription(SymbolAnalysisContext symbolContext, INamedTypeSymbol namedType, AttributeData attribute)
+            {
+                var node = attribute.ApplicationSyntaxReference?.GetSyntax();
+                if (node != null)
+                {
+                    symbolContext.ReportDiagnostic(
+                        node.CreateDiagnostic(
+                            Descriptors.Epi2001ContentTypeShouldHaveDescription,
                             namedType.ToDisplayString(SymbolDisplayFormat.CSharpShortErrorMessageFormat)));
                 }
             }

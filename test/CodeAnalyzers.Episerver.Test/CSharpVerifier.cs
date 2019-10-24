@@ -3,6 +3,8 @@ using Microsoft.CodeAnalysis.CSharp.Testing;
 using Microsoft.CodeAnalysis.Diagnostics;
 using Microsoft.CodeAnalysis.Testing;
 using Microsoft.CodeAnalysis.Testing.Verifiers;
+using System.Collections.Generic;
+using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
 
@@ -26,11 +28,18 @@ namespace CodeAnalyzers.Episerver.Test
         public static Task VerifyAnalyzerAsync(string source, params DiagnosticResult[] expected)
         {
             var test = new EpiserverTest { TestCode = source };
-            test.ExpectedDiagnostics.AddRange(expected);
+            test.ExpectedDiagnostics.AddRange(expected);           
             return test.RunAsync();
         }
 
-        private class EpiserverTest : CSharpCodeFixTest<TAnalyzer, EmptyCodeFixProvider, XUnitVerifier>
+        public static EpiserverTest Ignore(params DiagnosticDescriptor[] ignored)
+        {
+            var test = new EpiserverTest();
+            test.DisabledDiagnostics.AddRange(ignored.Select(d => d.Id));
+            return test;
+        }      
+
+        internal class EpiserverTest : CSharpCodeFixTest<TAnalyzer, EmptyCodeFixProvider, XUnitVerifier>
         {
             public EpiserverTest()
             {
@@ -50,6 +59,13 @@ namespace CodeAnalyzers.Episerver.Test
 
                 Exclusions &= ~AnalysisExclusions.GeneratedCode;
             }
-        }
+
+            public Task VerifyAnalyzerAsync(string source, params DiagnosticResult[] expected)
+            {
+                TestCode = source;
+                ExpectedDiagnostics.AddRange(expected);
+                return RunAsync();
+            }
+        }       
     }
 }

@@ -17,19 +17,19 @@ namespace CodeAnalyzers.Episerver.Cms10.Test
                 namespace Test
                 {
                     [ContentType(GUID = ""1F218487-9C23-4944-A0E6-76FC1995CBF0"")]
-                    [ImageUrl(""image.png"")]
                     public class TypeName : PageData
                     {
                     }
 
                     [ContentType(GUID = ""71D42C7D-FBA6-420C-A837-49C2330AA5C1"")]
-                    [ImageUrl(""image.png"")]
                     public class OtherTypeName : PageData
                     {
                     }
                 }";
 
-            await Verify.VerifyAnalyzerAsync(test);
+            await Verify
+                .Ignore(Descriptors.Epi2001ContentTypeShouldHaveDescription, Descriptors.Epi2005ContentTypeShouldHaveImageUrl)
+                .VerifyAnalyzerAsync(test);
         }
 
         [Fact]
@@ -46,19 +46,19 @@ namespace CodeAnalyzers.Episerver.Cms10.Test
                     }
 
                     [CustomContentType(GUID = ""1F218487-9C23-4944-A0E6-76FC1995CBF0"")]
-                    [ImageUrl(""image.png"")]
                     public class TypeName : PageData
                     {
                     }
 
                     [CustomContentType(GUID = ""71D42C7D-FBA6-420C-A837-49C2330AA5C1"")]
-                    [ImageUrl(""image.png"")]
                     public class OtherTypeName : PageData
                     {
                     }
                 }";
 
-            await Verify.VerifyAnalyzerAsync(test);
+            await Verify
+                .Ignore(Descriptors.Epi2001ContentTypeShouldHaveDescription, Descriptors.Epi2005ContentTypeShouldHaveImageUrl)
+                .VerifyAnalyzerAsync(test);
         }
 
         [Fact]
@@ -75,19 +75,19 @@ namespace CodeAnalyzers.Episerver.Cms10.Test
                     }
 
                     [ContentType(GUID = ""1F218487-9C23-4944-A0E6-76FC1995CBF0"")]
-                    [ImageUrl(""image.png"")]
                     public class TypeName : PageData
                     {
                     }
 
                     [CustomContentType(GUID = ""71D42C7D-FBA6-420C-A837-49C2330AA5C1"")]
-                    [ImageUrl(""image.png"")]
                     public class OtherTypeName : PageData
                     {
                     }
                 }";
 
-            await Verify.VerifyAnalyzerAsync(test);
+            await Verify
+                .Ignore(Descriptors.Epi2001ContentTypeShouldHaveDescription, Descriptors.Epi2005ContentTypeShouldHaveImageUrl)
+                .VerifyAnalyzerAsync(test);
         }
 
         [Fact]
@@ -100,20 +100,20 @@ namespace CodeAnalyzers.Episerver.Cms10.Test
                 namespace Test
                 {
                     [ContentType(GUID = ""1F218487-9C23-4944-A0E6-76FC1995CBF0"")]
-                    [ImageUrl(""image.png"")]
                     public class TypeName : PageData
                     {
                     }
 
                     [ContentType(GUID = ""1F218487-9C23-4944-A0E6-76FC1995CBF0"")]
-                    [ImageUrl(""image.png"")]
                     public class OtherTypeName : PageData
                     {
                     }
                 }";
-            await Verify.VerifyAnalyzerAsync(test,
+            await Verify
+                .Ignore(Descriptors.Epi2001ContentTypeShouldHaveDescription, Descriptors.Epi2005ContentTypeShouldHaveImageUrl)
+                .VerifyAnalyzerAsync(test,
                 Verify.Diagnostic(Descriptors.Epi1001ContentTypeMustHaveUniqueGuid).WithLocation(7, 22).WithArguments("TypeName", "OtherTypeName"),
-                Verify.Diagnostic(Descriptors.Epi1001ContentTypeMustHaveUniqueGuid).WithLocation(13, 22).WithArguments("OtherTypeName", "TypeName"));
+                Verify.Diagnostic(Descriptors.Epi1001ContentTypeMustHaveUniqueGuid).WithLocation(12, 22).WithArguments("OtherTypeName", "TypeName"));
         }
 
         [Fact]
@@ -126,20 +126,20 @@ namespace CodeAnalyzers.Episerver.Cms10.Test
                 namespace Test
                 {
                     [ContentType(GUID = ""1F218487-9C23-4944-A0E6-76FC1995CBF0"")]
-                    [ImageUrl(""image.png"")]
                     public class TypeName : PageData
                     {
                     }
 
                     [ContentType(GUID = ""{1F218487-9C23-4944-A0E6-76FC1995CBF0}"")]
-                    [ImageUrl(""image.png"")]
                     public class OtherTypeName : PageData
                     {
                     }
                 }";
-            await Verify.VerifyAnalyzerAsync(test,
+            await Verify
+                .Ignore(Descriptors.Epi2001ContentTypeShouldHaveDescription, Descriptors.Epi2005ContentTypeShouldHaveImageUrl)
+                .VerifyAnalyzerAsync(test,
                 Verify.Diagnostic(Descriptors.Epi1001ContentTypeMustHaveUniqueGuid).WithLocation(7, 22).WithArguments("TypeName", "OtherTypeName"),
-                Verify.Diagnostic(Descriptors.Epi1001ContentTypeMustHaveUniqueGuid).WithLocation(13, 22).WithArguments("OtherTypeName", "TypeName"));
+                Verify.Diagnostic(Descriptors.Epi1001ContentTypeMustHaveUniqueGuid).WithLocation(12, 22).WithArguments("OtherTypeName", "TypeName"));
         }
 
         [Fact]
@@ -156,21 +156,21 @@ namespace CodeAnalyzers.Episerver.Cms10.Test
                     }
 
                     [CustomContentType(GUID = ""1F218487-9C23-4944-A0E6-76FC1995CBF0"")]
-                    [ImageUrl(""image.png"")]
                     public class TypeName : PageData
                     {
                     }
 
                     [CustomContentType(GUID = ""1F218487-9C23-4944-A0E6-76FC1995CBF0"")]
-                    [ImageUrl(""image.png"")]
                     public class OtherTypeName : PageData
                     {
                     }
                 }";
 
-            await Verify.VerifyAnalyzerAsync(test,
+            await Verify
+                .Ignore(Descriptors.Epi2001ContentTypeShouldHaveDescription, Descriptors.Epi2005ContentTypeShouldHaveImageUrl)
+                .VerifyAnalyzerAsync(test,
                 Verify.Diagnostic(Descriptors.Epi1001ContentTypeMustHaveUniqueGuid).WithLocation(11, 22).WithArguments("TypeName", "OtherTypeName"),
-                Verify.Diagnostic(Descriptors.Epi1001ContentTypeMustHaveUniqueGuid).WithLocation(17, 22).WithArguments("OtherTypeName", "TypeName"));
+                Verify.Diagnostic(Descriptors.Epi1001ContentTypeMustHaveUniqueGuid).WithLocation(16, 22).WithArguments("OtherTypeName", "TypeName"));
         }
 
         [Fact]
@@ -187,21 +187,21 @@ namespace CodeAnalyzers.Episerver.Cms10.Test
                     }
 
                     [ContentType(GUID = ""1F218487-9C23-4944-A0E6-76FC1995CBF0"")]
-                    [ImageUrl(""image.png"")]
                     public class TypeName : PageData
                     {
                     }
 
                     [CustomContentType(GUID = ""1F218487-9C23-4944-A0E6-76FC1995CBF0"")]
-                    [ImageUrl(""image.png"")]
                     public class OtherTypeName : PageData
                     {
                     }
                 }";
 
-            await Verify.VerifyAnalyzerAsync(test,
+            await Verify
+                .Ignore(Descriptors.Epi2001ContentTypeShouldHaveDescription, Descriptors.Epi2005ContentTypeShouldHaveImageUrl)
+                .VerifyAnalyzerAsync(test,
                 Verify.Diagnostic(Descriptors.Epi1001ContentTypeMustHaveUniqueGuid).WithLocation(11, 22).WithArguments("TypeName", "OtherTypeName"),
-                Verify.Diagnostic(Descriptors.Epi1001ContentTypeMustHaveUniqueGuid).WithLocation(17, 22).WithArguments("OtherTypeName", "TypeName"));
+                Verify.Diagnostic(Descriptors.Epi1001ContentTypeMustHaveUniqueGuid).WithLocation(16, 22).WithArguments("OtherTypeName", "TypeName"));
         }
     }
 }
