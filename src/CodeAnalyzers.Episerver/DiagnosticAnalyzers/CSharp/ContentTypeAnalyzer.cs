@@ -86,7 +86,7 @@ namespace CodeAnalyzers.Episerver.DiagnosticAnalyzers.CSharp
                 var imageUrlAttribute = attributes.FirstOrDefault(attr => imageUrlType.IsAssignableFrom(attr.AttributeClass));
                 if(imageUrlAttribute is null)
                 {
-                    ReportMissingImageUrl(symbolContext, namedTypeSymbol, contentAttribute);
+                    ReportInvalidImageUrl(symbolContext, namedTypeSymbol, contentAttribute);
                 }
                 else
                 {
@@ -99,7 +99,15 @@ namespace CodeAnalyzers.Episerver.DiagnosticAnalyzers.CSharp
 
             private void VerifyImageUrl(SymbolAnalysisContext symbolContext, INamedTypeSymbol namedTypeSymbol, AttributeData imageUrlAttribute)
             {
-                //throw new NotImplementedException();
+                // For simplicity, assume that a derived imageurl attribute sets an image path in its constructor
+
+                if (Equals(imageUrlAttribute.AttributeClass, imageUrlType))
+                {
+                    if (string.IsNullOrEmpty(imageUrlAttribute.ConstructorArguments.FirstOrDefault().Value?.ToString()))
+                    {
+                        ReportInvalidImageUrl(symbolContext, namedTypeSymbol, imageUrlAttribute);
+                    }
+                }
             }
 
             private void VerifyContentTypeGuid(SymbolAnalysisContext symbolContext, INamedTypeSymbol namedTypeSymbol, AttributeData attribute)
@@ -178,7 +186,7 @@ namespace CodeAnalyzers.Episerver.DiagnosticAnalyzers.CSharp
                         namedType.ToDisplayString(SymbolDisplayFormat.CSharpShortErrorMessageFormat)));
             }
 
-            private void ReportMissingImageUrl(SymbolAnalysisContext symbolContext, INamedTypeSymbol namedType, AttributeData attribute)
+            private void ReportInvalidImageUrl(SymbolAnalysisContext symbolContext, INamedTypeSymbol namedType, AttributeData attribute)
             {
                 var node = attribute.ApplicationSyntaxReference?.GetSyntax();
                 if (node != null)

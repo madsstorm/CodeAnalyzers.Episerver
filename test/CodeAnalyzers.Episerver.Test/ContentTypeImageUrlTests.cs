@@ -130,7 +130,7 @@ namespace CodeAnalyzers.Episerver.Test
                 Verify.Diagnostic(Descriptors.Epi2005ContentTypeShouldHaveImageUrl).WithLocation(7, 22).WithArguments("TypeName"));
         }
 
-        [Fact(Skip = "TODO")]
+        [Fact]
         public async Task DetectContentTypeWithNullImageUrl()
         {
             var test = @"
@@ -151,10 +151,10 @@ namespace CodeAnalyzers.Episerver.Test
                 }";
 
             await Verify.VerifyAnalyzerAsync(test,
-                Verify.Diagnostic(Descriptors.Epi2005ContentTypeShouldHaveImageUrl).WithLocation(7, 22).WithArguments("TypeName"));
+                Verify.Diagnostic(Descriptors.Epi2005ContentTypeShouldHaveImageUrl).WithLocation(12, 22).WithArguments("TypeName"));
         }
 
-        [Fact(Skip = "TODO")]
+        [Fact]
         public async Task DetectContentTypeWithEmptyImageUrl()
         {
             var test = @"
@@ -175,7 +175,7 @@ namespace CodeAnalyzers.Episerver.Test
                 }";
 
             await Verify.VerifyAnalyzerAsync(test,
-                Verify.Diagnostic(Descriptors.Epi2005ContentTypeShouldHaveImageUrl).WithLocation(7, 22).WithArguments("TypeName"));
+                Verify.Diagnostic(Descriptors.Epi2005ContentTypeShouldHaveImageUrl).WithLocation(12, 22).WithArguments("TypeName"));
         }
     }
 }
