@@ -99,14 +99,19 @@ namespace CodeAnalyzers.Episerver.DiagnosticAnalyzers.CSharp
 
             private void VerifyImageUrl(SymbolAnalysisContext symbolContext, INamedTypeSymbol namedTypeSymbol, AttributeData imageUrlAttribute)
             {
-                // For simplicity, assume that a derived imageurl attribute sets an image path in its constructor
-
-                if (Equals(imageUrlAttribute.AttributeClass, imageUrlType))
+                if (!Equals(imageUrlAttribute.AttributeClass, imageUrlAttribute))
                 {
-                    if (string.IsNullOrEmpty(imageUrlAttribute.ConstructorArguments.FirstOrDefault().Value?.ToString()))
+                    if (imageUrlAttribute.ConstructorArguments.IsEmpty)
                     {
-                        ReportInvalidImageUrl(symbolContext, namedTypeSymbol, imageUrlAttribute);
+                        // For simplicity, assume that a derived attribute
+                        // with a parameterless constructor sets an image path
+                        return;
                     }
+                }
+
+                if (string.IsNullOrEmpty(imageUrlAttribute.ConstructorArguments.FirstOrDefault().Value?.ToString()))
+                {
+                    ReportInvalidImageUrl(symbolContext, namedTypeSymbol, imageUrlAttribute);
                 }
             }
 

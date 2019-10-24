@@ -177,5 +177,45 @@ namespace CodeAnalyzers.Episerver.Test
             await Verify.VerifyAnalyzerAsync(test,
                 Verify.Diagnostic(Descriptors.Epi2005ContentTypeShouldHaveImageUrl).WithLocation(12, 22).WithArguments("TypeName"));
         }
+
+        [Fact]
+        public async Task DetectContentTypeWithEmptyInheritedImageUrl()
+        {
+            var test = @"
+                using EPiServer.DataAnnotations;
+                using EPiServer.Core;
+
+                namespace Custom
+                {
+                    public class CustomImageUrl : ImageUrlAttribute
+                    {
+                        public CustomImageUrl() : base(""base.png"")
+                        {
+                        }
+
+                        public CustomImageUrl(string path) : base(path)
+                        {
+                        }
+                    }
+                }
+
+                namespace Test
+                {
+                    using Custom;
+
+                    [ContentType(GUID = ""1F218487-9C23-4944-A0E6-76FC1995CBF0"",
+                                 DisplayName = ""DisplayName"",
+                                 Description = ""Description"",
+                                 GroupName = ""GroupName"",
+                                 Order = 100)]
+                    [CustomImageUrl("""")]
+                    public class TypeName : PageData
+                    {
+                    }
+                }";
+
+            await Verify.VerifyAnalyzerAsync(test,
+                Verify.Diagnostic(Descriptors.Epi2005ContentTypeShouldHaveImageUrl).WithLocation(28, 22).WithArguments("TypeName"));
+        }
     }
 }
