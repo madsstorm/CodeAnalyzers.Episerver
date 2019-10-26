@@ -15,19 +15,15 @@ namespace CodeAnalyzers.Episerver.Test
 
                 namespace Test
                 {
-                    [ContentType(GUID = ""1F218487-9C23-4944-A0E6-76FC1995CBF0"",
-                                 DisplayName = ""DisplayName"",
-                                 Description = ""Description"",
-                                 GroupName = ""GroupName"",
-                                 Order = 100)]
-                    [ImageUrl(""image.png"")]
+                    [ContentType]
                     public abstract class TypeName : PageData
                     {
                     }
                 }";
 
             await Verify.VerifyAnalyzerAsync(test,
-                Verify.Diagnostic(Descriptors.Epi1003ContentTypeMustImplementContentData).WithLocation(13, 43).WithArguments("TypeName"));
+                Verify.Diagnostic(Descriptors.Epi1003ContentTypeMustImplementContentData)
+                    .WithLocation(8, 43).WithArguments("TypeName"));
         }
 
         [Fact]
@@ -39,19 +35,15 @@ namespace CodeAnalyzers.Episerver.Test
 
                 namespace Test
                 {
-                    [ContentType(GUID = ""1F218487-9C23-4944-A0E6-76FC1995CBF0"",
-                                 DisplayName = ""DisplayName"",
-                                 Description = ""Description"",
-                                 GroupName = ""GroupName"",
-                                 Order = 100)]
-                    [ImageUrl(""image.png"")]
+                    [ContentType]
                     public class TypeName : object
                     {
                     }
                 }";
 
             await Verify.VerifyAnalyzerAsync(test,
-                Verify.Diagnostic(Descriptors.Epi1003ContentTypeMustImplementContentData).WithLocation(13, 34).WithArguments("TypeName"));
+                Verify.Diagnostic(Descriptors.Epi1003ContentTypeMustImplementContentData)
+                    .WithLocation(8, 34).WithArguments("TypeName"));
         }
     }
 }
