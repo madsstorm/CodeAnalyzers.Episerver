@@ -26,19 +26,19 @@ namespace CodeAnalyzers.Episerver
 
         public static DiagnosticDescriptor Epi1000ContentTypeMustHaveValidGuid { get; } =
             Rule("Epi1000", "Content type must have a valid GUID", Usage, Error,
-                "Content type '{0}' is missing a valid GUID property", "All content types must be identified by a valid GUID property.");
+                "Missing GUID", "All content types must be identified by a valid GUID property.");
 
         public static DiagnosticDescriptor Epi1001ContentTypeMustHaveUniqueGuid { get; } =
             Rule("Epi1001", "Content type must have a unique GUID", Usage, Error,
-                "Content type '{0}' has the same GUID as '{1}'", "All content types must be identified by a unique GUID property.");
+                "{0} has the same GUID as {1}", "All content types must be identified by a unique GUID property.");
 
         public static DiagnosticDescriptor Epi1002AvoidUsingInternalNamespaces { get; } =
             Rule("Epi1002", "Avoid using internal namespaces", Usage, Warning,
-                "Avoid using internal type '{0}'", "Internal namespaces are not considered part of the public supported API.");
+                "Avoid using internal type {0}", "Internal namespaces are not considered part of the public supported API.");
 
         public static DiagnosticDescriptor Epi1003ContentTypeMustImplementContentData { get; } =
             Rule("Epi1003", "Content type must implement content data", Usage, Error,
-                "Content type '{0}' must implement a content data type", "Content types must be non-abstract classes that implement a content data type such as PageData, BlockData and MediaData.");
+                "{0} must implement a content data type", "Content types must be non-abstract classes that implement a content data type such as PageData, BlockData and MediaData.");
 
         #endregion
 
@@ -46,27 +46,27 @@ namespace CodeAnalyzers.Episerver
 
         public static DiagnosticDescriptor Epi2000ContentTypeShouldHaveDisplayName { get; } =
             Rule("Epi2000", "Content type should have a DisplayName", Content, Warning,
-                "Content type '{0}' is missing DisplayName", "Content types should have a readable DisplayName shown in edit view.");
+                "Missing DisplayName", "Content types should have a readable DisplayName shown in edit view.");
 
         public static DiagnosticDescriptor Epi2001ContentTypeShouldHaveDescription { get; } =
             Rule("Epi2001", "Content type should have a Description", Content, Warning,
-                "Content type '{0}' is missing Description", "Content types should have a Description shown in edit view.");
+                "Missing Description", "Content types should have a Description shown in edit view.");
 
         public static DiagnosticDescriptor Epi2002ContentTypeShouldHaveGroupName { get; } =
             Rule("Epi2002", "Content type should have a GroupName", Content, Warning,
-                "Content type '{0}' is missing GroupName", "Content types should have a GroupName for grouping in edit view.");
+                "Missing GroupName", "Content types should have a GroupName for grouping in edit view.");
 
         public static DiagnosticDescriptor Epi2003ContentTypeShouldHaveOrder { get; } =
             Rule("Epi2003", "Content type should have an Order", Content, Warning,
-                "Content type '{0}' is missing Order", "Content types should have an Order for sorting in edit view.");
+                "Missing Order", "Content types should have an Order for sorting in edit view.");
 
         public static DiagnosticDescriptor Epi2004ContentTypeShouldHaveUniqueOrder { get; } =
             Rule("Epi2004", "Content type should have a unique Order", Content, Warning,
-                "{0} '{1}' has the same Order as '{2}'", "Content type Orders should be unique for sorting in edit view.");
+                "{0} has the same Order as {1}", "Content type Orders should be unique for sorting in edit view.");
 
         public static DiagnosticDescriptor Epi2005ContentTypeShouldHaveImageUrl { get; } =
             Rule("Epi2005", "Content type should have an ImageUrl", Content, Warning,
-                "Content type '{0}' is missing an ImageUrl attribute", "Content types should have an ImageUrl attribute for showing an icon in edit view.");
+                "Missing ImageUrl attribute", "Content types should have an ImageUrl attribute for showing an icon in edit view.");
 
         #endregion
 

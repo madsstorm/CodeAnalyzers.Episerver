@@ -56,15 +56,15 @@ namespace CodeAnalyzers.Episerver.DiagnosticAnalyzers.CSharp
             var imageUrlAttribute = attributes.FirstOrDefault(attr => imageUrlType.IsAssignableFrom(attr.AttributeClass));
             if (imageUrlAttribute is null)
             {
-                ReportInvalidImageUrl(symbolContext, namedTypeSymbol, contentAttribute);
+                ReportInvalidImageUrl(symbolContext, contentAttribute);
             }
             else
             {
-                VerifyImageUrl(symbolContext, namedTypeSymbol, imageUrlAttribute, imageUrlType);
+                VerifyImageUrl(symbolContext, imageUrlAttribute, imageUrlType);
             }
         }
 
-        private void VerifyImageUrl(SymbolAnalysisContext symbolContext, INamedTypeSymbol namedTypeSymbol, AttributeData imageUrlAttribute, INamedTypeSymbol imageUrlType)
+        private static void VerifyImageUrl(SymbolAnalysisContext symbolContext, AttributeData imageUrlAttribute, INamedTypeSymbol imageUrlType)
         {
             if (!Equals(imageUrlAttribute.AttributeClass, imageUrlType))
             {
@@ -78,19 +78,18 @@ namespace CodeAnalyzers.Episerver.DiagnosticAnalyzers.CSharp
 
             if (string.IsNullOrEmpty(imageUrlAttribute.ConstructorArguments.FirstOrDefault().Value?.ToString()))
             {
-                ReportInvalidImageUrl(symbolContext, namedTypeSymbol, imageUrlAttribute);
+                ReportInvalidImageUrl(symbolContext, imageUrlAttribute);
             }
         }
 
-        private static void ReportInvalidImageUrl(SymbolAnalysisContext symbolContext, INamedTypeSymbol namedType, AttributeData attribute)
+        private static void ReportInvalidImageUrl(SymbolAnalysisContext symbolContext, AttributeData attribute)
         {
             var node = attribute.ApplicationSyntaxReference?.GetSyntax();
             if (node != null)
             {
                 symbolContext.ReportDiagnostic(
                     node.CreateDiagnostic(
-                        Descriptors.Epi2005ContentTypeShouldHaveImageUrl,
-                        namedType.ToDisplayString(SymbolDisplayFormat.CSharpShortErrorMessageFormat)));
+                        Descriptors.Epi2005ContentTypeShouldHaveImageUrl));
             }
         }
     }

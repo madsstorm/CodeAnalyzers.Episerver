@@ -80,7 +80,7 @@ namespace CodeAnalyzers.Episerver.DiagnosticAnalyzers.CSharp
                 }
                 else
                 {
-                    ReportInvalidGuid(symbolContext, namedTypeSymbol, attribute);
+                    ReportInvalidGuid(symbolContext, attribute);
                 }
             }
 
@@ -114,15 +114,14 @@ namespace CodeAnalyzers.Episerver.DiagnosticAnalyzers.CSharp
                 }
             }
 
-            private static void ReportInvalidGuid(SymbolAnalysisContext symbolContext, INamedTypeSymbol namedType, AttributeData attribute)
+            private static void ReportInvalidGuid(SymbolAnalysisContext symbolContext, AttributeData attribute)
             {
                 var node = attribute.ApplicationSyntaxReference?.GetSyntax();
                 if (node != null)
                 {
                     symbolContext.ReportDiagnostic(
                         node.CreateDiagnostic(
-                            Descriptors.Epi1000ContentTypeMustHaveValidGuid,
-                            namedType.ToDisplayString(SymbolDisplayFormat.CSharpShortErrorMessageFormat)));
+                            Descriptors.Epi1000ContentTypeMustHaveValidGuid));
                 }
             }
         }

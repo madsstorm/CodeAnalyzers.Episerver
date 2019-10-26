@@ -85,8 +85,8 @@ namespace CodeAnalyzers.Episerver.Test
                 }";
 
             await Verify.VerifyAnalyzerAsync(test,
-                Verify.Diagnostic(Descriptors.Epi2004ContentTypeShouldHaveUniqueOrder).WithLocation(7, 22).WithArguments("BlockData", "TypeName", "OtherType"),
-                Verify.Diagnostic(Descriptors.Epi2004ContentTypeShouldHaveUniqueOrder).WithLocation(12, 22).WithArguments("BlockData", "OtherType", "TypeName"));
+                Verify.Diagnostic(Descriptors.Epi2004ContentTypeShouldHaveUniqueOrder).WithLocation(7, 22).WithArguments("TypeName", "OtherType"),
+                Verify.Diagnostic(Descriptors.Epi2004ContentTypeShouldHaveUniqueOrder).WithLocation(12, 22).WithArguments("OtherType", "TypeName"));
         }
     }
 }

@@ -111,7 +111,7 @@ namespace CodeAnalyzers.Episerver.DiagnosticAnalyzers.CSharp
                 return int.TryParse(orderValue.Value?.ToString(), out order);
             }
 
-            private void ReportDuplicateOrder(SymbolAnalysisContext symbolContext, INamedTypeSymbol namedType,
+            private static void ReportDuplicateOrder(SymbolAnalysisContext symbolContext, INamedTypeSymbol namedType,
                 AttributeData attribute, INamedTypeSymbol matchingType)
             {
                 var node = attribute.ApplicationSyntaxReference?.GetSyntax();
@@ -119,8 +119,7 @@ namespace CodeAnalyzers.Episerver.DiagnosticAnalyzers.CSharp
                 {
                     symbolContext.ReportDiagnostic(
                         node.CreateDiagnostic(
-                            Descriptors.Epi2004ContentTypeShouldHaveUniqueOrder,
-                            contentRootType.ToDisplayString(SymbolDisplayFormat.CSharpShortErrorMessageFormat),
+                            Descriptors.Epi2004ContentTypeShouldHaveUniqueOrder,                            
                             namedType.ToDisplayString(SymbolDisplayFormat.CSharpShortErrorMessageFormat),
                             matchingType.ToDisplayString(SymbolDisplayFormat.CSharpShortErrorMessageFormat)));
                 }
