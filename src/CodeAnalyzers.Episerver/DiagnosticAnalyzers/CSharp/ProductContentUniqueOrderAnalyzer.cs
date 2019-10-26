@@ -1,5 +1,9 @@
-﻿namespace CodeAnalyzers.Episerver.DiagnosticAnalyzers.CSharp
+﻿using Microsoft.CodeAnalysis;
+using Microsoft.CodeAnalysis.Diagnostics;
+
+namespace CodeAnalyzers.Episerver.DiagnosticAnalyzers.CSharp
 {
+    [DiagnosticAnalyzer(LanguageNames.CSharp)]
     public class ProductContentUniqueOrderAnalyzer : ContentTypeUniqueOrderAnalyzerBase
     {
         protected override string ContentRootTypeName =>

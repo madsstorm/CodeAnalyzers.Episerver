@@ -59,7 +59,7 @@ namespace CodeAnalyzers.Episerver.DiagnosticAnalyzers.CSharp
             }
         }
 
-        private void ReportInvalidContentDataType(SymbolAnalysisContext symbolContext, INamedTypeSymbol namedType)
+        private static void ReportInvalidContentDataType(SymbolAnalysisContext symbolContext, INamedTypeSymbol namedType)
         {
             symbolContext.ReportDiagnostic(
                 namedType.CreateDiagnostic(

@@ -11,7 +11,6 @@ namespace CodeAnalyzers.Episerver.DiagnosticAnalyzers.CSharp
     /// <summary>
     /// ContentType 'Order' should be unique within its content type root
     /// </summary>
-    [DiagnosticAnalyzer(LanguageNames.CSharp)]
     public abstract class ContentTypeUniqueOrderAnalyzerBase : DiagnosticAnalyzer
     {
         private const string ContentTypeMetadataName = "EPiServer.DataAnnotations.ContentTypeAttribute";

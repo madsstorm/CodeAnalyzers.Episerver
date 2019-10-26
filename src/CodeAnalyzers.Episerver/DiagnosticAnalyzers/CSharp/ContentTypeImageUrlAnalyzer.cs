@@ -82,7 +82,7 @@ namespace CodeAnalyzers.Episerver.DiagnosticAnalyzers.CSharp
             }
         }
 
-        private void ReportInvalidImageUrl(SymbolAnalysisContext symbolContext, INamedTypeSymbol namedType, AttributeData attribute)
+        private static void ReportInvalidImageUrl(SymbolAnalysisContext symbolContext, INamedTypeSymbol namedType, AttributeData attribute)
         {
             var node = attribute.ApplicationSyntaxReference?.GetSyntax();
             if (node != null)
