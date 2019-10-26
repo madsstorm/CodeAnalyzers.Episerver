@@ -12,7 +12,6 @@ namespace CodeAnalyzers.Episerver.DiagnosticAnalyzers.CSharp
     public class ContentTypeAnalyzer : DiagnosticAnalyzer
     {
         private const string ContentTypeMetadataName = "EPiServer.DataAnnotations.ContentTypeAttribute";
-        private const string ImageUrlMetadataName = "EPiServer.DataAnnotations.ImageUrlAttribute";
         private const string GuidArgument = "GUID";
         private const string DescriptionArgument = "Description";
 
@@ -20,8 +19,7 @@ namespace CodeAnalyzers.Episerver.DiagnosticAnalyzers.CSharp
             ImmutableArray.Create(
                 Descriptors.Epi1000ContentTypeMustHaveValidGuid,
                 Descriptors.Epi1001ContentTypeMustHaveUniqueGuid,
-                Descriptors.Epi2001ContentTypeShouldHaveDescription,
-                Descriptors.Epi2005ContentTypeShouldHaveImageUrl);
+                Descriptors.Epi2001ContentTypeShouldHaveDescription);
 
         public override void Initialize(AnalysisContext context)
         {
@@ -38,13 +36,7 @@ namespace CodeAnalyzers.Episerver.DiagnosticAnalyzers.CSharp
                     return;
                 }
 
-                var imageUrlType = compilationContext.Compilation.GetTypeByMetadataName(ImageUrlMetadataName);
-                if(imageUrlType is null)
-                {
-                    return;
-                }
-
-                CompilationAnalyzer analyzer = new CompilationAnalyzer(contentTypeAttribute, imageUrlType);
+                CompilationAnalyzer analyzer = new CompilationAnalyzer(contentTypeAttribute);
 
                 compilationContext.RegisterSymbolAction(analyzer.AnalyzeSymbol, SymbolKind.NamedType);
             });
@@ -53,15 +45,13 @@ namespace CodeAnalyzers.Episerver.DiagnosticAnalyzers.CSharp
         private class CompilationAnalyzer
         {
             private readonly INamedTypeSymbol contentTypeAttribute;
-            private readonly INamedTypeSymbol imageUrlType;
 
             private readonly ConcurrentDictionary<Guid, (INamedTypeSymbol Type, AttributeData Attribute)> contentTypeGuids =
                 new ConcurrentDictionary<Guid, (INamedTypeSymbol Type, AttributeData Attribute)>();
 
-            public CompilationAnalyzer(INamedTypeSymbol contentTypeAttribute, INamedTypeSymbol imageUrlType)
+            public CompilationAnalyzer(INamedTypeSymbol contentTypeAttribute)
             {
                 this.contentTypeAttribute = contentTypeAttribute;
-                this.imageUrlType = imageUrlType;
             }
 
             internal void AnalyzeSymbol(SymbolAnalysisContext symbolContext)
@@ -75,36 +65,8 @@ namespace CodeAnalyzers.Episerver.DiagnosticAnalyzers.CSharp
                     return;
                 }
 
-                var imageUrlAttribute = attributes.FirstOrDefault(attr => imageUrlType.IsAssignableFrom(attr.AttributeClass));
-                if(imageUrlAttribute is null)
-                {
-                    ReportInvalidImageUrl(symbolContext, namedTypeSymbol, contentAttribute);
-                }
-                else
-                {
-                    VerifyImageUrl(symbolContext, namedTypeSymbol, imageUrlAttribute);
-                }
-
                 VerifyContentTypeGuid(symbolContext, namedTypeSymbol, contentAttribute);
                 VerifyContentTypeDescription(symbolContext, namedTypeSymbol, contentAttribute);
-            }
-
-            private void VerifyImageUrl(SymbolAnalysisContext symbolContext, INamedTypeSymbol namedTypeSymbol, AttributeData imageUrlAttribute)
-            {
-                if (!Equals(imageUrlAttribute.AttributeClass, imageUrlAttribute))
-                {
-                    if (imageUrlAttribute.ConstructorArguments.IsEmpty)
-                    {
-                        // For simplicity, assume that a derived attribute
-                        // with a parameterless constructor sets an image path
-                        return;
-                    }
-                }
-
-                if (string.IsNullOrEmpty(imageUrlAttribute.ConstructorArguments.FirstOrDefault().Value?.ToString()))
-                {
-                    ReportInvalidImageUrl(symbolContext, namedTypeSymbol, imageUrlAttribute);
-                }
             }
 
             private void VerifyContentTypeGuid(SymbolAnalysisContext symbolContext, INamedTypeSymbol namedTypeSymbol, AttributeData attribute)
@@ -176,18 +138,6 @@ namespace CodeAnalyzers.Episerver.DiagnosticAnalyzers.CSharp
                     symbolContext.ReportDiagnostic(
                         node.CreateDiagnostic(
                             Descriptors.Epi1000ContentTypeMustHaveValidGuid,
-                            namedType.ToDisplayString(SymbolDisplayFormat.CSharpShortErrorMessageFormat)));
-                }
-            }
-
-            private void ReportInvalidImageUrl(SymbolAnalysisContext symbolContext, INamedTypeSymbol namedType, AttributeData attribute)
-            {
-                var node = attribute.ApplicationSyntaxReference?.GetSyntax();
-                if (node != null)
-                {
-                    symbolContext.ReportDiagnostic(
-                        node.CreateDiagnostic(
-                            Descriptors.Epi2005ContentTypeShouldHaveImageUrl,
                             namedType.ToDisplayString(SymbolDisplayFormat.CSharpShortErrorMessageFormat)));
                 }
             }

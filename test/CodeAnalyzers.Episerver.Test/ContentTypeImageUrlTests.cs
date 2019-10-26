@@ -1,4 +1,4 @@
-using Verify = CodeAnalyzers.Episerver.Test.CSharpVerifier<CodeAnalyzers.Episerver.DiagnosticAnalyzers.CSharp.ContentTypeAnalyzer>;
+using Verify = CodeAnalyzers.Episerver.Test.CSharpVerifier<CodeAnalyzers.Episerver.DiagnosticAnalyzers.CSharp.ContentTypeImageUrlAnalyzer>;
 using System.Threading.Tasks;
 using Xunit;
 
@@ -7,7 +7,7 @@ namespace CodeAnalyzers.Episerver.Test
     public class ContentTypeImageUrlTests
     {
         [Fact]
-        public async Task IgnoreContentTypeWithAllAttributes()
+        public async Task IgnoreContentTypeWithImageUrl()
         {
             var test = @"
                 using EPiServer.DataAnnotations;
@@ -15,11 +15,7 @@ namespace CodeAnalyzers.Episerver.Test
 
                 namespace Test
                 {
-                    [ContentType(GUID = ""1F218487-9C23-4944-A0E6-76FC1995CBF0"",
-                                 DisplayName = ""DisplayName"",
-                                 Description = ""Description"",
-                                 GroupName = ""GroupName"",
-                                 Order = 100)]
+                    [ContentType]
                     [ImageUrl(""image.png"")]
                     public class TypeName : PageData
                     {
@@ -54,11 +50,7 @@ namespace CodeAnalyzers.Episerver.Test
                 {
                     using Custom;
 
-                    [ContentType(GUID = ""1F218487-9C23-4944-A0E6-76FC1995CBF0"",
-                                 DisplayName = ""DisplayName"",
-                                 Description = ""Description"",
-                                 GroupName = ""GroupName"",
-                                 Order = 100)]
+                    [ContentType]
                     [CustomImageUrl(""image.png"")]
                     public class TypeName : PageData
                     {
@@ -93,11 +85,7 @@ namespace CodeAnalyzers.Episerver.Test
                 {
                     using Custom;
 
-                    [ContentType(GUID = ""1F218487-9C23-4944-A0E6-76FC1995CBF0"",
-                                 DisplayName = ""DisplayName"",
-                                 Description = ""Description"",
-                                 GroupName = ""GroupName"",
-                                 Order = 100)]
+                    [ContentType]
                     [CustomImageUrl]
                     public class TypeName : PageData
                     {
@@ -116,11 +104,7 @@ namespace CodeAnalyzers.Episerver.Test
 
                 namespace Test
                 {
-                    [ContentType(GUID = ""1F218487-9C23-4944-A0E6-76FC1995CBF0"",
-                                 DisplayName = ""DisplayName"",
-                                 Description = ""Description"",
-                                 GroupName = ""GroupName"",
-                                 Order = 100)]
+                    [ContentType]
                     public class TypeName : PageData
                     {
                     }
@@ -139,11 +123,7 @@ namespace CodeAnalyzers.Episerver.Test
 
                 namespace Test
                 {
-                    [ContentType(GUID = ""1F218487-9C23-4944-A0E6-76FC1995CBF0"",
-                                 DisplayName = ""DisplayName"",
-                                 Description = ""Description"",
-                                 GroupName = ""GroupName"",
-                                 Order = 100)]
+                    [ContentType]
                     [ImageUrl(null)]
                     public class TypeName : PageData
                     {
@@ -151,7 +131,7 @@ namespace CodeAnalyzers.Episerver.Test
                 }";
 
             await Verify.VerifyAnalyzerAsync(test,
-                Verify.Diagnostic(Descriptors.Epi2005ContentTypeShouldHaveImageUrl).WithLocation(12, 22).WithArguments("TypeName"));
+                Verify.Diagnostic(Descriptors.Epi2005ContentTypeShouldHaveImageUrl).WithLocation(8, 22).WithArguments("TypeName"));
         }
 
         [Fact]
@@ -163,11 +143,7 @@ namespace CodeAnalyzers.Episerver.Test
 
                 namespace Test
                 {
-                    [ContentType(GUID = ""1F218487-9C23-4944-A0E6-76FC1995CBF0"",
-                                 DisplayName = ""DisplayName"",
-                                 Description = ""Description"",
-                                 GroupName = ""GroupName"",
-                                 Order = 100)]
+                    [ContentType]
                     [ImageUrl("""")]
                     public class TypeName : PageData
                     {
@@ -175,7 +151,7 @@ namespace CodeAnalyzers.Episerver.Test
                 }";
 
             await Verify.VerifyAnalyzerAsync(test,
-                Verify.Diagnostic(Descriptors.Epi2005ContentTypeShouldHaveImageUrl).WithLocation(12, 22).WithArguments("TypeName"));
+                Verify.Diagnostic(Descriptors.Epi2005ContentTypeShouldHaveImageUrl).WithLocation(8, 22).WithArguments("TypeName"));
         }
 
         [Fact]
@@ -203,11 +179,7 @@ namespace CodeAnalyzers.Episerver.Test
                 {
                     using Custom;
 
-                    [ContentType(GUID = ""1F218487-9C23-4944-A0E6-76FC1995CBF0"",
-                                 DisplayName = ""DisplayName"",
-                                 Description = ""Description"",
-                                 GroupName = ""GroupName"",
-                                 Order = 100)]
+                    [ContentType]
                     [CustomImageUrl("""")]
                     public class TypeName : PageData
                     {
@@ -215,7 +187,7 @@ namespace CodeAnalyzers.Episerver.Test
                 }";
 
             await Verify.VerifyAnalyzerAsync(test,
-                Verify.Diagnostic(Descriptors.Epi2005ContentTypeShouldHaveImageUrl).WithLocation(28, 22).WithArguments("TypeName"));
+                Verify.Diagnostic(Descriptors.Epi2005ContentTypeShouldHaveImageUrl).WithLocation(24, 22).WithArguments("TypeName"));
         }
     }
 }
