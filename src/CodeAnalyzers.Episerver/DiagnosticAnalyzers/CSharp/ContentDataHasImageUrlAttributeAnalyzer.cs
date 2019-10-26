@@ -3,12 +3,17 @@ using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.Diagnostics;
 using CodeAnalyzers.Episerver.Extensions;
 using System.Linq;
+using System.Collections.Generic;
 
 namespace CodeAnalyzers.Episerver.DiagnosticAnalyzers.CSharp
 {
     [DiagnosticAnalyzer(LanguageNames.CSharp)]
     public class ContentDataHasImageUrlAttributeAnalyzer : DiagnosticAnalyzer
     {
+        // Ignore ImageUrl attribute for content data derived from these types
+        private readonly ImmutableArray<string> ExcludedRootTypeNames =
+            ImmutableArray.Create(TypeNames.MediaDataMetadataName);
+
         public override ImmutableArray<DiagnosticDescriptor> SupportedDiagnostics =>
             ImmutableArray.Create(Descriptors.Epi2005ContentDataShouldHaveImageUrlAttribute);
 
@@ -21,6 +26,10 @@ namespace CodeAnalyzers.Episerver.DiagnosticAnalyzers.CSharp
 
             context.RegisterCompilationStartAction(compilationContext =>
             {
+                var excludedRootTypes =
+                    ExcludedRootTypeNames.Select(root => compilationContext.Compilation.GetTypeByMetadataName(root))
+                        .Where(symbol => symbol != null);
+
                 var iContentDataType = compilationContext.Compilation.GetTypeByMetadataName(TypeNames.IContentDataMetadataName);
                 if (iContentDataType is null)
                 {
@@ -34,17 +43,29 @@ namespace CodeAnalyzers.Episerver.DiagnosticAnalyzers.CSharp
                 }
 
                 compilationContext.RegisterSymbolAction(
-                    symbolContext => AnalyzeSymbol(symbolContext, iContentDataType, imageUrlType)
+                    symbolContext => AnalyzeSymbol(symbolContext, iContentDataType, imageUrlType, excludedRootTypes)
                     , SymbolKind.NamedType);
             });
         }
 
-        private void AnalyzeSymbol(SymbolAnalysisContext symbolContext, INamedTypeSymbol iContentDataType, INamedTypeSymbol imageUrlType)
+        private void AnalyzeSymbol(
+            SymbolAnalysisContext symbolContext,
+            INamedTypeSymbol iContentDataType,
+            INamedTypeSymbol imageUrlType,
+            IEnumerable<INamedTypeSymbol> excludedRootTypes)
         {
             var namedTypeSymbol = (INamedTypeSymbol)symbolContext.Symbol;
             if(!iContentDataType.IsAssignableFrom(namedTypeSymbol))
             {
                 return;
+            }
+
+            foreach(var rootType in excludedRootTypes)
+            {
+                if(rootType.IsAssignableFrom(namedTypeSymbol))
+                {
+                    return;
+                }
             }
 
             var attributes = namedTypeSymbol.GetAttributes();
