@@ -28,6 +28,34 @@ namespace CodeAnalyzers.Episerver.Test
         }
 
         [Fact]
+        public async Task IgnoreContentTypeWithInheritedGroupName()
+        {
+            var test = @"
+                using EPiServer.DataAnnotations;
+                using EPiServer.Core;
+
+                namespace Test
+                {
+                    public class CustomContentTypeAttribute : ContentTypeAttribute
+                    {
+                        public CustomContentTypeAttribute()
+                        {
+                            GroupName = ""GroupName"";
+                        }
+                    }
+
+                    [CustomContentType(DisplayName = ""DisplayName"",
+                                       Description = ""Description"",
+                                       Order = 100)]
+                    public class TypeName : PageData
+                    {
+                    }
+                }";
+
+            await Verify.VerifyAnalyzerAsync(test);
+        }
+
+        [Fact]
         public async Task DetectContentTypeWithMissingArguments()
         {
             var test = @"

@@ -12,12 +12,12 @@ namespace CodeAnalyzers.Episerver.DiagnosticAnalyzers.CSharp
     {
         private const string ContentTypeMetadataName = "EPiServer.DataAnnotations.ContentTypeAttribute";
 
-        private readonly ImmutableArray<(string ArgumentName, DiagnosticDescriptor Descriptor)> ContentTypeArguments =
+        private readonly ImmutableArray<(string ArgumentName, DiagnosticDescriptor Descriptor, bool AssumeInherited)> ContentTypeArguments =
             ImmutableArray.Create(
-                ("DisplayName", Descriptors.Epi2000ContentTypeShouldHaveDisplayName),
-                ("Description", Descriptors.Epi2001ContentTypeShouldHaveDescription),
-                ("GroupName", Descriptors.Epi2002ContentTypeShouldHaveGroupName),
-                ("Order", Descriptors.Epi2003ContentTypeShouldHaveOrder));
+                ("DisplayName", Descriptors.Epi2000ContentTypeShouldHaveDisplayName, false),
+                ("Description", Descriptors.Epi2001ContentTypeShouldHaveDescription, false),
+                ("GroupName", Descriptors.Epi2002ContentTypeShouldHaveGroupName, true),
+                ("Order", Descriptors.Epi2003ContentTypeShouldHaveOrder, false));
 
         public override ImmutableArray<DiagnosticDescriptor> SupportedDiagnostics =>
             ImmutableArray.Create(
@@ -58,12 +58,22 @@ namespace CodeAnalyzers.Episerver.DiagnosticAnalyzers.CSharp
                 return;
             }
 
-            foreach (var pair in ContentTypeArguments)
+            foreach (var tuple in ContentTypeArguments)
             {
-                var argument = contentAttribute.NamedArguments.FirstOrDefault(arg => string.Equals(arg.Key, pair.ArgumentName, StringComparison.Ordinal));
+                if (tuple.AssumeInherited && !Equals(contentAttribute.AttributeClass, contentTypeAttribute))
+                {
+                    if (!contentAttribute.NamedArguments.Any(arg => string.Equals(arg.Key, tuple.ArgumentName, StringComparison.Ordinal)))
+                    {
+                        // For simplicity, assume that a derived attribute
+                        // with missing argument inherits an argument value
+                        return;
+                    }
+                }
+
+                var argument = contentAttribute.NamedArguments.FirstOrDefault(arg => string.Equals(arg.Key, tuple.ArgumentName, StringComparison.Ordinal));
                 if (string.IsNullOrEmpty(argument.Value.Value?.ToString()))
                 {
-                    ReportInvalidArgument(symbolContext, namedTypeSymbol, contentAttribute, pair.Descriptor);
+                    ReportInvalidArgument(symbolContext, namedTypeSymbol, contentAttribute, tuple.Descriptor);
                 }
             }
         }

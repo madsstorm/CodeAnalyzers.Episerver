@@ -60,18 +60,18 @@ namespace CodeAnalyzers.Episerver.DiagnosticAnalyzers.CSharp
             }
             else
             {
-                VerifyImageUrl(symbolContext, namedTypeSymbol, imageUrlAttribute);
+                VerifyImageUrl(symbolContext, namedTypeSymbol, imageUrlAttribute, imageUrlType);
             }
         }
 
-        private void VerifyImageUrl(SymbolAnalysisContext symbolContext, INamedTypeSymbol namedTypeSymbol, AttributeData imageUrlAttribute)
+        private void VerifyImageUrl(SymbolAnalysisContext symbolContext, INamedTypeSymbol namedTypeSymbol, AttributeData imageUrlAttribute, INamedTypeSymbol imageUrlType)
         {
-            if (!Equals(imageUrlAttribute.AttributeClass, imageUrlAttribute))
+            if (!Equals(imageUrlAttribute.AttributeClass, imageUrlType))
             {
                 if (imageUrlAttribute.ConstructorArguments.IsEmpty)
                 {
                     // For simplicity, assume that a derived attribute
-                    // with a parameterless constructor sets an image path
+                    // with a parameterless constructor inherits an image path
                     return;
                 }
             }
