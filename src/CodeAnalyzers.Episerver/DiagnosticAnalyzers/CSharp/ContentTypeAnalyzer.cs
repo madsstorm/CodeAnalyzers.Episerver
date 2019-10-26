@@ -12,7 +12,6 @@ namespace CodeAnalyzers.Episerver.DiagnosticAnalyzers.CSharp
     public class ContentTypeAnalyzer : DiagnosticAnalyzer
     {
         private const string ContentTypeMetadataName = "EPiServer.DataAnnotations.ContentTypeAttribute";
-        private const string IContentDataMetadataName = "EPiServer.Core.IContentData";
         private const string ImageUrlMetadataName = "EPiServer.DataAnnotations.ImageUrlAttribute";
         private const string GuidArgument = "GUID";
         private const string DescriptionArgument = "Description";
@@ -21,7 +20,6 @@ namespace CodeAnalyzers.Episerver.DiagnosticAnalyzers.CSharp
             ImmutableArray.Create(
                 Descriptors.Epi1000ContentTypeMustHaveValidGuid,
                 Descriptors.Epi1001ContentTypeMustHaveUniqueGuid,
-                Descriptors.Epi1003ContentTypeMustImplementContentData,
                 Descriptors.Epi2001ContentTypeShouldHaveDescription,
                 Descriptors.Epi2005ContentTypeShouldHaveImageUrl);
 
@@ -40,19 +38,13 @@ namespace CodeAnalyzers.Episerver.DiagnosticAnalyzers.CSharp
                     return;
                 }
 
-                var iContentDataType = compilationContext.Compilation.GetTypeByMetadataName(IContentDataMetadataName);
-                if(iContentDataType is null)
-                {
-                    return;
-                }
-
                 var imageUrlType = compilationContext.Compilation.GetTypeByMetadataName(ImageUrlMetadataName);
                 if(imageUrlType is null)
                 {
                     return;
                 }
 
-                CompilationAnalyzer analyzer = new CompilationAnalyzer(contentTypeAttribute, iContentDataType, imageUrlType);
+                CompilationAnalyzer analyzer = new CompilationAnalyzer(contentTypeAttribute, imageUrlType);
 
                 compilationContext.RegisterSymbolAction(analyzer.AnalyzeSymbol, SymbolKind.NamedType);
             });
@@ -61,16 +53,14 @@ namespace CodeAnalyzers.Episerver.DiagnosticAnalyzers.CSharp
         private class CompilationAnalyzer
         {
             private readonly INamedTypeSymbol contentTypeAttribute;
-            private readonly INamedTypeSymbol iContentDataType;
             private readonly INamedTypeSymbol imageUrlType;
 
             private readonly ConcurrentDictionary<Guid, (INamedTypeSymbol Type, AttributeData Attribute)> contentTypeGuids =
                 new ConcurrentDictionary<Guid, (INamedTypeSymbol Type, AttributeData Attribute)>();
 
-            public CompilationAnalyzer(INamedTypeSymbol contentTypeAttribute, INamedTypeSymbol iContentDataType, INamedTypeSymbol imageUrlType)
+            public CompilationAnalyzer(INamedTypeSymbol contentTypeAttribute, INamedTypeSymbol imageUrlType)
             {
                 this.contentTypeAttribute = contentTypeAttribute;
-                this.iContentDataType = iContentDataType;
                 this.imageUrlType = imageUrlType;
             }
 
@@ -97,8 +87,6 @@ namespace CodeAnalyzers.Episerver.DiagnosticAnalyzers.CSharp
 
                 VerifyContentTypeGuid(symbolContext, namedTypeSymbol, contentAttribute);
                 VerifyContentTypeDescription(symbolContext, namedTypeSymbol, contentAttribute);
-
-                VerifyContentDataType(symbolContext, namedTypeSymbol);
             }
 
             private void VerifyImageUrl(SymbolAnalysisContext symbolContext, INamedTypeSymbol namedTypeSymbol, AttributeData imageUrlAttribute)
@@ -150,14 +138,6 @@ namespace CodeAnalyzers.Episerver.DiagnosticAnalyzers.CSharp
                 }
             }
 
-            private void VerifyContentDataType(SymbolAnalysisContext symbolContext, INamedTypeSymbol namedTypeSymbol)
-            {
-                if(namedTypeSymbol.IsAbstract || !(iContentDataType.IsAssignableFrom(namedTypeSymbol)))
-                {
-                    ReportInvalidContentDataType(symbolContext, namedTypeSymbol);
-                }
-            }
-
             private static bool TryGetGuidFromAttribute(AttributeData attribute, out Guid guid)
             {
                 TypedConstant guidValue = default;
@@ -198,14 +178,6 @@ namespace CodeAnalyzers.Episerver.DiagnosticAnalyzers.CSharp
                             Descriptors.Epi1000ContentTypeMustHaveValidGuid,
                             namedType.ToDisplayString(SymbolDisplayFormat.CSharpShortErrorMessageFormat)));
                 }
-            }
-
-            private void ReportInvalidContentDataType(SymbolAnalysisContext symbolContext, INamedTypeSymbol namedType)
-            {
-                symbolContext.ReportDiagnostic(
-                    namedType.CreateDiagnostic(
-                        Descriptors.Epi1003ContentTypeMustImplementContentData,
-                        namedType.ToDisplayString(SymbolDisplayFormat.CSharpShortErrorMessageFormat)));
             }
 
             private void ReportInvalidImageUrl(SymbolAnalysisContext symbolContext, INamedTypeSymbol namedType, AttributeData attribute)
