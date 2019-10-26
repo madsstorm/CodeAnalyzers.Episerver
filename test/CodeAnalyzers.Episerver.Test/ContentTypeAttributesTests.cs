@@ -1,4 +1,4 @@
-using Verify = CodeAnalyzers.Episerver.Test.CSharpVerifier<CodeAnalyzers.Episerver.DiagnosticAnalyzers.CSharp.ContentTypeAnalyzer>;
+using Verify = CodeAnalyzers.Episerver.Test.CSharpVerifier<CodeAnalyzers.Episerver.DiagnosticAnalyzers.CSharp.ContentTypeAttributesAnalyzer>;
 using System.Threading.Tasks;
 using Xunit;
 
@@ -25,9 +25,7 @@ namespace CodeAnalyzers.Episerver.Test
                     }
                 }";
 
-            await Verify
-                .Ignore(Descriptors.Epi2005ContentTypeShouldHaveImageUrl)
-                .VerifyAnalyzerAsync(test);
+            await Verify.VerifyAnalyzerAsync(test);
         }
 
         [Fact(Skip = "TODO")]
@@ -143,7 +141,6 @@ namespace CodeAnalyzers.Episerver.Test
                 }";
 
             await Verify
-                .Ignore(Descriptors.Epi2005ContentTypeShouldHaveImageUrl)
                 .VerifyAnalyzerAsync(test,
                 Verify.Diagnostic(Descriptors.Epi2001ContentTypeShouldHaveDescription).WithLocation(7, 22).WithArguments("TypeName"));
         }

@@ -1,4 +1,4 @@
-﻿using Verify = CodeAnalyzers.Episerver.Test.CSharpVerifier<CodeAnalyzers.Episerver.DiagnosticAnalyzers.CSharp.ContentTypeAnalyzer>;
+﻿using Verify = CodeAnalyzers.Episerver.Test.CSharpVerifier<CodeAnalyzers.Episerver.DiagnosticAnalyzers.CSharp.ContentTypeGuidAnalyzer>;
 using System.Threading.Tasks;
 using Xunit;
 
@@ -27,9 +27,7 @@ namespace CodeAnalyzers.Episerver.Cms10.Test
                     }
                 }";
 
-            await Verify
-                .Ignore(Descriptors.Epi2001ContentTypeShouldHaveDescription, Descriptors.Epi2005ContentTypeShouldHaveImageUrl)
-                .VerifyAnalyzerAsync(test);
+            await Verify.VerifyAnalyzerAsync(test);
         }
 
         [Fact]
@@ -56,9 +54,7 @@ namespace CodeAnalyzers.Episerver.Cms10.Test
                     }
                 }";
 
-            await Verify
-                .Ignore(Descriptors.Epi2001ContentTypeShouldHaveDescription, Descriptors.Epi2005ContentTypeShouldHaveImageUrl)
-                .VerifyAnalyzerAsync(test);
+            await Verify.VerifyAnalyzerAsync(test);
         }
 
         [Fact]
@@ -85,9 +81,7 @@ namespace CodeAnalyzers.Episerver.Cms10.Test
                     }
                 }";
 
-            await Verify
-                .Ignore(Descriptors.Epi2001ContentTypeShouldHaveDescription, Descriptors.Epi2005ContentTypeShouldHaveImageUrl)
-                .VerifyAnalyzerAsync(test);
+            await Verify.VerifyAnalyzerAsync(test);
         }
 
         [Fact]
@@ -109,9 +103,7 @@ namespace CodeAnalyzers.Episerver.Cms10.Test
                     {
                     }
                 }";
-            await Verify
-                .Ignore(Descriptors.Epi2001ContentTypeShouldHaveDescription, Descriptors.Epi2005ContentTypeShouldHaveImageUrl)
-                .VerifyAnalyzerAsync(test,
+            await Verify.VerifyAnalyzerAsync(test,
                 Verify.Diagnostic(Descriptors.Epi1001ContentTypeMustHaveUniqueGuid).WithLocation(7, 22).WithArguments("TypeName", "OtherTypeName"),
                 Verify.Diagnostic(Descriptors.Epi1001ContentTypeMustHaveUniqueGuid).WithLocation(12, 22).WithArguments("OtherTypeName", "TypeName"));
         }
@@ -135,9 +127,7 @@ namespace CodeAnalyzers.Episerver.Cms10.Test
                     {
                     }
                 }";
-            await Verify
-                .Ignore(Descriptors.Epi2001ContentTypeShouldHaveDescription, Descriptors.Epi2005ContentTypeShouldHaveImageUrl)
-                .VerifyAnalyzerAsync(test,
+            await Verify.VerifyAnalyzerAsync(test,
                 Verify.Diagnostic(Descriptors.Epi1001ContentTypeMustHaveUniqueGuid).WithLocation(7, 22).WithArguments("TypeName", "OtherTypeName"),
                 Verify.Diagnostic(Descriptors.Epi1001ContentTypeMustHaveUniqueGuid).WithLocation(12, 22).WithArguments("OtherTypeName", "TypeName"));
         }
@@ -166,9 +156,7 @@ namespace CodeAnalyzers.Episerver.Cms10.Test
                     }
                 }";
 
-            await Verify
-                .Ignore(Descriptors.Epi2001ContentTypeShouldHaveDescription, Descriptors.Epi2005ContentTypeShouldHaveImageUrl)
-                .VerifyAnalyzerAsync(test,
+            await Verify.VerifyAnalyzerAsync(test,
                 Verify.Diagnostic(Descriptors.Epi1001ContentTypeMustHaveUniqueGuid).WithLocation(11, 22).WithArguments("TypeName", "OtherTypeName"),
                 Verify.Diagnostic(Descriptors.Epi1001ContentTypeMustHaveUniqueGuid).WithLocation(16, 22).WithArguments("OtherTypeName", "TypeName"));
         }
@@ -197,9 +185,7 @@ namespace CodeAnalyzers.Episerver.Cms10.Test
                     }
                 }";
 
-            await Verify
-                .Ignore(Descriptors.Epi2001ContentTypeShouldHaveDescription, Descriptors.Epi2005ContentTypeShouldHaveImageUrl)
-                .VerifyAnalyzerAsync(test,
+            await Verify.VerifyAnalyzerAsync(test,
                 Verify.Diagnostic(Descriptors.Epi1001ContentTypeMustHaveUniqueGuid).WithLocation(11, 22).WithArguments("TypeName", "OtherTypeName"),
                 Verify.Diagnostic(Descriptors.Epi1001ContentTypeMustHaveUniqueGuid).WithLocation(16, 22).WithArguments("OtherTypeName", "TypeName"));
         }
