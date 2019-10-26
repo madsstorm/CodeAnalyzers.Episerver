@@ -3,21 +3,21 @@ using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.Diagnostics;
 using CodeAnalyzers.Episerver.Extensions;
 using System;
-using System.Collections.Concurrent;
 using System.Linq;
+using System.Collections.Concurrent;
 
 namespace CodeAnalyzers.Episerver.DiagnosticAnalyzers.CSharp
 {
     [DiagnosticAnalyzer(LanguageNames.CSharp)]
-    public class ContentTypeGuidAnalyzer : DiagnosticAnalyzer
+    public class ContentTypeOrderAnalyzer : DiagnosticAnalyzer
     {
         private const string ContentTypeMetadataName = "EPiServer.DataAnnotations.ContentTypeAttribute";
-        private const string GuidArgument = "GUID";
+        private const string OrderArgument = "Order";
 
         public override ImmutableArray<DiagnosticDescriptor> SupportedDiagnostics =>
             ImmutableArray.Create(
-                Descriptors.Epi1000ContentTypeMustHaveValidGuid,
-                Descriptors.Epi1001ContentTypeMustHaveUniqueGuid);
+                Descriptors.Epi2003ContentTypeShouldHaveOrder,
+                Descriptors.Epi2004ContentTypeShouldHaveUniqueOrder);
 
         public override void Initialize(AnalysisContext context)
         {
@@ -44,8 +44,8 @@ namespace CodeAnalyzers.Episerver.DiagnosticAnalyzers.CSharp
         {
             private readonly INamedTypeSymbol contentTypeAttribute;
 
-            private readonly ConcurrentDictionary<Guid, (INamedTypeSymbol Type, AttributeData Attribute)> contentTypeGuids =
-                new ConcurrentDictionary<Guid, (INamedTypeSymbol Type, AttributeData Attribute)>();
+            private readonly ConcurrentDictionary<int, (INamedTypeSymbol Type, AttributeData Attribute)> contentTypeOrders =
+                new ConcurrentDictionary<int, (INamedTypeSymbol Type, AttributeData Attribute)>();
 
             public CompilationAnalyzer(INamedTypeSymbol contentTypeAttribute)
             {
@@ -63,44 +63,44 @@ namespace CodeAnalyzers.Episerver.DiagnosticAnalyzers.CSharp
                     return;
                 }
 
-                VerifyContentTypeGuid(symbolContext, namedTypeSymbol, contentAttribute);
+                VerifyContentTypeOrder(symbolContext, namedTypeSymbol, contentAttribute);
             }
 
-            private void VerifyContentTypeGuid(SymbolAnalysisContext symbolContext, INamedTypeSymbol namedTypeSymbol, AttributeData attribute)
+            private void VerifyContentTypeOrder(SymbolAnalysisContext symbolContext, INamedTypeSymbol namedTypeSymbol, AttributeData attribute)
             {
-                if (TryGetGuidFromAttribute(attribute, out Guid contentGuid))
+                if (TryGetOrderFromAttribute(attribute, out int contentOrder))
                 {
-                    var (existingType, existingAttribute) = contentTypeGuids.GetOrAdd(contentGuid, (namedTypeSymbol, attribute));
+                    var (existingType, existingAttribute) = contentTypeOrders.GetOrAdd(contentOrder, (namedTypeSymbol, attribute));
 
                     if (existingType != namedTypeSymbol)
                     {
-                        ReportDuplicateGuid(symbolContext, namedTypeSymbol, attribute, existingType);
-                        ReportDuplicateGuid(symbolContext, existingType, existingAttribute, namedTypeSymbol);
+                        ReportDuplicateOrder(symbolContext, namedTypeSymbol, attribute, existingType);
+                        ReportDuplicateOrder(symbolContext, existingType, existingAttribute, namedTypeSymbol);
                     }
                 }
                 else
                 {
-                    ReportInvalidGuid(symbolContext, namedTypeSymbol, attribute);
+                    ReportInvalidOrder(symbolContext, namedTypeSymbol, attribute);
                 }
             }
 
-            private static bool TryGetGuidFromAttribute(AttributeData attribute, out Guid guid)
+            private static bool TryGetOrderFromAttribute(AttributeData attribute, out int order)
             {
-                TypedConstant guidValue = default;
+                TypedConstant orderValue = default;
 
                 foreach (var namedArgument in attribute.NamedArguments)
                 {
-                    if (string.Equals(namedArgument.Key, GuidArgument, StringComparison.Ordinal))
+                    if (string.Equals(namedArgument.Key, OrderArgument, StringComparison.Ordinal))
                     {
-                        guidValue = namedArgument.Value;
+                        orderValue = namedArgument.Value;
                         break;
                     }
                 }
 
-                return Guid.TryParse(guidValue.Value?.ToString(), out guid);
+                return int.TryParse(orderValue.Value?.ToString(), out order);
             }
 
-            private static void ReportDuplicateGuid(SymbolAnalysisContext symbolContext, INamedTypeSymbol namedType,
+            private static void ReportDuplicateOrder(SymbolAnalysisContext symbolContext, INamedTypeSymbol namedType,
                 AttributeData attribute, INamedTypeSymbol matchingType)
             {
                 var node = attribute.ApplicationSyntaxReference?.GetSyntax();
@@ -108,20 +108,20 @@ namespace CodeAnalyzers.Episerver.DiagnosticAnalyzers.CSharp
                 {
                     symbolContext.ReportDiagnostic(
                         node.CreateDiagnostic(
-                            Descriptors.Epi1001ContentTypeMustHaveUniqueGuid,
+                            Descriptors.Epi2004ContentTypeShouldHaveUniqueOrder,
                             namedType.ToDisplayString(SymbolDisplayFormat.CSharpShortErrorMessageFormat),
                             matchingType.ToDisplayString(SymbolDisplayFormat.CSharpShortErrorMessageFormat)));
                 }
             }
 
-            private static void ReportInvalidGuid(SymbolAnalysisContext symbolContext, INamedTypeSymbol namedType, AttributeData attribute)
+            private static void ReportInvalidOrder(SymbolAnalysisContext symbolContext, INamedTypeSymbol namedType, AttributeData attribute)
             {
                 var node = attribute.ApplicationSyntaxReference?.GetSyntax();
                 if (node != null)
                 {
                     symbolContext.ReportDiagnostic(
                         node.CreateDiagnostic(
-                            Descriptors.Epi1000ContentTypeMustHaveValidGuid,
+                            Descriptors.Epi2003ContentTypeShouldHaveOrder,
                             namedType.ToDisplayString(SymbolDisplayFormat.CSharpShortErrorMessageFormat)));
                 }
             }

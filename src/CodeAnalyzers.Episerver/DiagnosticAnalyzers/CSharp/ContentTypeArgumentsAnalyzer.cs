@@ -8,13 +8,21 @@ using System.Linq;
 namespace CodeAnalyzers.Episerver.DiagnosticAnalyzers.CSharp
 {
     [DiagnosticAnalyzer(LanguageNames.CSharp)]
-    public class ContentTypeAttributesAnalyzer : DiagnosticAnalyzer
+    public class ContentTypeArgumentsAnalyzer : DiagnosticAnalyzer
     {
         private const string ContentTypeMetadataName = "EPiServer.DataAnnotations.ContentTypeAttribute";
-        private const string DescriptionArgument = "Description";
+
+        private readonly ImmutableArray<(string ArgumentName, DiagnosticDescriptor Descriptor)> ContentTypeArguments =
+            ImmutableArray.Create(
+                ("DisplayName", Descriptors.Epi2000ContentTypeShouldHaveDisplayName),
+                ("Description", Descriptors.Epi2001ContentTypeShouldHaveDescription),
+                ("GroupName", Descriptors.Epi2002ContentTypeShouldHaveGroupName));
 
         public override ImmutableArray<DiagnosticDescriptor> SupportedDiagnostics =>
-            ImmutableArray.Create(Descriptors.Epi2001ContentTypeShouldHaveDescription);
+            ImmutableArray.Create(
+                Descriptors.Epi2000ContentTypeShouldHaveDisplayName,
+                Descriptors.Epi2001ContentTypeShouldHaveDescription,
+                Descriptors.Epi2002ContentTypeShouldHaveGroupName);
 
         public override void Initialize(AnalysisContext context)
         {
@@ -48,25 +56,24 @@ namespace CodeAnalyzers.Episerver.DiagnosticAnalyzers.CSharp
                 return;
             }
 
-            var descriptionArgument = contentAttribute.NamedArguments
-                .FirstOrDefault(arg => string.Equals(arg.Key, DescriptionArgument, StringComparison.Ordinal));
-
-            string description = descriptionArgument.Value.Value?.ToString();
-
-            if (string.IsNullOrEmpty(description))
+            foreach (var pair in ContentTypeArguments)
             {
-                ReportInvalidDescription(symbolContext, namedTypeSymbol, contentAttribute);
+                var argument = contentAttribute.NamedArguments.FirstOrDefault(arg => string.Equals(arg.Key, pair.ArgumentName, StringComparison.Ordinal));
+                if (string.IsNullOrEmpty(argument.Value.Value?.ToString()))
+                {
+                    ReportInvalidArgument(symbolContext, namedTypeSymbol, contentAttribute, pair.Descriptor);
+                }
             }
         }
 
-        private void ReportInvalidDescription(SymbolAnalysisContext symbolContext, INamedTypeSymbol namedType, AttributeData attribute)
+        private void ReportInvalidArgument(SymbolAnalysisContext symbolContext, INamedTypeSymbol namedType, AttributeData attribute, DiagnosticDescriptor descriptor)
         {
             var node = attribute.ApplicationSyntaxReference?.GetSyntax();
             if (node != null)
             {
                 symbolContext.ReportDiagnostic(
                     node.CreateDiagnostic(
-                        Descriptors.Epi2001ContentTypeShouldHaveDescription,
+                        descriptor,
                         namedType.ToDisplayString(SymbolDisplayFormat.CSharpShortErrorMessageFormat)));
             }
         }
