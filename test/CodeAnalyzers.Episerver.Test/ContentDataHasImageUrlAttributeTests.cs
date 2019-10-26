@@ -1,10 +1,10 @@
-using Verify = CodeAnalyzers.Episerver.Test.CSharpVerifier<CodeAnalyzers.Episerver.DiagnosticAnalyzers.CSharp.ContentTypeImageUrlAnalyzer>;
+using Verify = CodeAnalyzers.Episerver.Test.CSharpVerifier<CodeAnalyzers.Episerver.DiagnosticAnalyzers.CSharp.ContentDataHasImageUrlAttributeAnalyzer>;
 using System.Threading.Tasks;
 using Xunit;
 
 namespace CodeAnalyzers.Episerver.Test
 {
-    public class ContentTypeImageUrlTests
+    public class ContentDataHasImageUrlAttributeTests
     {
         [Fact]
         public async Task IgnoreContentTypeWithImageUrl()
@@ -15,7 +15,6 @@ namespace CodeAnalyzers.Episerver.Test
 
                 namespace Test
                 {
-                    [ContentType]
                     [ImageUrl(""image.png"")]
                     public class TypeName : PageData
                     {
@@ -50,7 +49,6 @@ namespace CodeAnalyzers.Episerver.Test
                 {
                     using Custom;
 
-                    [ContentType]
                     [CustomImageUrl(""image.png"")]
                     public class TypeName : PageData
                     {
@@ -85,9 +83,22 @@ namespace CodeAnalyzers.Episerver.Test
                 {
                     using Custom;
 
-                    [ContentType]
                     [CustomImageUrl]
                     public class TypeName : PageData
+                    {
+                    }
+                }";
+
+            await Verify.VerifyAnalyzerAsync(test);
+        }
+
+        [Fact]
+        public async Task IgnoreOtherType()
+        {
+            var test = @"
+                namespace Test
+                {
+                    public class TypeName
                     {
                     }
                 }";
@@ -104,14 +115,13 @@ namespace CodeAnalyzers.Episerver.Test
 
                 namespace Test
                 {
-                    [ContentType]
                     public class TypeName : PageData
                     {
                     }
                 }";
 
             await Verify.VerifyAnalyzerAsync(test,
-                Verify.Diagnostic(Descriptors.Epi2005ContentTypeShouldHaveImageUrl).WithLocation(7, 22));
+                Verify.Diagnostic(Descriptors.Epi2005ContentDataShouldHaveImageUrlAttribute).WithLocation(7, 34));
         }
 
         [Fact]
@@ -123,7 +133,6 @@ namespace CodeAnalyzers.Episerver.Test
 
                 namespace Test
                 {
-                    [ContentType]
                     [ImageUrl(null)]
                     public class TypeName : PageData
                     {
@@ -131,7 +140,7 @@ namespace CodeAnalyzers.Episerver.Test
                 }";
 
             await Verify.VerifyAnalyzerAsync(test,
-                Verify.Diagnostic(Descriptors.Epi2005ContentTypeShouldHaveImageUrl).WithLocation(8, 22));
+                Verify.Diagnostic(Descriptors.Epi2005ContentDataShouldHaveImageUrlAttribute).WithLocation(8, 34));
         }
 
         [Fact]
@@ -143,7 +152,6 @@ namespace CodeAnalyzers.Episerver.Test
 
                 namespace Test
                 {
-                    [ContentType]
                     [ImageUrl("""")]
                     public class TypeName : PageData
                     {
@@ -151,7 +159,7 @@ namespace CodeAnalyzers.Episerver.Test
                 }";
 
             await Verify.VerifyAnalyzerAsync(test,
-                Verify.Diagnostic(Descriptors.Epi2005ContentTypeShouldHaveImageUrl).WithLocation(8, 22));
+                Verify.Diagnostic(Descriptors.Epi2005ContentDataShouldHaveImageUrlAttribute).WithLocation(8, 34));
         }
 
         [Fact]
@@ -179,7 +187,6 @@ namespace CodeAnalyzers.Episerver.Test
                 {
                     using Custom;
 
-                    [ContentType]
                     [CustomImageUrl("""")]
                     public class TypeName : PageData
                     {
@@ -187,7 +194,7 @@ namespace CodeAnalyzers.Episerver.Test
                 }";
 
             await Verify.VerifyAnalyzerAsync(test,
-                Verify.Diagnostic(Descriptors.Epi2005ContentTypeShouldHaveImageUrl).WithLocation(24, 22));
+                Verify.Diagnostic(Descriptors.Epi2005ContentDataShouldHaveImageUrlAttribute).WithLocation(24, 34));
         }
     }
 }

@@ -3,7 +3,6 @@ using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.Diagnostics;
 using System.Collections.Immutable;
 using System.Linq;
-using static CodeAnalyzers.Episerver.TypeNames;
 
 namespace CodeAnalyzers.Episerver.DiagnosticAnalyzers.CSharp
 {
@@ -22,13 +21,13 @@ namespace CodeAnalyzers.Episerver.DiagnosticAnalyzers.CSharp
 
             context.RegisterCompilationStartAction(compilationContext =>
             {
-                var contentTypeAttribute = compilationContext.Compilation.GetTypeByMetadataName(ContentTypeMetadataName);
+                var contentTypeAttribute = compilationContext.Compilation.GetTypeByMetadataName(TypeNames.ContentTypeMetadataName);
                 if (contentTypeAttribute is null)
                 {
                     return;
                 }
 
-                var iContentDataType = compilationContext.Compilation.GetTypeByMetadataName(IContentDataMetadataName);
+                var iContentDataType = compilationContext.Compilation.GetTypeByMetadataName(TypeNames.IContentDataMetadataName);
                 if (iContentDataType is null)
                 {
                     return;

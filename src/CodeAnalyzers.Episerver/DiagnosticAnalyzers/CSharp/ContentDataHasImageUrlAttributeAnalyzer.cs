@@ -7,10 +7,10 @@ using System.Linq;
 namespace CodeAnalyzers.Episerver.DiagnosticAnalyzers.CSharp
 {
     [DiagnosticAnalyzer(LanguageNames.CSharp)]
-    public class ContentTypeImageUrlAnalyzer : DiagnosticAnalyzer
+    public class ContentDataHasImageUrlAttributeAnalyzer : DiagnosticAnalyzer
     {
         public override ImmutableArray<DiagnosticDescriptor> SupportedDiagnostics =>
-            ImmutableArray.Create(Descriptors.Epi2005ContentTypeShouldHaveImageUrl);
+            ImmutableArray.Create(Descriptors.Epi2005ContentDataShouldHaveImageUrlAttribute);
 
         public override void Initialize(AnalysisContext context)
         {
@@ -21,8 +21,8 @@ namespace CodeAnalyzers.Episerver.DiagnosticAnalyzers.CSharp
 
             context.RegisterCompilationStartAction(compilationContext =>
             {
-                var contentTypeAttribute = compilationContext.Compilation.GetTypeByMetadataName(TypeNames.ContentTypeMetadataName);
-                if (contentTypeAttribute is null)
+                var iContentDataType = compilationContext.Compilation.GetTypeByMetadataName(TypeNames.IContentDataMetadataName);
+                if (iContentDataType is null)
                 {
                     return;
                 }
@@ -34,34 +34,33 @@ namespace CodeAnalyzers.Episerver.DiagnosticAnalyzers.CSharp
                 }
 
                 compilationContext.RegisterSymbolAction(
-                    symbolContext => AnalyzeSymbol(symbolContext, contentTypeAttribute, imageUrlType)
+                    symbolContext => AnalyzeSymbol(symbolContext, iContentDataType, imageUrlType)
                     , SymbolKind.NamedType);
             });
         }
 
-        private void AnalyzeSymbol(SymbolAnalysisContext symbolContext, INamedTypeSymbol contentTypeAttribute, INamedTypeSymbol imageUrlType)
+        private void AnalyzeSymbol(SymbolAnalysisContext symbolContext, INamedTypeSymbol iContentDataType, INamedTypeSymbol imageUrlType)
         {
             var namedTypeSymbol = (INamedTypeSymbol)symbolContext.Symbol;
-            var attributes = namedTypeSymbol.GetAttributes();
-
-            var contentAttribute = attributes.FirstOrDefault(attr => contentTypeAttribute.IsAssignableFrom(attr.AttributeClass));
-            if (contentAttribute is null)
+            if(!iContentDataType.IsAssignableFrom(namedTypeSymbol))
             {
                 return;
             }
 
+            var attributes = namedTypeSymbol.GetAttributes();
+
             var imageUrlAttribute = attributes.FirstOrDefault(attr => imageUrlType.IsAssignableFrom(attr.AttributeClass));
             if (imageUrlAttribute is null)
             {
-                ReportInvalidImageUrl(symbolContext, contentAttribute);
+                ReportInvalidImageUrl(symbolContext, namedTypeSymbol);
             }
             else
             {
-                VerifyImageUrl(symbolContext, imageUrlAttribute, imageUrlType);
+                VerifyImageUrl(symbolContext, imageUrlAttribute, imageUrlType, namedTypeSymbol);
             }
         }
 
-        private static void VerifyImageUrl(SymbolAnalysisContext symbolContext, AttributeData imageUrlAttribute, INamedTypeSymbol imageUrlType)
+        private static void VerifyImageUrl(SymbolAnalysisContext symbolContext, AttributeData imageUrlAttribute, INamedTypeSymbol imageUrlType, INamedTypeSymbol namedTypeSymbol)
         {
             if (!Equals(imageUrlAttribute.AttributeClass, imageUrlType))
             {
@@ -75,19 +74,15 @@ namespace CodeAnalyzers.Episerver.DiagnosticAnalyzers.CSharp
 
             if (string.IsNullOrEmpty(imageUrlAttribute.ConstructorArguments.FirstOrDefault().Value?.ToString()))
             {
-                ReportInvalidImageUrl(symbolContext, imageUrlAttribute);
+                ReportInvalidImageUrl(symbolContext, namedTypeSymbol);
             }
         }
 
-        private static void ReportInvalidImageUrl(SymbolAnalysisContext symbolContext, AttributeData attribute)
+        private static void ReportInvalidImageUrl(SymbolAnalysisContext symbolContext, INamedTypeSymbol namedType)
         {
-            var node = attribute.ApplicationSyntaxReference?.GetSyntax();
-            if (node != null)
-            {
-                symbolContext.ReportDiagnostic(
-                    node.CreateDiagnostic(
-                        Descriptors.Epi2005ContentTypeShouldHaveImageUrl));
-            }
+            symbolContext.ReportDiagnostic(
+                    namedType.CreateDiagnostic(
+                        Descriptors.Epi2005ContentDataShouldHaveImageUrlAttribute));
         }
     }
 }
