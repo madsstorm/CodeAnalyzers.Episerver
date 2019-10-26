@@ -62,7 +62,7 @@ namespace CodeAnalyzers.Episerver
 
         public static DiagnosticDescriptor Epi2004ContentTypeShouldHaveUniqueOrder { get; } =
             Rule("Epi2004", "Content type should have a unique Order", Content, Warning,
-                "Content type '{0}' has the same Order as '{1}'", "Content type Orders should be unique for sorting in edit view.");
+                "{0} '{1}' has the same Order as '{2}'", "Content type Orders should be unique for sorting in edit view.");
 
         public static DiagnosticDescriptor Epi2005ContentTypeShouldHaveImageUrl { get; } =
             Rule("Epi2005", "Content type should have an ImageUrl", Content, Warning,

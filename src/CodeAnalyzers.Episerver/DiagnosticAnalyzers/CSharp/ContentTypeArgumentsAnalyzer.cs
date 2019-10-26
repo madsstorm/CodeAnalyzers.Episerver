@@ -16,13 +16,15 @@ namespace CodeAnalyzers.Episerver.DiagnosticAnalyzers.CSharp
             ImmutableArray.Create(
                 ("DisplayName", Descriptors.Epi2000ContentTypeShouldHaveDisplayName),
                 ("Description", Descriptors.Epi2001ContentTypeShouldHaveDescription),
-                ("GroupName", Descriptors.Epi2002ContentTypeShouldHaveGroupName));
+                ("GroupName", Descriptors.Epi2002ContentTypeShouldHaveGroupName),
+                ("Order", Descriptors.Epi2003ContentTypeShouldHaveOrder));
 
         public override ImmutableArray<DiagnosticDescriptor> SupportedDiagnostics =>
             ImmutableArray.Create(
                 Descriptors.Epi2000ContentTypeShouldHaveDisplayName,
                 Descriptors.Epi2001ContentTypeShouldHaveDescription,
-                Descriptors.Epi2002ContentTypeShouldHaveGroupName);
+                Descriptors.Epi2002ContentTypeShouldHaveGroupName,
+                Descriptors.Epi2003ContentTypeShouldHaveOrder);
 
         public override void Initialize(AnalysisContext context)
         {

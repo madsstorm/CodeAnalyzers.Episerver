@@ -43,7 +43,9 @@ namespace CodeAnalyzers.Episerver.Test
                         .AddMetadataReference(projectId, MetadataReference.CreateFromFile(typeof(EPiServer.Web.Routing.IRoutable).GetTypeInfo().Assembly.Location))
                         .AddMetadataReference(projectId, MetadataReference.CreateFromFile(typeof(EPiServer.Core.PageReference).GetTypeInfo().Assembly.Location))
                         .AddMetadataReference(projectId, MetadataReference.CreateFromFile(typeof(EPiServer.Framework.Initialization.InitializationModule).GetTypeInfo().Assembly.Location))
-                        .AddMetadataReference(projectId, MetadataReference.CreateFromFile(typeof(EPiServer.Cms.Shell.CmsModule).GetTypeInfo().Assembly.Location));
+                        .AddMetadataReference(projectId, MetadataReference.CreateFromFile(typeof(EPiServer.Cms.Shell.CmsModule).GetTypeInfo().Assembly.Location))
+                        .AddMetadataReference(projectId, MetadataReference.CreateFromFile(typeof(EPiServer.Commerce.Catalog.ContentTypes.VariationContent).GetTypeInfo().Assembly.Location))
+                        .AddMetadataReference(projectId, MetadataReference.CreateFromFile(typeof(EPiServer.Commerce.Marketing.EntryPromotion).GetTypeInfo().Assembly.Location));
 
                     return solution;
                 });

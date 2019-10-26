@@ -3,7 +3,7 @@ using System.Threading.Tasks;
 using Xunit;
 
 
-namespace CodeAnalyzers.Episerver.Cms10.Test
+namespace CodeAnalyzers.Episerver.Test
 {
     public class ContentTypeUniqueGuidTests
     {

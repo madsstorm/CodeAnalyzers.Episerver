@@ -17,7 +17,8 @@ namespace CodeAnalyzers.Episerver.Test
                 {
                     [ContentType(DisplayName = ""DisplayName"",
                                  Description = ""Description"",
-                                 GroupName = ""GroupName"")]
+                                 GroupName = ""GroupName"",
+                                 Order = 100)]
                     public class TypeName : PageData
                     {
                     }
@@ -44,7 +45,8 @@ namespace CodeAnalyzers.Episerver.Test
             await Verify.VerifyAnalyzerAsync(test,
                 Verify.Diagnostic(Descriptors.Epi2000ContentTypeShouldHaveDisplayName).WithLocation(7, 22).WithArguments("TypeName"),
                 Verify.Diagnostic(Descriptors.Epi2001ContentTypeShouldHaveDescription).WithLocation(7, 22).WithArguments("TypeName"),
-                Verify.Diagnostic(Descriptors.Epi2002ContentTypeShouldHaveGroupName).WithLocation(7, 22).WithArguments("TypeName"));
+                Verify.Diagnostic(Descriptors.Epi2002ContentTypeShouldHaveGroupName).WithLocation(7, 22).WithArguments("TypeName"),
+                Verify.Diagnostic(Descriptors.Epi2003ContentTypeShouldHaveOrder).WithLocation(7, 22).WithArguments("TypeName"));
         }
 
         [Fact]
@@ -58,7 +60,8 @@ namespace CodeAnalyzers.Episerver.Test
                 {
                     [ContentType(DisplayName = null,
                                  Description = null,
-                                 GroupName = null)]
+                                 GroupName = null,
+                                 Order = 100)]
                     public class TypeName : PageData
                     {
                     }
@@ -81,7 +84,8 @@ namespace CodeAnalyzers.Episerver.Test
                 {
                     [ContentType(DisplayName = """",
                                  Description = """",
-                                 GroupName = """")]
+                                 GroupName = """",
+                                 Order = 100)]
                     public class TypeName : PageData
                     {
                     }
@@ -103,7 +107,8 @@ namespace CodeAnalyzers.Episerver.Test
                 namespace Test
                 {
                     [ContentType(Description = ""Description"",
-                                 GroupName = ""GroupName"")]
+                                 GroupName = ""GroupName"",
+                                 Order = 100)]
                     public class TypeName : PageData
                     {
                     }
@@ -123,7 +128,8 @@ namespace CodeAnalyzers.Episerver.Test
                 namespace Test
                 {
                     [ContentType(DisplayName = ""DisplayName"",
-                                 GroupName = ""GroupName"")]
+                                 GroupName = ""GroupName"",
+                                 Order = 100)]
                     public class TypeName : PageData
                     {
                     }
@@ -144,7 +150,8 @@ namespace CodeAnalyzers.Episerver.Test
                 namespace Test
                 {
                     [ContentType(DisplayName = ""DisplayName"",
-                                 Description = ""Description"")]
+                                 Description = ""Description"",
+                                 Order = 100)]
                     public class TypeName : PageData
                     {
                     }
@@ -152,6 +159,27 @@ namespace CodeAnalyzers.Episerver.Test
 
             await Verify.VerifyAnalyzerAsync(test,
                 Verify.Diagnostic(Descriptors.Epi2002ContentTypeShouldHaveGroupName).WithLocation(7, 22).WithArguments("TypeName"));
+        }
+
+        [Fact]
+        public async Task DetectContentTypeWithMissingOrder()
+        {
+            var test = @"
+                using EPiServer.DataAnnotations;
+                using EPiServer.Core;
+
+                namespace Test
+                {
+                    [ContentType(DisplayName = ""DisplayName"",
+                                 Description = ""Description"",
+                                 GroupName = ""GroupName"")]
+                    public class TypeName : PageData
+                    {
+                    }
+                }";
+
+            await Verify.VerifyAnalyzerAsync(test,
+                Verify.Diagnostic(Descriptors.Epi2003ContentTypeShouldHaveOrder).WithLocation(7, 22).WithArguments("TypeName"));
         }
     }
 }

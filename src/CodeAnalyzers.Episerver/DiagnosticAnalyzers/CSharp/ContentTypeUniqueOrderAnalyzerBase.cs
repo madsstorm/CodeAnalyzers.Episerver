@@ -8,16 +8,19 @@ using System.Collections.Concurrent;
 
 namespace CodeAnalyzers.Episerver.DiagnosticAnalyzers.CSharp
 {
+    /// <summary>
+    /// ContentType 'Order' should be unique within its content type root
+    /// </summary>
     [DiagnosticAnalyzer(LanguageNames.CSharp)]
-    public class ContentTypeOrderAnalyzer : DiagnosticAnalyzer
+    public abstract class ContentTypeUniqueOrderAnalyzerBase : DiagnosticAnalyzer
     {
         private const string ContentTypeMetadataName = "EPiServer.DataAnnotations.ContentTypeAttribute";
         private const string OrderArgument = "Order";
 
+        protected abstract string ContentRootTypeName { get; }
+
         public override ImmutableArray<DiagnosticDescriptor> SupportedDiagnostics =>
-            ImmutableArray.Create(
-                Descriptors.Epi2003ContentTypeShouldHaveOrder,
-                Descriptors.Epi2004ContentTypeShouldHaveUniqueOrder);
+            ImmutableArray.Create(Descriptors.Epi2004ContentTypeShouldHaveUniqueOrder);
 
         public override void Initialize(AnalysisContext context)
         {
@@ -34,7 +37,13 @@ namespace CodeAnalyzers.Episerver.DiagnosticAnalyzers.CSharp
                     return;
                 }
 
-                CompilationAnalyzer analyzer = new CompilationAnalyzer(contentTypeAttribute);
+                var contentRootType = compilationContext.Compilation.GetTypeByMetadataName(ContentRootTypeName);
+                if(contentRootType is null)
+                {
+                    return;
+                }
+
+                CompilationAnalyzer analyzer = new CompilationAnalyzer(contentTypeAttribute, contentRootType);
 
                 compilationContext.RegisterSymbolAction(analyzer.AnalyzeSymbol, SymbolKind.NamedType);
             });
@@ -43,18 +52,25 @@ namespace CodeAnalyzers.Episerver.DiagnosticAnalyzers.CSharp
         private class CompilationAnalyzer
         {
             private readonly INamedTypeSymbol contentTypeAttribute;
+            private readonly INamedTypeSymbol contentRootType;
 
             private readonly ConcurrentDictionary<int, (INamedTypeSymbol Type, AttributeData Attribute)> contentTypeOrders =
                 new ConcurrentDictionary<int, (INamedTypeSymbol Type, AttributeData Attribute)>();
 
-            public CompilationAnalyzer(INamedTypeSymbol contentTypeAttribute)
+            public CompilationAnalyzer(INamedTypeSymbol contentTypeAttribute, INamedTypeSymbol contentRootType)
             {
                 this.contentTypeAttribute = contentTypeAttribute;
+                this.contentRootType = contentRootType;
             }
 
             internal void AnalyzeSymbol(SymbolAnalysisContext symbolContext)
             {
                 var namedTypeSymbol = (INamedTypeSymbol)symbolContext.Symbol;
+                if(!contentRootType.IsAssignableFrom(namedTypeSymbol))
+                {
+                    return;
+                }
+
                 var attributes = namedTypeSymbol.GetAttributes();
 
                 var contentAttribute = attributes.FirstOrDefault(attr => contentTypeAttribute.IsAssignableFrom(attr.AttributeClass));
@@ -63,10 +79,10 @@ namespace CodeAnalyzers.Episerver.DiagnosticAnalyzers.CSharp
                     return;
                 }
 
-                VerifyContentTypeOrder(symbolContext, namedTypeSymbol, contentAttribute);
+                VerifyContentTypeUniqueOrder(symbolContext, namedTypeSymbol, contentAttribute);
             }
 
-            private void VerifyContentTypeOrder(SymbolAnalysisContext symbolContext, INamedTypeSymbol namedTypeSymbol, AttributeData attribute)
+            private void VerifyContentTypeUniqueOrder(SymbolAnalysisContext symbolContext, INamedTypeSymbol namedTypeSymbol, AttributeData attribute)
             {
                 if (TryGetOrderFromAttribute(attribute, out int contentOrder))
                 {
@@ -77,10 +93,6 @@ namespace CodeAnalyzers.Episerver.DiagnosticAnalyzers.CSharp
                         ReportDuplicateOrder(symbolContext, namedTypeSymbol, attribute, existingType);
                         ReportDuplicateOrder(symbolContext, existingType, existingAttribute, namedTypeSymbol);
                     }
-                }
-                else
-                {
-                    ReportInvalidOrder(symbolContext, namedTypeSymbol, attribute);
                 }
             }
 
@@ -100,7 +112,7 @@ namespace CodeAnalyzers.Episerver.DiagnosticAnalyzers.CSharp
                 return int.TryParse(orderValue.Value?.ToString(), out order);
             }
 
-            private static void ReportDuplicateOrder(SymbolAnalysisContext symbolContext, INamedTypeSymbol namedType,
+            private void ReportDuplicateOrder(SymbolAnalysisContext symbolContext, INamedTypeSymbol namedType,
                 AttributeData attribute, INamedTypeSymbol matchingType)
             {
                 var node = attribute.ApplicationSyntaxReference?.GetSyntax();
@@ -109,20 +121,9 @@ namespace CodeAnalyzers.Episerver.DiagnosticAnalyzers.CSharp
                     symbolContext.ReportDiagnostic(
                         node.CreateDiagnostic(
                             Descriptors.Epi2004ContentTypeShouldHaveUniqueOrder,
+                            contentRootType.ToDisplayString(SymbolDisplayFormat.CSharpShortErrorMessageFormat),
                             namedType.ToDisplayString(SymbolDisplayFormat.CSharpShortErrorMessageFormat),
                             matchingType.ToDisplayString(SymbolDisplayFormat.CSharpShortErrorMessageFormat)));
-                }
-            }
-
-            private static void ReportInvalidOrder(SymbolAnalysisContext symbolContext, INamedTypeSymbol namedType, AttributeData attribute)
-            {
-                var node = attribute.ApplicationSyntaxReference?.GetSyntax();
-                if (node != null)
-                {
-                    symbolContext.ReportDiagnostic(
-                        node.CreateDiagnostic(
-                            Descriptors.Epi2003ContentTypeShouldHaveOrder,
-                            namedType.ToDisplayString(SymbolDisplayFormat.CSharpShortErrorMessageFormat)));
                 }
             }
         }
