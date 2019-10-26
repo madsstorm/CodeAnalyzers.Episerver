@@ -9,9 +9,6 @@ namespace CodeAnalyzers.Episerver.DiagnosticAnalyzers.CSharp
     [DiagnosticAnalyzer(LanguageNames.CSharp)]
     public class ContentTypeImageUrlAnalyzer : DiagnosticAnalyzer
     {
-        private const string ContentTypeMetadataName = "EPiServer.DataAnnotations.ContentTypeAttribute";
-        private const string ImageUrlMetadataName = "EPiServer.DataAnnotations.ImageUrlAttribute";
-
         public override ImmutableArray<DiagnosticDescriptor> SupportedDiagnostics =>
             ImmutableArray.Create(Descriptors.Epi2005ContentTypeShouldHaveImageUrl);
 
@@ -24,13 +21,13 @@ namespace CodeAnalyzers.Episerver.DiagnosticAnalyzers.CSharp
 
             context.RegisterCompilationStartAction(compilationContext =>
             {
-                var contentTypeAttribute = compilationContext.Compilation.GetTypeByMetadataName(ContentTypeMetadataName);
+                var contentTypeAttribute = compilationContext.Compilation.GetTypeByMetadataName(TypeNames.ContentTypeMetadataName);
                 if (contentTypeAttribute is null)
                 {
                     return;
                 }
 
-                var imageUrlType = compilationContext.Compilation.GetTypeByMetadataName(ImageUrlMetadataName);
+                var imageUrlType = compilationContext.Compilation.GetTypeByMetadataName(TypeNames.ImageUrlMetadataName);
                 if (imageUrlType is null)
                 {
                     return;

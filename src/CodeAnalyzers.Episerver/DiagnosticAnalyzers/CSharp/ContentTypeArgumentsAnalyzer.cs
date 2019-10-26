@@ -10,8 +10,6 @@ namespace CodeAnalyzers.Episerver.DiagnosticAnalyzers.CSharp
     [DiagnosticAnalyzer(LanguageNames.CSharp)]
     public class ContentTypeArgumentsAnalyzer : DiagnosticAnalyzer
     {
-        private const string ContentTypeMetadataName = "EPiServer.DataAnnotations.ContentTypeAttribute";
-
         private readonly ImmutableArray<(string ArgumentName, DiagnosticDescriptor Descriptor, bool AssumeInherited)> ContentTypeArguments =
             ImmutableArray.Create(
                 ("DisplayName", Descriptors.Epi2000ContentTypeShouldHaveDisplayName, false),
@@ -35,7 +33,7 @@ namespace CodeAnalyzers.Episerver.DiagnosticAnalyzers.CSharp
 
             context.RegisterCompilationStartAction(compilationContext =>
             {
-                var contentTypeAttribute = compilationContext.Compilation.GetTypeByMetadataName(ContentTypeMetadataName);
+                var contentTypeAttribute = compilationContext.Compilation.GetTypeByMetadataName(TypeNames.ContentTypeMetadataName);
                 if (contentTypeAttribute is null)
                 {
                     return;

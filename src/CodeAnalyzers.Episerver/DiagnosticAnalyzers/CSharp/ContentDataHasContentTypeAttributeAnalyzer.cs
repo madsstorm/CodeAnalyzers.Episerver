@@ -7,13 +7,10 @@ using System.Linq;
 namespace CodeAnalyzers.Episerver.DiagnosticAnalyzers.CSharp
 {
     [DiagnosticAnalyzer(LanguageNames.CSharp)]
-    public class ContentTypeContentDataAnalyzer : DiagnosticAnalyzer
+    public class ContentDataHasContentTypeAttributeAnalyzer : DiagnosticAnalyzer
     {
-        private const string ContentTypeMetadataName = "EPiServer.DataAnnotations.ContentTypeAttribute";
-        private const string IContentDataMetadataName = "EPiServer.Core.IContentData";
-
         public override ImmutableArray<DiagnosticDescriptor> SupportedDiagnostics =>
-            ImmutableArray.Create(Descriptors.Epi1003ContentTypeMustImplementContentData);
+            ImmutableArray.Create(Descriptors.Epi1004ContentDataMustHaveContentTypeAttribute);
 
         public override void Initialize(AnalysisContext context)
         {
@@ -24,13 +21,13 @@ namespace CodeAnalyzers.Episerver.DiagnosticAnalyzers.CSharp
 
             context.RegisterCompilationStartAction(compilationContext =>
             {
-                var contentTypeAttribute = compilationContext.Compilation.GetTypeByMetadataName(ContentTypeMetadataName);
+                var contentTypeAttribute = compilationContext.Compilation.GetTypeByMetadataName(TypeNames.ContentTypeMetadataName);
                 if (contentTypeAttribute is null)
                 {
                     return;
                 }
 
-                var iContentDataType = compilationContext.Compilation.GetTypeByMetadataName(IContentDataMetadataName);
+                var iContentDataType = compilationContext.Compilation.GetTypeByMetadataName(TypeNames.IContentDataMetadataName);
                 if (iContentDataType is null)
                 {
                     return;
@@ -45,26 +42,25 @@ namespace CodeAnalyzers.Episerver.DiagnosticAnalyzers.CSharp
         private void AnalyzeSymbol(SymbolAnalysisContext symbolContext, INamedTypeSymbol contentTypeAttribute, INamedTypeSymbol iContentDataType)
         {
             var namedTypeSymbol = (INamedTypeSymbol)symbolContext.Symbol;
+            if(!iContentDataType.IsAssignableFrom(namedTypeSymbol))
+            {
+                return;
+            }
+
             var attributes = namedTypeSymbol.GetAttributes();
 
             var contentAttribute = attributes.FirstOrDefault(attr => contentTypeAttribute.IsAssignableFrom(attr.AttributeClass));
             if (contentAttribute is null)
             {
-                return;
-            }
-
-            if (namedTypeSymbol.IsAbstract || !(iContentDataType.IsAssignableFrom(namedTypeSymbol)))
-            {
-                ReportInvalidContentDataType(symbolContext, namedTypeSymbol);
+                ReportMissingContentTypeAttribute(symbolContext, namedTypeSymbol);
             }
         }
 
-        private static void ReportInvalidContentDataType(SymbolAnalysisContext symbolContext, INamedTypeSymbol namedType)
+        private static void ReportMissingContentTypeAttribute(SymbolAnalysisContext symbolContext, INamedTypeSymbol namedType)
         {
             symbolContext.ReportDiagnostic(
                 namedType.CreateDiagnostic(
-                    Descriptors.Epi1003ContentTypeMustImplementContentData,
-                    namedType.ToDisplayString(SymbolDisplayFormat.CSharpShortErrorMessageFormat)));
+                    Descriptors.Epi1004ContentDataMustHaveContentTypeAttribute));
         }
     }
 }

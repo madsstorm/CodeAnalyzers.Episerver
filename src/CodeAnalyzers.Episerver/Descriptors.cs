@@ -40,6 +40,10 @@ namespace CodeAnalyzers.Episerver
             Rule("Epi1003", "Content type must implement content data", Usage, Error,
                 "{0} must implement a content data type", "Content types must be non-abstract classes that implement a content data type such as PageData, BlockData and MediaData.");
 
+        public static DiagnosticDescriptor Epi1004ContentDataMustHaveContentTypeAttribute { get; } =
+            Rule("Epi1004", "Content must have ContentType attribute", Usage, Error,
+                "Missing ContentType attribute", "The ContentType attribute is required for all content types.");
+
         #endregion
 
         #region Content 2xxx

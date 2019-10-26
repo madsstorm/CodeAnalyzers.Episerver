@@ -1,10 +1,10 @@
-using Verify = CodeAnalyzers.Episerver.Test.CSharpVerifier<CodeAnalyzers.Episerver.DiagnosticAnalyzers.CSharp.ContentTypeContentDataAnalyzer>;
+using Verify = CodeAnalyzers.Episerver.Test.CSharpVerifier<CodeAnalyzers.Episerver.DiagnosticAnalyzers.CSharp.ContentTypeImplementsContentDataAnalyzer>;
 using System.Threading.Tasks;
 using Xunit;
 
 namespace CodeAnalyzers.Episerver.Test
 {
-    public class ContentTypeContentDataTests
+    public class ContentTypeImplementsContentDataTests
     {
         [Fact]
         public async Task DetectAbstractContentDataType()

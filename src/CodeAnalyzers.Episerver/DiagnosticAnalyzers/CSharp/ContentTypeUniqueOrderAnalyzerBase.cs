@@ -13,7 +13,6 @@ namespace CodeAnalyzers.Episerver.DiagnosticAnalyzers.CSharp
     /// </summary>
     public abstract class ContentTypeUniqueOrderAnalyzerBase : DiagnosticAnalyzer
     {
-        private const string ContentTypeMetadataName = "EPiServer.DataAnnotations.ContentTypeAttribute";
         private const string OrderArgument = "Order";
 
         protected abstract string ContentRootTypeName { get; }
@@ -30,7 +29,7 @@ namespace CodeAnalyzers.Episerver.DiagnosticAnalyzers.CSharp
 
             context.RegisterCompilationStartAction(compilationContext =>
             {
-                var contentTypeAttribute = compilationContext.Compilation.GetTypeByMetadataName(ContentTypeMetadataName);
+                var contentTypeAttribute = compilationContext.Compilation.GetTypeByMetadataName(TypeNames.ContentTypeMetadataName);
                 if (contentTypeAttribute is null)
                 {
                     return;

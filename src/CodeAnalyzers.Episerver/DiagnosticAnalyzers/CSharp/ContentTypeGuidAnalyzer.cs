@@ -11,7 +11,6 @@ namespace CodeAnalyzers.Episerver.DiagnosticAnalyzers.CSharp
     [DiagnosticAnalyzer(LanguageNames.CSharp)]
     public class ContentTypeGuidAnalyzer : DiagnosticAnalyzer
     {
-        private const string ContentTypeMetadataName = "EPiServer.DataAnnotations.ContentTypeAttribute";
         private const string GuidArgument = "GUID";
 
         public override ImmutableArray<DiagnosticDescriptor> SupportedDiagnostics =>
@@ -28,7 +27,7 @@ namespace CodeAnalyzers.Episerver.DiagnosticAnalyzers.CSharp
 
             context.RegisterCompilationStartAction(compilationContext =>
             {
-                var contentTypeAttribute = compilationContext.Compilation.GetTypeByMetadataName(ContentTypeMetadataName);
+                var contentTypeAttribute = compilationContext.Compilation.GetTypeByMetadataName(TypeNames.ContentTypeMetadataName);
                 if (contentTypeAttribute is null)
                 {
                     return;
