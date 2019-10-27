@@ -10,8 +10,8 @@ namespace CodeAnalyzers.Episerver.DiagnosticAnalyzers.CSharp
     [DiagnosticAnalyzer(LanguageNames.CSharp)]
     public class ContentDataHasImageUrlAttributeAnalyzer : DiagnosticAnalyzer
     {
-        // Ignore ImageUrl attribute for content data derived from these types
-        private readonly ImmutableArray<string> ExcludedRootTypeNames =
+        // Ignore content data derived from these types
+        private readonly ImmutableArray<string> IgnoredRootTypeNames =
             ImmutableArray.Create(TypeNames.MediaDataMetadataName);
 
         public override ImmutableArray<DiagnosticDescriptor> SupportedDiagnostics =>
@@ -26,8 +26,8 @@ namespace CodeAnalyzers.Episerver.DiagnosticAnalyzers.CSharp
 
             context.RegisterCompilationStartAction(compilationContext =>
             {
-                var excludedRootTypes =
-                    ExcludedRootTypeNames.Select(root => compilationContext.Compilation.GetTypeByMetadataName(root))
+                var ignoredRootTypes =
+                    IgnoredRootTypeNames.Select(root => compilationContext.Compilation.GetTypeByMetadataName(root))
                         .Where(symbol => symbol != null);
 
                 var iContentDataType = compilationContext.Compilation.GetTypeByMetadataName(TypeNames.IContentDataMetadataName);
@@ -43,7 +43,7 @@ namespace CodeAnalyzers.Episerver.DiagnosticAnalyzers.CSharp
                 }
 
                 compilationContext.RegisterSymbolAction(
-                    symbolContext => AnalyzeSymbol(symbolContext, iContentDataType, imageUrlType, excludedRootTypes)
+                    symbolContext => AnalyzeSymbol(symbolContext, iContentDataType, imageUrlType, ignoredRootTypes)
                     , SymbolKind.NamedType);
             });
         }
@@ -52,7 +52,7 @@ namespace CodeAnalyzers.Episerver.DiagnosticAnalyzers.CSharp
             SymbolAnalysisContext symbolContext,
             INamedTypeSymbol iContentDataType,
             INamedTypeSymbol imageUrlType,
-            IEnumerable<INamedTypeSymbol> excludedRootTypes)
+            IEnumerable<INamedTypeSymbol> ignoredRootTypes)
         {
             var namedTypeSymbol = (INamedTypeSymbol)symbolContext.Symbol;
             if(!iContentDataType.IsAssignableFrom(namedTypeSymbol))
@@ -60,7 +60,7 @@ namespace CodeAnalyzers.Episerver.DiagnosticAnalyzers.CSharp
                 return;
             }
 
-            foreach(var rootType in excludedRootTypes)
+            foreach(var rootType in ignoredRootTypes)
             {
                 if(rootType.IsAssignableFrom(namedTypeSymbol))
                 {

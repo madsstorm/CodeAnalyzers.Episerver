@@ -44,6 +44,14 @@ namespace CodeAnalyzers.Episerver
             Rule("Epi1004", "Content must have ContentType attribute", Usage, Error,
                 "Missing ContentType attribute", "The ContentType attribute is required for all content types.");
 
+        public static DiagnosticDescriptor Epi1005CatalogContentTypeMustImplementCatalogContentData { get; } =
+            Rule("Epi1005", "Catalog content type must implement catalog content data", Usage, Error,
+                "{0} must implement a catalog content data type", "Catalog content types must be non-abstract classes that implement a catalog content data type such as ProductContent or VariationContent.");
+
+        public static DiagnosticDescriptor Epi1006CatalogContentDataMustHaveCatalogContentTypeAttribute { get; } =
+            Rule("Epi1006", "Catalog content must have CatalogContentType attribute", Usage, Error,
+                "Missing CatalogContentType attribute", "The CatalogContentType attribute is required for all catalog content types.");
+
         #endregion
 
         #region Content 2xxx
