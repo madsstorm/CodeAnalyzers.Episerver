@@ -16,5 +16,10 @@ Code analyzers for Episerver
 | Epi2003 | Content type should have an Order | Content | Warning |
 | Epi2004 | Content type should have a unique Order | Content | Warning |
 | Epi2005 | Content type should have an ImageUrl | Content | Warning |
+| Epi2006 | Content property should have a Name | Content | Warning |
+| Epi2007 | Content property should have a Description | Content | Warning |
+| Epi2008 | Content property should have a GroupName | Content | Warning |
+| Epi2009 | Content property should have an Order | Content | Warning |
+| Epi2010 | Content property should have a unique Order | Content | Warning |
 | Epi3000 | Avoid using legacy DataFactory | Legacy | Warning |
 | Epi3001 | Avoid using legacy CacheManager | Legacy | Warning |

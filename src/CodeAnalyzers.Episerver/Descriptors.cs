@@ -84,6 +84,26 @@ namespace CodeAnalyzers.Episerver
             Rule("Epi2005", "Content should have an ImageUrl attribute", Content, Warning,
                 "Missing ImageUrl attribute", "Content data should have an ImageUrl attribute for showing an icon in edit view.");
 
+        public static DiagnosticDescriptor Epi2006ContentPropertyShouldHaveName { get; } =
+            Rule("Epi2006", "Content property should have a Name", Content, Warning,
+                "Missing Name", "Content properties should have a Name shown in edit view.");
+
+        public static DiagnosticDescriptor Epi2007ContentPropertyShouldHaveDescription { get; } =
+            Rule("Epi2007", "Content property should have a Description", Content, Warning,
+                "Missing Description", "Content properties should have a Description shown in edit view.");
+
+        public static DiagnosticDescriptor Epi2008ContentPropertyShouldHaveGroupName { get; } =
+            Rule("Epi2008", "Content property should have a GroupName", Content, Warning,
+                "Missing GroupName", "Content properties should have a GroupName for organizing in tabs in edit view.");
+
+        public static DiagnosticDescriptor Epi2009ContentPropertyShouldHaveOrder { get; } =
+            Rule("Epi2009", "Content property should have an Order", Content, Warning,
+                "Missing Order", "Content properties should have an Order for sorting in edit view.");
+
+        public static DiagnosticDescriptor Epi2010ContentPropertyShouldHaveUniqueOrder { get; } =
+            Rule("Epi2010", "Content property should have a unique Order", Content, Warning,
+                "{0} has the same Order as {1}", "Content property Orders should be unique for sorting in edit view.");
+
         #endregion
 
         #region Legacy 3xxx
