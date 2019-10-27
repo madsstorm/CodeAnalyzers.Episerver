@@ -38,6 +38,7 @@ namespace CodeAnalyzers.Episerver.Test
                 {
                     solution = solution
                         .AddMetadataReference(projectId, MetadataReference.CreateFromFile(typeof(System.Web.Mvc.FilterAttribute).GetTypeInfo().Assembly.Location))
+                        .AddMetadataReference(projectId, MetadataReference.CreateFromFile(typeof(System.ComponentModel.DataAnnotations.DisplayAttribute).GetTypeInfo().Assembly.Location))
                         .AddMetadataReference(projectId, MetadataReference.CreateFromFile(typeof(EPiServer.DataFactory).GetTypeInfo().Assembly.Location))
                         .AddMetadataReference(projectId, MetadataReference.CreateFromFile(typeof(EPiServer.Data.Entity.IReadOnly).GetTypeInfo().Assembly.Location))
                         .AddMetadataReference(projectId, MetadataReference.CreateFromFile(typeof(EPiServer.Web.Routing.IRoutable).GetTypeInfo().Assembly.Location))
