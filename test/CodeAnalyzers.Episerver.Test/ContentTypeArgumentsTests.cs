@@ -78,6 +78,59 @@ namespace CodeAnalyzers.Episerver.Test
         }
 
         [Fact]
+        public async Task DetectCatalogContentTypeWithMissingArguments()
+        {
+            var test = @"
+                using EPiServer.Commerce.Catalog.DataAnnotations;
+                using EPiServer.Commerce.Catalog.ContentTypes;
+                using EPiServer.Core;
+
+                namespace Test
+                {
+                    [CatalogContentType]
+                    public class VariationType : VariationContent
+                    {
+                    }
+                }";
+
+            await Verify.VerifyAnalyzerAsync(test,
+                Verify.Diagnostic(Descriptors.Epi2000ContentTypeShouldHaveDisplayName).WithLocation(8, 22),
+                Verify.Diagnostic(Descriptors.Epi2001ContentTypeShouldHaveDescription).WithLocation(8, 22),
+                Verify.Diagnostic(Descriptors.Epi2002ContentTypeShouldHaveGroupName).WithLocation(8, 22),
+                Verify.Diagnostic(Descriptors.Epi2003ContentTypeShouldHaveOrder).WithLocation(8, 22));
+        }
+
+        [Fact]
+        public async Task DetectCustomContentTypeWithMissingArguments()
+        {
+            var test = @"
+                using EPiServer.Commerce.Catalog.ContentTypes;
+                using EPiServer.DataAnnotations;
+                using EPiServer.Core;
+
+                namespace Test
+                {
+                    public class CustomContentTypeAttribute : ContentTypeAttribute
+                    {
+                        public CustomContentTypeAttribute()
+                        {
+                            GroupName = ""GroupName"";
+                        }
+                    }
+
+                    [CustomContentType]
+                    public class VariationType : VariationContent
+                    {
+                    }
+                }";
+
+            await Verify.VerifyAnalyzerAsync(test,
+                Verify.Diagnostic(Descriptors.Epi2000ContentTypeShouldHaveDisplayName).WithLocation(16, 22),
+                Verify.Diagnostic(Descriptors.Epi2001ContentTypeShouldHaveDescription).WithLocation(16, 22),
+                Verify.Diagnostic(Descriptors.Epi2003ContentTypeShouldHaveOrder).WithLocation(16, 22));
+        }
+
+        [Fact]
         public async Task DetectContentTypeWithNullValues()
         {
             var test = @"

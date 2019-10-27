@@ -4,6 +4,7 @@ using Microsoft.CodeAnalysis.Diagnostics;
 using CodeAnalyzers.Episerver.Extensions;
 using System;
 using System.Linq;
+using System.Collections.Generic;
 
 namespace CodeAnalyzers.Episerver.DiagnosticAnalyzers.CSharp
 {
@@ -16,6 +17,11 @@ namespace CodeAnalyzers.Episerver.DiagnosticAnalyzers.CSharp
                 ("Description", Descriptors.Epi2001ContentTypeShouldHaveDescription, false),
                 ("GroupName", Descriptors.Epi2002ContentTypeShouldHaveGroupName, true),
                 ("Order", Descriptors.Epi2003ContentTypeShouldHaveOrder, false));
+
+        private readonly ImmutableArray<string> KnownContentTypeAttributeNames =
+            ImmutableArray.Create(
+                TypeNames.ContentTypeMetadataName,
+                TypeNames.CatalogContentTypeMetadataName);
 
         public override ImmutableArray<DiagnosticDescriptor> SupportedDiagnostics =>
             ImmutableArray.Create(
@@ -39,13 +45,20 @@ namespace CodeAnalyzers.Episerver.DiagnosticAnalyzers.CSharp
                     return;
                 }
 
+                var knownContentTypeAttributes =
+                    KnownContentTypeAttributeNames.Select(root => compilationContext.Compilation.GetTypeByMetadataName(root))
+                        .Where(symbol => symbol != null);
+
                 compilationContext.RegisterSymbolAction(
-                    symbolContext => AnalyzeSymbol(symbolContext, contentTypeAttribute)
+                    symbolContext => AnalyzeSymbol(symbolContext, contentTypeAttribute, knownContentTypeAttributes)
                     , SymbolKind.NamedType);
             });
         }
 
-        private void AnalyzeSymbol(SymbolAnalysisContext symbolContext, INamedTypeSymbol contentTypeAttribute)
+        private void AnalyzeSymbol(
+            SymbolAnalysisContext symbolContext,
+            INamedTypeSymbol contentTypeAttribute,
+            IEnumerable<INamedTypeSymbol> knownContentTypeAttributes)
         {
             var namedTypeSymbol = (INamedTypeSymbol)symbolContext.Symbol;
             var attributes = namedTypeSymbol.GetAttributes();
@@ -58,13 +71,13 @@ namespace CodeAnalyzers.Episerver.DiagnosticAnalyzers.CSharp
 
             foreach (var tuple in ContentTypeArguments)
             {
-                if (tuple.AssumeInherited && !Equals(contentAttribute.AttributeClass, contentTypeAttribute))
+                if (tuple.AssumeInherited && !IsKnownContentTypeAttribute(contentAttribute, knownContentTypeAttributes))
                 {
                     if (!contentAttribute.NamedArguments.Any(arg => string.Equals(arg.Key, tuple.ArgumentName, StringComparison.Ordinal)))
                     {
-                        // For simplicity, assume that a derived attribute
+                        // For simplicity, assume that a custom attribute
                         // with missing argument inherits an argument value
-                        return;
+                        continue;
                     }
                 }
 
@@ -74,6 +87,19 @@ namespace CodeAnalyzers.Episerver.DiagnosticAnalyzers.CSharp
                     ReportInvalidArgument(symbolContext, namedTypeSymbol, contentAttribute, tuple.Descriptor);
                 }
             }
+        }
+
+        private bool IsKnownContentTypeAttribute(AttributeData attribute, IEnumerable<INamedTypeSymbol> knownContentTypeAttributes)
+        {
+            foreach(var knownAttribute in knownContentTypeAttributes)
+            {
+                if(Equals(attribute.AttributeClass, knownAttribute))
+                {
+                    return true;
+                }
+            }
+
+            return false;
         }
 
         private static void ReportInvalidArgument(SymbolAnalysisContext symbolContext, INamedTypeSymbol namedType, AttributeData attribute, DiagnosticDescriptor descriptor)

@@ -87,7 +87,7 @@ namespace CodeAnalyzers.Episerver.DiagnosticAnalyzers.CSharp
             {
                 if (imageUrlAttribute.ConstructorArguments.IsEmpty)
                 {
-                    // For simplicity, assume that a derived attribute
+                    // For simplicity, assume that a custom attribute
                     // with a parameterless constructor inherits an image path
                     return;
                 }
