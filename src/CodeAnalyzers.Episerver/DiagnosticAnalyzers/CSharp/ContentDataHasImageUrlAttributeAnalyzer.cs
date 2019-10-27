@@ -12,7 +12,7 @@ namespace CodeAnalyzers.Episerver.DiagnosticAnalyzers.CSharp
     {
         // Ignore content data derived from these types
         private readonly ImmutableArray<string> IgnoredRootTypeNames =
-            ImmutableArray.Create(TypeNames.MediaDataMetadataName);
+            ImmutableArray.Create(TypeNames.IContentMediaMetadataName);
 
         public override ImmutableArray<DiagnosticDescriptor> SupportedDiagnostics =>
             ImmutableArray.Create(Descriptors.Epi2005ContentDataShouldHaveImageUrlAttribute);

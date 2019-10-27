@@ -52,6 +52,10 @@ namespace CodeAnalyzers.Episerver
             Rule("Epi1006", "Catalog content must have CatalogContentType attribute", Usage, Error,
                 "Missing CatalogContentType attribute", "The CatalogContentType attribute is required for all catalog content types.");
 
+        public static DiagnosticDescriptor Epi1007MediaDataShouldHaveMediaDescriptorAttribute { get; } =
+            Rule("Epi1007", "Media data should have MediaDescriptor attribute", Usage, Warning,
+                "Missing MediaDescriptor attribute", "The MediaDescriptor attribute defines a list of file extensions for the content type.");
+
         #endregion
 
         #region Content 2xxx

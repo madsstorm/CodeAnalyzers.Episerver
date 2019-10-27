@@ -89,7 +89,7 @@ namespace CodeAnalyzers.Episerver.DiagnosticAnalyzers.CSharp
             }
         }
 
-        private bool IsKnownContentTypeAttribute(AttributeData attribute, IEnumerable<INamedTypeSymbol> knownContentTypeAttributes)
+        private static bool IsKnownContentTypeAttribute(AttributeData attribute, IEnumerable<INamedTypeSymbol> knownContentTypeAttributes)
         {
             foreach(var knownAttribute in knownContentTypeAttributes)
             {
