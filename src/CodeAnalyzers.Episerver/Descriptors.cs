@@ -33,24 +33,24 @@ namespace CodeAnalyzers.Episerver
                 "{0} has the same GUID as {1}", "All content types must be identified by a unique GUID property.");
 
         public static DiagnosticDescriptor Epi1002AvoidUsingInternalNamespaces { get; } =
-            Rule("Epi1002", "Avoid using internal namespaces", Usage, Warning,
-                "Avoid using internal type {0}", "Internal namespaces are not considered part of the public supported API.");
+            Rule("Epi1002", "Avoid using Internal namespaces", Usage, Warning,
+                "Avoid using Internal type {0}", "Internal namespaces are not considered part of the public supported API.");
 
         public static DiagnosticDescriptor Epi1003ContentTypeMustImplementContentData { get; } =
             Rule("Epi1003", "Content type must implement content data", Usage, Error,
                 "{0} must implement a content data type", "Content types must be non-abstract classes that implement a content data type such as PageData, BlockData or MediaData.");
 
         public static DiagnosticDescriptor Epi1004ContentDataMustHaveContentTypeAttribute { get; } =
-            Rule("Epi1004", "Content must have ContentType attribute", Usage, Error,
-                "Missing ContentType attribute", "The ContentType attribute is required for all content types.");
+            Rule("Epi1004", "Content data must have ContentType attribute", Usage, Error,
+                "Missing ContentType attribute", "The ContentType attribute is required for all content data types.");
 
         public static DiagnosticDescriptor Epi1005CatalogContentTypeMustImplementCatalogContentData { get; } =
             Rule("Epi1005", "Catalog content type must implement catalog content data", Usage, Error,
                 "{0} must implement a catalog content data type", "Catalog content types must be non-abstract classes that implement a catalog content data type such as ProductContent or VariationContent.");
 
         public static DiagnosticDescriptor Epi1006CatalogContentDataMustHaveCatalogContentTypeAttribute { get; } =
-            Rule("Epi1006", "Catalog content must have CatalogContentType attribute", Usage, Error,
-                "Missing CatalogContentType attribute", "The CatalogContentType attribute is required for all catalog content types.");
+            Rule("Epi1006", "Catalog content data must have CatalogContentType attribute", Usage, Error,
+                "Missing CatalogContentType attribute", "The CatalogContentType attribute is required for all catalog content data types.");
 
         public static DiagnosticDescriptor Epi1007MediaDataShouldHaveMediaDescriptorAttribute { get; } =
             Rule("Epi1007", "Media data should have MediaDescriptor attribute", Usage, Warning,
