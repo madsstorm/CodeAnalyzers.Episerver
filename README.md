@@ -14,7 +14,7 @@
 ### Example rules
 Code | Problem | Severity
 -----|---------|:-------:
-`[ContentType(DisplayName="StartPage")]` | **_No GUID_**<br>**_No Description_** | :no_entry:<br>:warning:
+`[ContentType(DisplayName="StartPage")]` | **_Missing GUID_**<br>**_Missing Description_** | :no_entry:<br>:warning:
 `DataFactory.Instance.GetChildren()` | **_Legacy type_** | :warning:
 `EPiServer.Core.Internal.DefaultContentRepository` | **_Internal type_** | :warning:
 
