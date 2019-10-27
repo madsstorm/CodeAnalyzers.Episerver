@@ -11,12 +11,14 @@
 ### Intro
 **Code analyzers for Episerver** are [Roslyn](https://docs.microsoft.com/dotnet/csharp/roslyn-sdk) based analyzers that produce warnings in Visual Studio as you type.
 
-### Example
+### Example rules
 Code | Problem | Severity
 -----|---------|:-------:
 `[ContentType(DisplayName="StartPage")]` | **_No GUID_**<br>**_No Description_** | :no_entry:<br>:warning:
 `DataFactory.Instance.GetChildren()` | **_Legacy type_** | :warning:
 `EPiServer.Core.Internal.DefaultContentRepository` | **_Internal type_** | :warning:
+
+[See all rules](/docs/rules/rules.md)
 
 <!---
 ### Install
