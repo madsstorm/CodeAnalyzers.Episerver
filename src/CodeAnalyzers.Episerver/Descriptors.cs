@@ -56,6 +56,10 @@ namespace CodeAnalyzers.Episerver
             Rule("Epi1007", "Media data should have MediaDescriptor attribute", Usage, Warning,
                 "Missing MediaDescriptor attribute", "The MediaDescriptor attribute defines a list of file extensions for the content type.");
 
+        public static DiagnosticDescriptor Epi1008AvoidUsingServiceLocator { get; } =
+            Rule("Epi1008", "Avoid using ServiceLocator", Usage, Info,
+                "Avoid using ServiceLocator", "Prefer constructor injection over using ServiceLocator.");
+
         #endregion
 
         #region Content 2xxx

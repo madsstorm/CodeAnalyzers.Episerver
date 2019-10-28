@@ -14,6 +14,7 @@ namespace CodeAnalyzers.Episerver.DiagnosticAnalyzers.CSharp
 
         private readonly ImmutableArray<(string TypeName, DiagnosticDescriptor Descriptor)> BannedTypes =
             ImmutableArray.Create(
+                ("EPiServer.ServiceLocation.ServiceLocator", Descriptors.Epi1008AvoidUsingServiceLocator),
                 ("EPiServer.DataFactory", Descriptors.Epi3000AvoidUsingDataFactory),
                 ("EPiServer.CacheManager", Descriptors.Epi3001AvoidUsingCacheManager),
                 ("log4net.LogManager", Descriptors.Epi3002AvoidUsingLog4NetLogManager));
@@ -21,6 +22,7 @@ namespace CodeAnalyzers.Episerver.DiagnosticAnalyzers.CSharp
         public override ImmutableArray<DiagnosticDescriptor> SupportedDiagnostics =>
             ImmutableArray.Create(
                 Descriptors.Epi1002AvoidUsingInternalNamespaces,
+                Descriptors.Epi1008AvoidUsingServiceLocator,
                 Descriptors.Epi3000AvoidUsingDataFactory,
                 Descriptors.Epi3001AvoidUsingCacheManager,
                 Descriptors.Epi3002AvoidUsingLog4NetLogManager);
