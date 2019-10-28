@@ -4,7 +4,7 @@ using Xunit;
 
 namespace CodeAnalyzers.Episerver.Test
 {
-    public class CatalogContentDataHasContentTypeAttributeTests
+    public class CatalogContentDataHasCatalogContentTypeAttributeTests
     {
         [Fact]
         public async Task IgnoreCatalogContentDataWithCatalogContentTypeAttribute()
