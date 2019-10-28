@@ -58,7 +58,7 @@ namespace CodeAnalyzers.Episerver
 
         public static DiagnosticDescriptor Epi1008AvoidUsingServiceLocator { get; } =
             Rule("Epi1008", "Avoid using ServiceLocator", Usage, Info,
-                "Avoid using ServiceLocator", "Prefer constructor injection over using ServiceLocator.");
+                "Prefer constructor injection over using ServiceLocator.");
 
         #endregion
 
