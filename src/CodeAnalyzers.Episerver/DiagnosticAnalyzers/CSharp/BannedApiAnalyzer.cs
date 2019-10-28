@@ -15,13 +15,15 @@ namespace CodeAnalyzers.Episerver.DiagnosticAnalyzers.CSharp
         private readonly ImmutableArray<(string TypeName, DiagnosticDescriptor Descriptor)> BannedTypes =
             ImmutableArray.Create(
                 ("EPiServer.DataFactory", Descriptors.Epi3000AvoidUsingDataFactory),
-                ("EPiServer.CacheManager", Descriptors.Epi3001AvoidUsingCacheManager));
+                ("EPiServer.CacheManager", Descriptors.Epi3001AvoidUsingCacheManager),
+                ("log4net.LogManager", Descriptors.Epi3002AvoidUsingLog4NetLogManager));
 
         public override ImmutableArray<DiagnosticDescriptor> SupportedDiagnostics =>
             ImmutableArray.Create(
                 Descriptors.Epi1002AvoidUsingInternalNamespaces,
                 Descriptors.Epi3000AvoidUsingDataFactory,
-                Descriptors.Epi3001AvoidUsingCacheManager);
+                Descriptors.Epi3001AvoidUsingCacheManager,
+                Descriptors.Epi3002AvoidUsingLog4NetLogManager);
 
         public override void Initialize(AnalysisContext analysisContext)
         {

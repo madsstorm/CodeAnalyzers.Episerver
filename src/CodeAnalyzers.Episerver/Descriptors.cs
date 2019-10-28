@@ -116,6 +116,10 @@ namespace CodeAnalyzers.Episerver
             Rule("Epi3001", "Avoid using legacy CacheManager", Legacy, Warning,
                 "Avoid using legacy CacheManager", "Legacy cache manager in Episerver. This API has been replaced by the ISynchronizedObjectInstanceCache and IObjectInstanceCache interfaces.");
 
+        public static DiagnosticDescriptor Epi3002AvoidUsingLog4NetLogManager { get; } =
+            Rule("Epi3002", "Avoid using legacy log4net.LogManager", Legacy, Warning,
+                "Avoid using legacy log4net.LogManager", "Use the log abstraction EPiServer.Logging.LogManager");
+
         #endregion
 
     }
