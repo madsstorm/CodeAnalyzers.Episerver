@@ -1,5 +1,3 @@
-Code analyzers for Episerver
-
 | Id  | Title | Category | Severity |
 | --- | ----- | -------- | -------- |
 | Epi1000 | Content type must have a valid GUID | Usage | Error |
