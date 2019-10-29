@@ -45,7 +45,7 @@ namespace CodeAnalyzers.Episerver.Test
             await Verify.VerifyAnalyzerAsync(test);
         }
 
-        [Fact(Skip = "TODO")]
+        [Fact]
         public async Task IgnoreAbstractCatalogContentDataWithoutCatalogContentTypeAttribute()
         {
             var test = @"

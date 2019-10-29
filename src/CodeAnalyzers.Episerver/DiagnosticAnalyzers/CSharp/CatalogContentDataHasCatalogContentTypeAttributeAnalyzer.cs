@@ -45,6 +45,12 @@ namespace CodeAnalyzers.Episerver.DiagnosticAnalyzers.CSharp
             INamedTypeSymbol catalogContentBaseData)
         {
             var namedTypeSymbol = (INamedTypeSymbol)symbolContext.Symbol;
+
+            if(namedTypeSymbol.IsAbstract)
+            {
+                return;
+            }
+
             if (!catalogContentBaseData.IsAssignableFrom(namedTypeSymbol))
             {
                 return;

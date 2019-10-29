@@ -64,6 +64,12 @@ namespace CodeAnalyzers.Episerver.DiagnosticAnalyzers.CSharp
             IEnumerable<INamedTypeSymbol> invalidRootAttributes)
         {
             var namedTypeSymbol = (INamedTypeSymbol)symbolContext.Symbol;
+
+            if(namedTypeSymbol.IsAbstract)
+            {
+                return;
+            }
+
             if(!iContentDataType.IsAssignableFrom(namedTypeSymbol))
             {
                 return;
