@@ -36,6 +36,32 @@ namespace CodeAnalyzers.Episerver.Test
         }
 
         [Fact]
+        public async Task IgnoreAbstractContentDataWithoutImageUrl()
+        {
+            var test = @"
+                using EPiServer.DataAnnotations;
+                using EPiServer.Core;
+                using EPiServer.Commerce.Catalog.ContentTypes;
+
+                namespace Test
+                {
+                    public abstract class PageBase : PageData
+                    {
+                    }
+
+                    public abstract class BlockBase : BlockData
+                    {
+                    }
+
+                    public abstract class VariationBase : VariationContent
+                    {
+                    }
+                }";
+
+            await Verify.VerifyAnalyzerAsync(test);
+        }
+
+        [Fact]
         public async Task IgnoreExcludedContentDataWithoutImageUrl()
         {
             var test = @"

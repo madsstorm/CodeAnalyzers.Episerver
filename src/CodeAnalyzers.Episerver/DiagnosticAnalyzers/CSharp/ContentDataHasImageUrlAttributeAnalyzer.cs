@@ -55,6 +55,12 @@ namespace CodeAnalyzers.Episerver.DiagnosticAnalyzers.CSharp
             IEnumerable<INamedTypeSymbol> ignoredRootTypes)
         {
             var namedTypeSymbol = (INamedTypeSymbol)symbolContext.Symbol;
+
+            if(namedTypeSymbol.IsAbstract)
+            {
+                return;
+            }
+
             if(!iContentDataType.IsAssignableFrom(namedTypeSymbol))
             {
                 return;
