@@ -19,7 +19,7 @@
 | `DataFactory` | **_Legacy_** | :warning: |
 | `ApprovalDB` | **_Internal_** | :warning: |
 
-[See all rules](/docs/rules/rules.md)
+[**See all rules**](/docs/rules/rules.md)
 
 <!---
 ### Install
