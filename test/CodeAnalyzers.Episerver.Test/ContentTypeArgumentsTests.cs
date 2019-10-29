@@ -28,6 +28,24 @@ namespace CodeAnalyzers.Episerver.Test
         }
 
         [Fact]
+        public async Task IgnoreExcludedContentTypeWithoutArguments()
+        {
+            var test = @"
+                using EPiServer.DataAnnotations;
+                using EPiServer.Core;
+
+                namespace Test
+                {
+                    [ContentType()]
+                    public class MediaType : MediaData
+                    {
+                    }
+                }";
+
+            await Verify.VerifyAnalyzerAsync(test);
+        }
+
+        [Fact]
         public async Task IgnoreContentTypeWithInheritedGroupName()
         {
             var test = @"
