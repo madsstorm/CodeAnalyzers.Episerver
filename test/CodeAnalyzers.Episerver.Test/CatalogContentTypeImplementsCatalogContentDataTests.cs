@@ -58,7 +58,7 @@ namespace CodeAnalyzers.Episerver.Test
                 }";
 
             await Verify.VerifyAnalyzerAsync(test,
-                Verify.Diagnostic(Descriptors.Epi1005CatalogContentTypeMustImplementCatalogContentData)
+                Verify.Diagnostic(Descriptors.Epi1005CatalogContentTypeShouldImplementCatalogContentData)
                     .WithLocation(8, 34).WithArguments("PageType"));
         }
 
@@ -79,7 +79,7 @@ namespace CodeAnalyzers.Episerver.Test
                 }";
 
             await Verify.VerifyAnalyzerAsync(test,
-                Verify.Diagnostic(Descriptors.Epi1005CatalogContentTypeMustImplementCatalogContentData)
+                Verify.Diagnostic(Descriptors.Epi1005CatalogContentTypeShouldImplementCatalogContentData)
                     .WithLocation(9, 43).WithArguments("VariationType"));
         }
 
@@ -99,7 +99,7 @@ namespace CodeAnalyzers.Episerver.Test
                 }";
 
             await Verify.VerifyAnalyzerAsync(test,
-                Verify.Diagnostic(Descriptors.Epi1005CatalogContentTypeMustImplementCatalogContentData)
+                Verify.Diagnostic(Descriptors.Epi1005CatalogContentTypeShouldImplementCatalogContentData)
                     .WithLocation(8, 34).WithArguments("TypeName"));
         }
     }

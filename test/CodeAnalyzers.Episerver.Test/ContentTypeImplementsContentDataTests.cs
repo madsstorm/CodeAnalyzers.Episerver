@@ -61,7 +61,7 @@ namespace CodeAnalyzers.Episerver.Test
                 }";
 
             await Verify.VerifyAnalyzerAsync(test,
-                Verify.Diagnostic(Descriptors.Epi1003ContentTypeMustImplementContentData)
+                Verify.Diagnostic(Descriptors.Epi1003ContentTypeShouldImplementContentData)
                     .WithLocation(9, 34).WithArguments("VariationType"));
         }
 
@@ -81,7 +81,7 @@ namespace CodeAnalyzers.Episerver.Test
                 }";
 
             await Verify.VerifyAnalyzerAsync(test,
-                Verify.Diagnostic(Descriptors.Epi1003ContentTypeMustImplementContentData)
+                Verify.Diagnostic(Descriptors.Epi1003ContentTypeShouldImplementContentData)
                     .WithLocation(8, 43).WithArguments("TypeName"));
         }
 
@@ -101,7 +101,7 @@ namespace CodeAnalyzers.Episerver.Test
                 }";
 
             await Verify.VerifyAnalyzerAsync(test,
-                Verify.Diagnostic(Descriptors.Epi1003ContentTypeMustImplementContentData)
+                Verify.Diagnostic(Descriptors.Epi1003ContentTypeShouldImplementContentData)
                     .WithLocation(8, 34).WithArguments("TypeName"));
         }
     }

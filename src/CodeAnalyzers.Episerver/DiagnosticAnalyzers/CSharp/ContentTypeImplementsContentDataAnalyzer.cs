@@ -19,7 +19,7 @@ namespace CodeAnalyzers.Episerver.DiagnosticAnalyzers.CSharp
             ImmutableArray.Create(TypeNames.CatalogContentBaseMetadataName);
 
         public override ImmutableArray<DiagnosticDescriptor> SupportedDiagnostics =>
-            ImmutableArray.Create(Descriptors.Epi1003ContentTypeMustImplementContentData);
+            ImmutableArray.Create(Descriptors.Epi1003ContentTypeShouldImplementContentData);
 
         public override void Initialize(AnalysisContext context)
         {
@@ -98,7 +98,7 @@ namespace CodeAnalyzers.Episerver.DiagnosticAnalyzers.CSharp
         {
             symbolContext.ReportDiagnostic(
                 namedType.CreateDiagnostic(
-                    Descriptors.Epi1003ContentTypeMustImplementContentData,
+                    Descriptors.Epi1003ContentTypeShouldImplementContentData,
                     namedType.ToDisplayString(SymbolDisplayFormat.CSharpShortErrorMessageFormat)));
         }
     }

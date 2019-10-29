@@ -142,11 +142,11 @@ namespace CodeAnalyzers.Episerver.Test
                 }";
 
             await Verify.VerifyAnalyzerAsync(test,
-                Verify.Diagnostic(Descriptors.Epi1006CatalogContentDataMustHaveCatalogContentTypeAttribute).WithLocation(8, 34),
-                Verify.Diagnostic(Descriptors.Epi1006CatalogContentDataMustHaveCatalogContentTypeAttribute).WithLocation(12, 34),
-                Verify.Diagnostic(Descriptors.Epi1006CatalogContentDataMustHaveCatalogContentTypeAttribute).WithLocation(16, 34),
-                Verify.Diagnostic(Descriptors.Epi1006CatalogContentDataMustHaveCatalogContentTypeAttribute).WithLocation(20, 34),
-                Verify.Diagnostic(Descriptors.Epi1006CatalogContentDataMustHaveCatalogContentTypeAttribute).WithLocation(24, 34));
+                Verify.Diagnostic(Descriptors.Epi1006CatalogContentDataShouldHaveCatalogContentTypeAttribute).WithLocation(8, 34),
+                Verify.Diagnostic(Descriptors.Epi1006CatalogContentDataShouldHaveCatalogContentTypeAttribute).WithLocation(12, 34),
+                Verify.Diagnostic(Descriptors.Epi1006CatalogContentDataShouldHaveCatalogContentTypeAttribute).WithLocation(16, 34),
+                Verify.Diagnostic(Descriptors.Epi1006CatalogContentDataShouldHaveCatalogContentTypeAttribute).WithLocation(20, 34),
+                Verify.Diagnostic(Descriptors.Epi1006CatalogContentDataShouldHaveCatalogContentTypeAttribute).WithLocation(24, 34));
         }
 
         [Fact]
@@ -186,11 +186,11 @@ namespace CodeAnalyzers.Episerver.Test
                 }";
 
             await Verify.VerifyAnalyzerAsync(test,
-                Verify.Diagnostic(Descriptors.Epi1006CatalogContentDataMustHaveCatalogContentTypeAttribute).WithLocation(9, 34),
-                Verify.Diagnostic(Descriptors.Epi1006CatalogContentDataMustHaveCatalogContentTypeAttribute).WithLocation(14, 34),
-                Verify.Diagnostic(Descriptors.Epi1006CatalogContentDataMustHaveCatalogContentTypeAttribute).WithLocation(19, 34),
-                Verify.Diagnostic(Descriptors.Epi1006CatalogContentDataMustHaveCatalogContentTypeAttribute).WithLocation(24, 34),
-                Verify.Diagnostic(Descriptors.Epi1006CatalogContentDataMustHaveCatalogContentTypeAttribute).WithLocation(29, 34));
+                Verify.Diagnostic(Descriptors.Epi1006CatalogContentDataShouldHaveCatalogContentTypeAttribute).WithLocation(9, 34),
+                Verify.Diagnostic(Descriptors.Epi1006CatalogContentDataShouldHaveCatalogContentTypeAttribute).WithLocation(14, 34),
+                Verify.Diagnostic(Descriptors.Epi1006CatalogContentDataShouldHaveCatalogContentTypeAttribute).WithLocation(19, 34),
+                Verify.Diagnostic(Descriptors.Epi1006CatalogContentDataShouldHaveCatalogContentTypeAttribute).WithLocation(24, 34),
+                Verify.Diagnostic(Descriptors.Epi1006CatalogContentDataShouldHaveCatalogContentTypeAttribute).WithLocation(29, 34));
         }
     }
 }

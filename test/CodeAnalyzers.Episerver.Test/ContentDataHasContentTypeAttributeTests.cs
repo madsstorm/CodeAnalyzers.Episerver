@@ -131,10 +131,10 @@ namespace CodeAnalyzers.Episerver.Test
                 }";
 
             await Verify.VerifyAnalyzerAsync(test,
-                Verify.Diagnostic(Descriptors.Epi1004ContentDataMustHaveContentTypeAttribute).WithLocation(8, 34),
-                Verify.Diagnostic(Descriptors.Epi1004ContentDataMustHaveContentTypeAttribute).WithLocation(12, 34),
-                Verify.Diagnostic(Descriptors.Epi1004ContentDataMustHaveContentTypeAttribute).WithLocation(16, 34),
-                Verify.Diagnostic(Descriptors.Epi1004ContentDataMustHaveContentTypeAttribute).WithLocation(20, 34));
+                Verify.Diagnostic(Descriptors.Epi1004ContentDataShouldHaveContentTypeAttribute).WithLocation(8, 34),
+                Verify.Diagnostic(Descriptors.Epi1004ContentDataShouldHaveContentTypeAttribute).WithLocation(12, 34),
+                Verify.Diagnostic(Descriptors.Epi1004ContentDataShouldHaveContentTypeAttribute).WithLocation(16, 34),
+                Verify.Diagnostic(Descriptors.Epi1004ContentDataShouldHaveContentTypeAttribute).WithLocation(20, 34));
         }
 
         [Fact]
@@ -170,10 +170,10 @@ namespace CodeAnalyzers.Episerver.Test
                 }";
 
             await Verify.VerifyAnalyzerAsync(test,
-                Verify.Diagnostic(Descriptors.Epi1004ContentDataMustHaveContentTypeAttribute).WithLocation(10, 34),
-                Verify.Diagnostic(Descriptors.Epi1004ContentDataMustHaveContentTypeAttribute).WithLocation(15, 34),
-                Verify.Diagnostic(Descriptors.Epi1004ContentDataMustHaveContentTypeAttribute).WithLocation(20, 34),
-                Verify.Diagnostic(Descriptors.Epi1004ContentDataMustHaveContentTypeAttribute).WithLocation(25, 34));
+                Verify.Diagnostic(Descriptors.Epi1004ContentDataShouldHaveContentTypeAttribute).WithLocation(10, 34),
+                Verify.Diagnostic(Descriptors.Epi1004ContentDataShouldHaveContentTypeAttribute).WithLocation(15, 34),
+                Verify.Diagnostic(Descriptors.Epi1004ContentDataShouldHaveContentTypeAttribute).WithLocation(20, 34),
+                Verify.Diagnostic(Descriptors.Epi1004ContentDataShouldHaveContentTypeAttribute).WithLocation(25, 34));
         }
     }
 }

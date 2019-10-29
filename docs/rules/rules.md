@@ -3,10 +3,10 @@
 | Epi1000 | Content type must have a valid GUID | Usage | Error |
 | Epi1001 | Content type must have a unique GUID | Usage | Error |
 | Epi1002 | Avoid using Internal namespaces | Usage | Warning |
-| Epi1003 | Content type must implement content data | Usage | Error |
-| Epi1004 | Content data must have ContentType attribute | Usage | Error |
-| Epi1005 | Catalog content type must implement catalog content data | Usage | Error |
-| Epi1006 | Catalog content data must have CatalogContentType attribute | Usage | Error |
+| Epi1003 | Content type should implement content data | Usage | Warning |
+| Epi1004 | Content data should have ContentType attribute | Usage | Warning |
+| Epi1005 | Catalog content type should implement catalog content data | Usage | Warning |
+| Epi1006 | Catalog content data should have CatalogContentType attribute | Usage | Warning |
 | Epi1007 | Media data should have MediaDescriptor attribute | Usage | Warning |
 | Epi2000 | Content type should have a DisplayName | Content | Warning |
 | Epi2001 | Content type should have a Description | Content | Warning |
