@@ -40,6 +40,35 @@ namespace CodeAnalyzers.Episerver.Test
             await Verify.VerifyAnalyzerAsync(test);
         }
 
+        [Fact(Skip = "TODO")]
+        public async Task IgnoreAbstractContentDataWithoutContentTypeAttribute()
+        {
+            var test = @"
+                using EPiServer.Core;
+                using EPiServer.Commerce.Marketing;
+
+                namespace Test
+                {
+                    public abstract class PageBase : PageData
+                    {
+                    }
+
+                    public abstract class BlockBase : BlockData
+                    {
+                    }
+
+                    public abstract class MediaBase : MediaData
+                    {
+                    }
+
+                    public abstract class PromotionBase : EntryPromotion
+                    {
+                    }
+                }";
+
+            await Verify.VerifyAnalyzerAsync(test);
+        }
+
         [Fact]
         public async Task IgnoreOtherType()
         {

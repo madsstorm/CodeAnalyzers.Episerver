@@ -45,6 +45,39 @@ namespace CodeAnalyzers.Episerver.Test
             await Verify.VerifyAnalyzerAsync(test);
         }
 
+        [Fact(Skip = "TODO")]
+        public async Task IgnoreAbstractCatalogContentDataWithoutCatalogContentTypeAttribute()
+        {
+            var test = @"
+                using EPiServer.Core;
+                using EPiServer.Commerce.Catalog.ContentTypes;
+
+                namespace Test
+                {
+                    public abstract class NodeBase : NodeContent
+                    {
+                    }
+
+                    public abstract class ProductBase : ProductContent
+                    {
+                    }
+
+                    public abstract class VariationBase : VariationContent
+                    {
+                    }
+
+                    public abstract class BundleBase : BundleContent
+                    {
+                    }
+
+                    public abstract class PackageBase : PackageContent
+                    {
+                    }
+                }";
+
+            await Verify.VerifyAnalyzerAsync(test);
+        }
+
         [Fact]
         public async Task IgnoreOtherType()
         {
