@@ -14,10 +14,10 @@
 ### Examples
 | Code | Problem | Severity |
 |-----|---------|:-------:|
-| `[ContentType]` | **_No GUID_** | :no_entry: |
-| `[Display]` | **_No Name_** | :warning: |
-| `DataFactory` | **_Legacy_** | :warning: |
-| `ApprovalDB` | **_Internal_** | :warning: |
+| `[ContentType()]` | **_No GUID_** | :no_entry: |
+| `[Display()]` | **_No Name_** | :warning: |
+| `DataFactory...` | **_Legacy_** | :warning: |
+| `ApprovalDB...` | **_Internal_** | :warning: |
 
 [**See all rules**](/docs/rules/rules.md)
 
