@@ -102,7 +102,7 @@ namespace CodeAnalyzers.Episerver.DiagnosticAnalyzers.CSharp
                 var argument = contentAttribute.NamedArguments.FirstOrDefault(arg => string.Equals(arg.Key, tuple.ArgumentName, StringComparison.Ordinal));
                 if (string.IsNullOrEmpty(argument.Value.Value?.ToString()))
                 {
-                    ReportInvalidArgument(symbolContext, namedTypeSymbol, contentAttribute, tuple.Descriptor);
+                    ReportInvalidArgument(symbolContext, contentAttribute, tuple.Descriptor);
                 }
             }
         }
@@ -120,15 +120,13 @@ namespace CodeAnalyzers.Episerver.DiagnosticAnalyzers.CSharp
             return false;
         }
 
-        private static void ReportInvalidArgument(SymbolAnalysisContext symbolContext, INamedTypeSymbol namedType, AttributeData attribute, DiagnosticDescriptor descriptor)
+        private static void ReportInvalidArgument(SymbolAnalysisContext symbolContext, AttributeData attribute, DiagnosticDescriptor descriptor)
         {
             var node = attribute.ApplicationSyntaxReference?.GetSyntax();
             if (node != null)
             {
                 symbolContext.ReportDiagnostic(
-                    node.CreateDiagnostic(
-                        descriptor,
-                        namedType.ToDisplayString(SymbolDisplayFormat.CSharpShortErrorMessageFormat)));
+                    node.CreateDiagnostic(descriptor));
             }
         }
     }

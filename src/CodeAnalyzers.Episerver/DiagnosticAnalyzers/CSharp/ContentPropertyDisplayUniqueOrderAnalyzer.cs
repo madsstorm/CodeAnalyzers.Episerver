@@ -15,7 +15,6 @@ namespace CodeAnalyzers.Episerver.DiagnosticAnalyzers.CSharp
         public override ImmutableArray<DiagnosticDescriptor> SupportedDiagnostics =>
            ImmutableArray.Create(Descriptors.Epi2010ContentPropertyShouldHaveUniqueOrder);
 
-
         public override void Initialize(AnalysisContext context)
         {
             if (context is null) { return; }
@@ -25,8 +24,8 @@ namespace CodeAnalyzers.Episerver.DiagnosticAnalyzers.CSharp
 
             context.RegisterCompilationStartAction(compilationContext =>
             {
-                var contentTypeAttribute = compilationContext.Compilation.GetTypeByMetadataName(TypeNames.ContentTypeMetadataName);
-                if (contentTypeAttribute is null)
+                var iContentDataType = compilationContext.Compilation.GetTypeByMetadataName(TypeNames.IContentDataMetadataName);
+                if (iContentDataType is null)
                 {
                     return;
                 }
@@ -38,21 +37,18 @@ namespace CodeAnalyzers.Episerver.DiagnosticAnalyzers.CSharp
                 }
 
                 compilationContext.RegisterSymbolAction(
-                    symbolContext => AnalyzeSymbol(symbolContext, contentTypeAttribute, displayAttribute)
+                    symbolContext => AnalyzeSymbol(symbolContext, iContentDataType, displayAttribute)
                     , SymbolKind.NamedType);
             });
         }
 
         private void AnalyzeSymbol(
             SymbolAnalysisContext symbolContext,
-            INamedTypeSymbol contentTypeAttribute,
+            INamedTypeSymbol iContentDataType,
             INamedTypeSymbol displayAttribute)
         {
             var namedTypeSymbol = (INamedTypeSymbol)symbolContext.Symbol;
-            var attributes = namedTypeSymbol.GetAttributes();
-
-            var contentAttribute = attributes.FirstOrDefault(attr => contentTypeAttribute.IsAssignableFrom(attr.AttributeClass));
-            if (contentAttribute is null)
+            if(!iContentDataType.IsAssignableFrom(namedTypeSymbol))
             {
                 return;
             }

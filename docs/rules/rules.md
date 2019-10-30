@@ -19,6 +19,7 @@
 | Epi2008 | Content property should have a GroupName | Content | Warning |
 | Epi2009 | Content property should have an Order | Content | Warning |
 | Epi2010 | Content property should have a unique Order | Content | Warning |
+| Epi2011 | Avoid ContentArea property in block | Content | Info |
 | Epi3000 | Avoid using legacy DataFactory | Legacy | Warning |
 | Epi3001 | Avoid using legacy CacheManager | Legacy | Warning |
 | Epi3002 | Avoid using legacy log4net.LogManager | Legacy | Warning |

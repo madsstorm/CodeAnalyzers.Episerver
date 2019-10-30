@@ -104,6 +104,10 @@ namespace CodeAnalyzers.Episerver
             Rule("Epi2010", "Content property should have a unique Order", Content, Warning,
                 "{0} has duplicate Order", "Content property Orders should be unique for sorting in edit view.");
 
+        public static DiagnosticDescriptor Epi2011AvoidContentAreaPropertyInBlock { get; } =
+            Rule("Epi2011", "Avoid ContentArea property in block", Content, Info,
+                "Avoid ContentArea property in block", "ContentArea properties in blocks make it difficult for editors to manage nested content.");
+
         #endregion
 
         #region Legacy 3xxx
