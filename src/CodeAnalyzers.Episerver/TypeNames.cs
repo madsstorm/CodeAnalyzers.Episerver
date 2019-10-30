@@ -5,6 +5,8 @@
         public static readonly string IContentDataMetadataName = "EPiServer.Core.IContentData";
         public static readonly string IContentMediaMetadataName = "EPiServer.Core.IContentMedia";
         public static readonly string CatalogContentBaseMetadataName = "EPiServer.Commerce.Catalog.ContentTypes.CatalogContentBase";
+        public static readonly string BlockDataMetadataName = "EPiServer.Core.BlockData";
+        public static readonly string ContentAreaTypeMetadataName = "EPiServer.Core.ContentArea";
 
         public static readonly string ContentTypeMetadataName = "EPiServer.DataAnnotations.ContentTypeAttribute";
         public static readonly string CatalogContentTypeMetadataName = "EPiServer.Commerce.Catalog.DataAnnotations.CatalogContentTypeAttribute";                            

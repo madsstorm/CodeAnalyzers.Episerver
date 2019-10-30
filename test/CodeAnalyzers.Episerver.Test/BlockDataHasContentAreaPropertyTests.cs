@@ -7,7 +7,7 @@ namespace CodeAnalyzers.Episerver.Test
 {
     public class BlockDataHasContentAreaPropertyTests
     {
-        [Fact(Skip = "TODO")]
+        [Fact]
         public async Task IgnoreContentAreaPropertyInOtherContentData()
         {
             var test = @"
@@ -30,7 +30,28 @@ namespace CodeAnalyzers.Episerver.Test
             await Verify.VerifyAnalyzerAsync(test);
         }
 
-        [Fact(Skip = "TODO")]
+        [Fact]
+        public async Task IgnoreOtherProperties()
+        {
+            var test = @"
+                using EPiServer.Core;
+                using EPiServer.Commerce.Catalog.ContentTypes;
+
+                namespace Test
+                {
+                    public class BlockType : BlockData
+                    {
+                        public virtual string Title { get;set; }
+                        public virtual int Number { get;set; }
+                        public virtual bool Ready { get;set; }
+                        public virtual ContentReference Page { get;set; }
+                    }
+                }";
+
+            await Verify.VerifyAnalyzerAsync(test);
+        }
+
+        [Fact]
         public async Task DetectContentAreaPropertyInBlockData()
         {
             var test = @"
