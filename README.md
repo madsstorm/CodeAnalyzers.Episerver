@@ -16,8 +16,9 @@
 |-----|---------|:-------:|
 | `[ContentType()]` | **_No GUID_** | :no_entry: |
 | `[Display()]` | **_No Name_** | :warning: |
-| `DataFactory...` | **_Legacy_** | :warning: |
-| `ApprovalDB...` | **_Internal_** | :warning: |
+| `DataFactory` | **_Legacy_** | :warning: |
+| `ApprovalDB` | **_Internal_** | :warning: |
+| `class Block`<br>`{`<br>&nbsp;&nbsp;&nbsp;&nbsp;`ContentArea` | **_ContentArea<br>in Block_** | :information_source: |
 
 [**See all analyzer rules**](/docs/rules/rules.md)
 
