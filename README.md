@@ -15,10 +15,10 @@ The analyzers are installed per-project via a NuGet package, and are also execut
 ### Examples
 | Code | Problem | Severity |
 |-----|---------|:-------:|
-| `[ContentType()]` | **_No GUID_** | :no_entry: |
-| `[Display()]` | **_No Name_** | :warning: |
-| `DataFactory` | **_Legacy_** | :warning: |
-| `ApprovalDB` | **_Internal_** | :warning: |
+| `[ContentType(DisplayName="...")]` | **_Missing GUID_** | :no_entry: |
+| `[Display(Name="...")]` | **_Missing Description_** | :warning: |
+| `DataFactory.Instance` | **_Legacy type_** | :warning: |
+| `ApprovalDB.SaveAsync()` | **_Internal type_** | :warning: |
 | `class Block`<br>`{`<br>&nbsp;&nbsp;&nbsp;&nbsp;`ContentArea` | **_ContentArea<br>in Block_** | :information_source: |
 
 [**See all analyzer rules**](/docs/rules/rules.md)
