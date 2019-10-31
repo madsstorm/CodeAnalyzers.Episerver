@@ -9,7 +9,7 @@
 > **_Analyzes your code for Episerver best practices_**
 
 ### Intro
-**Code analyzers for Episerver** are [Roslyn](https://docs.microsoft.com/visualstudio/extensibility/getting-started-with-roslyn-analyzers) based analyzers that produce warnings in Visual Studio as you type.
+**Code analyzers for Episerver** are [Roslyn](https://docs.microsoft.com/visualstudio/extensibility/getting-started-with-roslyn-analyzers) based analyzers that produce warnings in Visual Studio as you type. Roslyn analyzers can be installed per-project via a NuGet package.
 
 ### Examples
 | Code | Problem | Severity |
