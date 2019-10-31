@@ -66,7 +66,7 @@ namespace CodeAnalyzers.Episerver.Test
         }
 
         [Fact]
-        public async Task DetectProductContentWithDuplicateOrder()
+        public async Task DetectPackageContentWithDuplicateOrder()
         {
             var test = @"
                 using EPiServer.DataAnnotations;
