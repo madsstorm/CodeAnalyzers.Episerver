@@ -19,7 +19,7 @@ The analyzers are installed per-project via a NuGet package, and are also execut
 | `[Display(Name="...")]` | **_Missing Description_** | :warning: |
 | `DataFactory.Instance` | **_Legacy type_** | :warning: |
 | `ApprovalDB.SaveAsync()` | **_Internal type_** | :warning: |
-| `class Block`<br>`{`<br>&nbsp;&nbsp;&nbsp;&nbsp;`ContentArea` | **_ContentArea<br>in Block_** | :information_source: |
+| `public class Block : BlockData`<br>`{`<br>&nbsp;&nbsp;&nbsp;&nbsp;`public virtual ContentArea ...` | **_ContentArea<br>in Block_** | :information_source: |
 
 [**See all analyzer rules**](/docs/rules/rules.md)
 
