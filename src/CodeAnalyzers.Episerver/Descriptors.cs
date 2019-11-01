@@ -42,7 +42,7 @@ namespace CodeAnalyzers.Episerver
 
         public static DiagnosticDescriptor Epi1004ContentDataShouldHaveContentTypeAttribute { get; } =
             Rule("Epi1004", "Content data should have ContentType attribute", Usage, Warning,
-                "Missing ContentType attribute", "The ContentType attribute should be used for all non-abstract content data types.");
+                "Missing ContentType attribute. Did you mean to make an abstract base class ?", "The ContentType attribute should be used for all non-abstract content data types.");
 
         public static DiagnosticDescriptor Epi1005CatalogContentTypeShouldImplementCatalogContentData { get; } =
             Rule("Epi1005", "Catalog content type should implement catalog content data", Usage, Warning,
@@ -50,7 +50,7 @@ namespace CodeAnalyzers.Episerver
 
         public static DiagnosticDescriptor Epi1006CatalogContentDataShouldHaveCatalogContentTypeAttribute { get; } =
             Rule("Epi1006", "Catalog content data should have CatalogContentType attribute", Usage, Warning,
-                "Missing CatalogContentType attribute", "The CatalogContentType attribute should be used for all non-abstract catalog content data types.");
+                "Missing CatalogContentType attribute. Did you mean to make an abstract base class ?", "The CatalogContentType attribute should be used for all non-abstract catalog content data types.");
 
         public static DiagnosticDescriptor Epi1007MediaDataShouldHaveMediaDescriptorAttribute { get; } =
             Rule("Epi1007", "Media data should have MediaDescriptor attribute", Usage, Warning,
@@ -82,7 +82,7 @@ namespace CodeAnalyzers.Episerver
 
         public static DiagnosticDescriptor Epi2005ContentDataShouldHaveImageUrlAttribute { get; } =
             Rule("Epi2005", "Content should have an ImageUrl attribute", Content, Warning,
-                "Missing ImageUrl attribute", "Content data should have an ImageUrl attribute for showing an icon in edit view.");
+                "Missing ImageUrl attribute. Did you mean to make an abstract base class ?", "Content data should have an ImageUrl attribute for showing an icon in edit view.");
 
         public static DiagnosticDescriptor Epi2006ContentPropertyShouldHaveName { get; } =
             Rule("Epi2006", "Content property should have a Name", Content, Warning,
