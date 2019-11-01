@@ -26,7 +26,7 @@ namespace CodeAnalyzers.Episerver
 
         public static DiagnosticDescriptor Epi1000ContentTypeMustHaveValidGuid { get; } =
             Rule("Epi1000", "Content type must have a valid GUID", Usage, Error,
-                "Missing GUID", "All content types must be identified by a valid GUID property.");
+                "Missing GUID", "All content types must be identified by a valid GUID property. If this content type has already been deployed to a live environment, you must find its existing GUID in Episerver Admin mode or the Episerver database.");
 
         public static DiagnosticDescriptor Epi1001ContentTypeMustHaveUniqueGuid { get; } =
             Rule("Epi1001", "Content type must have a unique GUID", Usage, Error,
