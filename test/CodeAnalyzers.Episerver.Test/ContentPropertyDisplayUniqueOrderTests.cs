@@ -175,15 +175,12 @@ namespace CodeAnalyzers.Episerver.Test
                     }
                 }";
 
-            await Verify.VerifyAnalyzerAsync(test,
-                Verify.Diagnostic(Descriptors.Epi2010ContentPropertyShouldHaveUniqueOrder).WithLocation(14, 47).WithArguments("PageType.Title"),
-                Verify.Diagnostic(Descriptors.Epi2010ContentPropertyShouldHaveUniqueOrder).WithLocation(17, 47).WithArguments("PageType.Intro"),
-                Verify.Diagnostic(Descriptors.Epi2010ContentPropertyShouldHaveUniqueOrder).WithLocation(20, 47).WithArguments("PageType.MainBody"),
-                Verify.Diagnostic(Descriptors.Epi2010ContentPropertyShouldHaveUniqueOrder).WithLocation(23, 47).WithArguments("PageType.Footer"),
-                Verify.Diagnostic(Descriptors.Epi2010ContentPropertyShouldHaveUniqueOrder).WithLocation(30, 47).WithArguments("BlockType.Title"),
-                Verify.Diagnostic(Descriptors.Epi2010ContentPropertyShouldHaveUniqueOrder).WithLocation(33, 47).WithArguments("BlockType.Intro"),
-                Verify.Diagnostic(Descriptors.Epi2010ContentPropertyShouldHaveUniqueOrder).WithLocation(46, 47).WithArguments("VariationType.Title"),
-                Verify.Diagnostic(Descriptors.Epi2010ContentPropertyShouldHaveUniqueOrder).WithLocation(49, 47).WithArguments("VariationType.Intro"));
+            await Verify.VerifyAnalyzerAsync(test, 
+                Verify.Diagnostic(Descriptors.Epi2010ContentPropertyShouldHaveUniqueOrder).WithLocation(13, 26).WithArguments("PageType.Title", "PageType.Intro"),
+                Verify.Diagnostic(Descriptors.Epi2010ContentPropertyShouldHaveUniqueOrder).WithLocation(16, 26).WithArguments("PageType.Intro", "PageType.MainBody"),
+                Verify.Diagnostic(Descriptors.Epi2010ContentPropertyShouldHaveUniqueOrder).WithLocation(19, 26).WithArguments("PageType.MainBody", "PageType.Footer"),
+                Verify.Diagnostic(Descriptors.Epi2010ContentPropertyShouldHaveUniqueOrder).WithLocation(29, 26).WithArguments("BlockType.Title", "BlockType.Intro"),
+                Verify.Diagnostic(Descriptors.Epi2010ContentPropertyShouldHaveUniqueOrder).WithLocation(45, 26).WithArguments("VariationType.Title", "VariationType.Intro"));
         }
     }
 }

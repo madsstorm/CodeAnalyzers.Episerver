@@ -60,19 +60,22 @@ namespace CodeAnalyzers.Episerver.DiagnosticAnalyzers.CSharp
                 .Select(property => TryGetAttribute(property, displayAttribute, out var attribute) ? (property, attribute) : default)
                 .Where(x => x != default);
 
-            var propertyOrders = propertyDisplayAttributes
-                .Select(tuple => TryGetOrder(tuple.attribute, out int order) ? (tuple.property, order) : default)
+            var propertyAttributeOrders = propertyDisplayAttributes
+                .Select(tuple => TryGetOrder(tuple.attribute, out int order) ? (tuple.property, tuple.attribute, order) : default)
                 .Where(x => x != default);
 
-            var propertyOrderGroups = propertyOrders.GroupBy(p => p.order);
+            var propertyAttributeOrderGroups = propertyAttributeOrders.GroupBy(p => p.order);
 
-            var duplicatePropertyOrderGroups = propertyOrderGroups.Where(x => x.Count() > 1);
+            var duplicatePropertyAttributeOrderGroups = propertyAttributeOrderGroups.Where(x => x.Count() > 1);
 
-            foreach(var group in  duplicatePropertyOrderGroups)
+            foreach(var group in duplicatePropertyAttributeOrderGroups)
             {
-                foreach(var (property, order) in group)
+                var propertyAttributeList = group.Select((tuple, index) => (tuple.property, tuple.attribute, index)).ToList();
+
+                foreach (var (property, attribute, index) in propertyAttributeList.Skip(1))
                 {
-                    ReportDuplicateOrder(symbolContext, property);
+                    var previous = propertyAttributeList[index - 1];
+                    ReportDuplicateOrder(symbolContext, previous.property, previous.attribute, property);
                 }
             }
         }
@@ -102,12 +105,17 @@ namespace CodeAnalyzers.Episerver.DiagnosticAnalyzers.CSharp
             return (attribute != null);
         }
 
-        private static void ReportDuplicateOrder(SymbolAnalysisContext symbolContext, IPropertySymbol property)
+        private static void ReportDuplicateOrder(SymbolAnalysisContext symbolContext, IPropertySymbol property, AttributeData attribute, IPropertySymbol duplicateProperty)
         {
-            symbolContext.ReportDiagnostic(
-                property.CreateDiagnostic(
-                    Descriptors.Epi2010ContentPropertyShouldHaveUniqueOrder,
-                    property.ToDisplayString(SymbolDisplayFormat.CSharpShortErrorMessageFormat)));
+            var node = attribute.ApplicationSyntaxReference?.GetSyntax();
+            if (node != null)
+            {
+                symbolContext.ReportDiagnostic(
+                    node.CreateDiagnostic(
+                        Descriptors.Epi2010ContentPropertyShouldHaveUniqueOrder,
+                        property.ToDisplayString(SymbolDisplayFormat.CSharpShortErrorMessageFormat),
+                        duplicateProperty.ToDisplayString(SymbolDisplayFormat.CSharpShortErrorMessageFormat)));
+            }
         }
     }
 }

@@ -102,7 +102,7 @@ namespace CodeAnalyzers.Episerver
 
         public static DiagnosticDescriptor Epi2010ContentPropertyShouldHaveUniqueOrder { get; } =
             Rule("Epi2010", "Content property should have a unique Order", Content, Warning,
-                "{0} has duplicate Order", "Content property Orders should be unique for sorting in edit view.");
+                "{0} has the same Order as {1}", "Content property Orders should be unique for sorting in edit view.");
 
         public static DiagnosticDescriptor Epi2011AvoidContentAreaPropertyInBlock { get; } =
             Rule("Epi2011", "Avoid ContentArea property in block", Content, Info,
