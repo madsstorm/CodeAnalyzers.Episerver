@@ -33,9 +33,11 @@ _Available at [nuget.episerver.com][nuget]_
 ## Configure
 Analyzer rule severity can be configured in a [ruleset file](https://docs.microsoft.com/visualstudio/code-quality/using-rule-sets-to-group-code-analysis-rules).
 
-## Requirements
+## Compatibility
 [![vs2019](docs/icon/vs2019.png)](#.#) <sup>**Visual Studio 2019**</sup>
 
 [![vs2017](docs/icon/vs2017.png)](#.#) <sup>**Visual Studio 2017 (15.5)+**</sup>
+
+<sup>**.NET Compiler Platform 2.6.1+**</sup>
 
 [nuget]: https://nuget.episerver.com/package/?id=CodeAnalyzers.Episerver
