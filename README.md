@@ -8,11 +8,11 @@
 
 > **_Analyzes your code for Episerver best practices_**
 
-### Intro
+## Intro
 **Code analyzers for Episerver** are [Roslyn](https://docs.microsoft.com/visualstudio/extensibility/getting-started-with-roslyn-analyzers) based analyzers that look for Episerver best practices and produce warnings ("squiggles") in Visual Studio as you type.
 The analyzers are installed per-project via a NuGet package, and are also executed by build servers.
 
-### Examples
+## Examples
 | Code | Problem | Severity |
 |-----|---------|:-------:|
 | `[ContentType(DisplayName="...")]` | **_Missing GUID_** | :no_entry: |
@@ -30,10 +30,10 @@ The analyzers are installed per-project via a NuGet package, and are also execut
 _Available at [nuget.episerver.com][nuget]_
 --->
 
-### Configure
+## Configure
 Analyzer rule severity can be configured in a [ruleset file](https://docs.microsoft.com/visualstudio/code-quality/using-rule-sets-to-group-code-analysis-rules).
 
-### Requirements
+## Requirements
 [![vs2019](docs/icon/vs2019.png)](#.#) <sup>**Visual Studio 2019**</sup>
 
 [![vs2017](docs/icon/vs2017.png)](#.#) <sup>**Visual Studio 2017 (15.5)+**</sup>
