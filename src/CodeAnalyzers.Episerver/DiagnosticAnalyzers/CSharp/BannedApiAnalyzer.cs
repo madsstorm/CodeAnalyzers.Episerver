@@ -4,6 +4,7 @@ using System;
 using System.Collections.Immutable;
 using CodeAnalyzers.Episerver.Extensions;
 using Microsoft.CodeAnalysis.Operations;
+using System.Linq;
 
 namespace CodeAnalyzers.Episerver.DiagnosticAnalyzers.CSharp
 {
@@ -11,6 +12,9 @@ namespace CodeAnalyzers.Episerver.DiagnosticAnalyzers.CSharp
     public class BannedApiAnalyzer : DiagnosticAnalyzer
     {
         private const string InternalNamespace = "Internal";
+
+        private readonly ImmutableArray<string> InternalRootNamespaces =
+            ImmutableArray.Create("EPiServer", "Mediachase");
 
         private readonly ImmutableArray<(string TypeName, DiagnosticDescriptor Descriptor)> BannedTypes =
             ImmutableArray.Create(
@@ -123,17 +127,17 @@ namespace CodeAnalyzers.Episerver.DiagnosticAnalyzers.CSharp
             return true;
         }
 
-        private static bool VerifyTypeInternal(Action<Diagnostic> reportDiagnostic, ITypeSymbol type, SyntaxNode syntaxNode)
+        private bool VerifyTypeInternal(Action<Diagnostic> reportDiagnostic, ITypeSymbol type, SyntaxNode syntaxNode)
         {
             var space = type.ContainingNamespace;
 
-            if (string.Equals(space?.MetadataName, InternalNamespace, StringComparison.Ordinal))
+            if (IsInternal(space))
             {
                 reportDiagnostic(
                     Diagnostic.Create(
                         Descriptors.Epi1002AvoidUsingInternalNamespaces,
                         syntaxNode?.GetLocation(),
-                        type.ToDisplayString(SymbolDisplayFormat.CSharpShortErrorMessageFormat)));
+                        type.ToDisplayString(SymbolDisplayFormat.CSharpErrorMessageFormat)));
 
                 return false;
             }
@@ -176,7 +180,7 @@ namespace CodeAnalyzers.Episerver.DiagnosticAnalyzers.CSharp
             {
                 var space = attribute.AttributeClass.ContainingNamespace;
 
-                if (string.Equals(space?.MetadataName, InternalNamespace, StringComparison.Ordinal))
+                if (IsInternal(space))
                 {
                     var node = attribute.ApplicationSyntaxReference?.GetSyntax();
                     if (node != null)
@@ -184,10 +188,35 @@ namespace CodeAnalyzers.Episerver.DiagnosticAnalyzers.CSharp
                         reportDiagnostic(
                             node.CreateDiagnostic(
                                 Descriptors.Epi1002AvoidUsingInternalNamespaces,
-                                attribute.AttributeClass.ToDisplayString(SymbolDisplayFormat.CSharpShortErrorMessageFormat)));
+                                attribute.AttributeClass.ToDisplayString(SymbolDisplayFormat.CSharpErrorMessageFormat)));
                     }
                 }
             }
+        }
+
+        private bool IsInternal(INamespaceSymbol space)
+        {
+            if(space is null)
+            {
+                return false;
+            }
+
+            if(!string.Equals(space.MetadataName, InternalNamespace, StringComparison.Ordinal))
+            {
+                return false; ;
+            }
+
+            while(!space.IsGlobalNamespace)
+            {
+                space = space.ContainingNamespace;
+                
+                if(InternalRootNamespaces.Any(root => string.Equals(space.MetadataName, root, StringComparison.Ordinal)))
+                {
+                    return true;
+                }
+            }
+
+            return false;
         }
     }
 }

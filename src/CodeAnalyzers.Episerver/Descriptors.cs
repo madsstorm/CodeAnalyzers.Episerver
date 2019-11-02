@@ -34,7 +34,7 @@ namespace CodeAnalyzers.Episerver
 
         public static DiagnosticDescriptor Epi1002AvoidUsingInternalNamespaces { get; } =
             Rule("Epi1002", "Avoid using Internal namespaces", Usage, Warning,
-                "Avoid using Internal type {0}", "Internal namespaces are not considered part of the public supported API.");
+                "Avoid using internal type {0}", "Internal namespaces are not considered part of the public supported API.");
 
         public static DiagnosticDescriptor Epi1003ContentTypeShouldImplementContentData { get; } =
             Rule("Epi1003", "Content type should implement content data", Usage, Warning,
