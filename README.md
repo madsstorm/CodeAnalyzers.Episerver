@@ -38,6 +38,6 @@ Analyzer rule severity can be configured in a [ruleset file](https://docs.micros
 
 [![vs2017](docs/icon/vs2017.png)](#.#) <sup>**Visual Studio 2017 (15.5)+**</sup>
 
-<sup>**.NET Compiler Platform 2.6.1+**</sup>
+[![microsoft](docs/icon/microsoft.png)](#.#) <sup>**.NET Compiler Platform 2.6.1+**</sup>
 
 [nuget]: https://nuget.episerver.com/package/?id=CodeAnalyzers.Episerver
