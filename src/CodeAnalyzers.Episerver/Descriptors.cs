@@ -78,7 +78,7 @@ namespace CodeAnalyzers.Episerver
 
         public static DiagnosticDescriptor Epi2005ContentDataShouldHaveImageUrlAttribute { get; } =
             Rule("Epi2005", "Content should have an ImageUrl attribute", Content, Warning,
-                "Missing ImageUrl attribute. Did you mean to make an abstract base class ?", "Content data should have an ImageUrl attribute for showing an icon in edit view.");
+                "Missing ImageUrl attribute", "Content data should have an ImageUrl attribute for showing an icon in edit view.");
 
         public static DiagnosticDescriptor Epi2006ContentPropertyShouldHaveName { get; } =
             Rule("Epi2006", "Content property should have a Name", Content, Warning,
