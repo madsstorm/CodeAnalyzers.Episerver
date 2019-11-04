@@ -2,9 +2,7 @@
 
 # Code analyzers for Episerver
 ![Build Status](https://dev.azure.com/madsstorm/CodeAnalyzers.Episerver/_apis/build/status/CodeAnalyzers.Episerver?branchName=master)
-<!---
 [![Nuget](https://img.shields.io/badge/nuget-v1.0-blue)][nuget]
---->
 
 > **_Analyzes your code for Episerver best practices_**
 
@@ -23,12 +21,10 @@ The analyzers are installed per-project via a NuGet package, and are also execut
 
 [**See all analyzer rules**](/docs/rules/rules.md)
 
-<!---
 ### Install
 `Install-Package CodeAnalyzers.Episerver`
 
 _Available at [nuget.episerver.com][nuget]_
---->
 
 ## Configure
 Analyzer rule severity can be configured in a [ruleset file](https://docs.microsoft.com/visualstudio/code-quality/using-rule-sets-to-group-code-analysis-rules).
