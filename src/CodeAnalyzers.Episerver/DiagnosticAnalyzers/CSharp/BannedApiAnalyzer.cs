@@ -63,11 +63,11 @@ namespace CodeAnalyzers.Episerver.DiagnosticAnalyzers.CSharp
                     break;
 
                 case IInvocationOperation invocation:
-                    VerifyType(operationContext.ReportDiagnostic, invocation.TargetMethod.ContainingType, operationContext.Operation.Syntax);
+                    VerifyType(operationContext.ReportDiagnostic, invocation.Instance?.Type ?? invocation.TargetMethod.ContainingType, operationContext.Operation.Syntax);
                     break;
 
                 case IMemberReferenceOperation memberReference:
-                    VerifyType(operationContext.ReportDiagnostic, memberReference.Member.ContainingType, operationContext.Operation.Syntax);
+                    VerifyType(operationContext.ReportDiagnostic, memberReference.Instance?.Type ?? memberReference.Member.ContainingType, operationContext.Operation.Syntax);
                     break;
 
                 case IArrayCreationOperation arrayCreation:

@@ -101,9 +101,9 @@ namespace CodeAnalyzers.Episerver.Test
                     }
                 }";
 
-            var expected = Verify.Diagnostic(Descriptors.Epi3000AvoidUsingDataFactory).WithLocation(10, 29);
-
-            await Verify.VerifyAnalyzerAsync(test, expected);
+            await Verify.VerifyAnalyzerAsync(test,
+                Verify.Diagnostic(Descriptors.Epi3000AvoidUsingDataFactory).WithLocation(10, 29),
+                Verify.Diagnostic(Descriptors.Epi3000AvoidUsingDataFactory).WithLocation(10, 29));
         }
 
         [Fact]

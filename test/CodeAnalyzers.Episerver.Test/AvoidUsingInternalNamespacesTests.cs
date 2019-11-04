@@ -15,6 +15,49 @@ namespace CodeAnalyzers.Episerver.Test
         }
 
         [Fact]
+        public async Task IgnoreInheritedInternalInvocation()
+        {
+            var test = @"
+                using EPiServer.Core;
+
+                namespace Test
+                {
+                    public class TypeName
+                    {
+                        public void Test()
+                        {
+                            LoaderOptions options = new LoaderOptions();
+                            LoaderOption result = options.Get<LoaderOption>();
+                        }
+                    }
+                }";
+
+            await Verify.VerifyAnalyzerAsync(test);
+        }
+
+        [Fact]
+        public async Task IgnoreInheritedInternalMemberReference()
+        {
+            var test = @"
+                using System;
+                using EPiServer.Core;
+
+                namespace Test
+                {
+                    public class TypeName
+                    {
+                        public void Test()
+                        {
+                            var options = new LoaderOptions();
+                            Func<LoaderOption, LoaderOptions> add = options.Add;
+                        }
+                    }
+                }";
+
+            await Verify.VerifyAnalyzerAsync(test);
+        }
+
+        [Fact]
         public async Task IgnoreOtherInternalNamespace()
         {
             var test = @"
