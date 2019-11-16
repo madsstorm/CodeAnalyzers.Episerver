@@ -44,6 +44,10 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Reference Include="System.Data.DataSetExtensions" />
+  </ItemGroup>
+  
+  <ItemGroup>
     <ProjectReference Include="..\..\src\CodeAnalyzers.Episerver\CodeAnalyzers.Episerver.csproj" />
   </ItemGroup>
 

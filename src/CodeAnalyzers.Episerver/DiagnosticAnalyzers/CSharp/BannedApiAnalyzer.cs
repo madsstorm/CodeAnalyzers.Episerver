@@ -16,15 +16,27 @@ namespace CodeAnalyzers.Episerver.DiagnosticAnalyzers.CSharp
         private readonly ImmutableArray<string> InternalRootNamespaces =
             ImmutableArray.Create("EPiServer", "Mediachase");
 
-        private readonly ImmutableArray<(string TypeName, DiagnosticDescriptor Descriptor)> BannedTypes =
+        private readonly ImmutableArray<(DiagnosticDescriptor Descriptor, ImmutableArray<string> TypeNames)> BannedTypes =
             ImmutableArray.Create(
-                ("EPiServer.DataFactory", Descriptors.Epi3000AvoidUsingDataFactory),
-                ("EPiServer.CacheManager", Descriptors.Epi3001AvoidUsingCacheManager),
-                ("log4net.LogManager", Descriptors.Epi3002AvoidUsingLog4NetLogManager));
+                (Descriptors.Epi1007AvoidUsingConcreteOrderClasses,
+                    ImmutableArray.Create(
+                        "Mediachase.Commerce.Orders.Cart",
+                        "Mediachase.Commerce.Orders.LineItem",
+                        "Mediachase.Commerce.Orders.OrderAddress",
+                        "Mediachase.Commerce.Orders.OrderForm",
+                        "Mediachase.Commerce.Orders.OrderNote",
+                        "Mediachase.Commerce.Orders.PaymentPlan",
+                        "Mediachase.Commerce.Orders.PurchaseOrder",
+                        "Mediachase.Commerce.Orders.Shipment",
+                        "Mediachase.Commerce.Orders.TaxValue")),
+                (Descriptors.Epi3000AvoidUsingDataFactory, ImmutableArray.Create("EPiServer.DataFactory")),
+                (Descriptors.Epi3001AvoidUsingCacheManager, ImmutableArray.Create("EPiServer.CacheManager")),
+                (Descriptors.Epi3002AvoidUsingLog4NetLogManager, ImmutableArray.Create("log4net.LogManager")));
 
         public override ImmutableArray<DiagnosticDescriptor> SupportedDiagnostics =>
             ImmutableArray.Create(
                 Descriptors.Epi1002AvoidUsingInternalNamespaces,
+                Descriptors.Epi1007AvoidUsingConcreteOrderClasses,
                 Descriptors.Epi3000AvoidUsingDataFactory,
                 Descriptors.Epi3001AvoidUsingCacheManager,
                 Descriptors.Epi3002AvoidUsingLog4NetLogManager);
@@ -111,16 +123,20 @@ namespace CodeAnalyzers.Episerver.DiagnosticAnalyzers.CSharp
         {
             string typeName = type.ToDisplayString(SymbolDisplayFormat.CSharpErrorMessageFormat);
 
-            foreach (var pair in BannedTypes)
+            foreach (var entry in BannedTypes)
             {
-                if (string.Equals(typeName, pair.TypeName, StringComparison.Ordinal))
+                foreach (string bannedType in entry.TypeNames)
                 {
-                    reportDiagnostic(
-                        Diagnostic.Create(
-                            pair.Descriptor,
-                            syntaxNode?.GetLocation()));
+                    if (string.Equals(typeName, bannedType, StringComparison.Ordinal))
+                    {
+                        reportDiagnostic(
+                            Diagnostic.Create(
+                                entry.Descriptor,
+                                syntaxNode?.GetLocation(),
+                                typeName));
 
-                    return false;
+                        return false;
+                    }
                 }
             }
 

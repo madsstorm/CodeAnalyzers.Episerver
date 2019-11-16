@@ -52,6 +52,10 @@ namespace CodeAnalyzers.Episerver
             Rule("Epi1006", "Catalog content data should have CatalogContentType attribute", Usage, Warning,
                 "Missing CatalogContentType attribute. Did you mean to make an abstract base class ?", "The CatalogContentType attribute should be used for all non-abstract catalog content data types.");
 
+        public static DiagnosticDescriptor Epi1007AvoidUsingConcreteOrderClasses { get; } =
+            Rule("Epi1007", "Avoid using concrete Order classes", Usage, Warning,
+                "Avoid using concrete type {0}", "Use order abstraction interfaces like IPurchaseOrder, ILineItem and similar interfaces.");
+
         #endregion
 
         #region Content 2xxx
