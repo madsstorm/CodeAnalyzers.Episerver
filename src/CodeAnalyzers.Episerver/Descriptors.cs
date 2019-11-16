@@ -124,6 +124,10 @@ namespace CodeAnalyzers.Episerver
             Rule("Epi3002", "Avoid using legacy log4net.LogManager", Legacy, Warning,
                 "Avoid using legacy log4net.LogManager", "Use the log abstraction EPiServer.Logging.LogManager");
 
+        public static DiagnosticDescriptor Epi3003AvoidUsingOrderContext { get; } =
+            Rule("Epi3003", "Avoid using legacy OrderContext", Legacy, Warning,
+                "Avoid using legacy OrderContext", "This API has been replaced by the IOrderRepository and IOrderSearchService interfaces.");
+
         #endregion
 
     }

@@ -23,3 +23,4 @@
 | Epi3000 | Avoid using legacy DataFactory | Legacy | Warning |
 | Epi3001 | Avoid using legacy CacheManager | Legacy | Warning |
 | Epi3002 | Avoid using legacy log4net.LogManager | Legacy | Warning |
+| Epi3003 | Avoid using legacy OrderContext | Legacy | Warning |

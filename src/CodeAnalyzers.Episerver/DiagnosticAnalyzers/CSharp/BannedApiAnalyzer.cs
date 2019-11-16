@@ -31,7 +31,8 @@ namespace CodeAnalyzers.Episerver.DiagnosticAnalyzers.CSharp
                         "Mediachase.Commerce.Orders.TaxValue")),
                 (Descriptors.Epi3000AvoidUsingDataFactory, ImmutableArray.Create("EPiServer.DataFactory")),
                 (Descriptors.Epi3001AvoidUsingCacheManager, ImmutableArray.Create("EPiServer.CacheManager")),
-                (Descriptors.Epi3002AvoidUsingLog4NetLogManager, ImmutableArray.Create("log4net.LogManager")));
+                (Descriptors.Epi3002AvoidUsingLog4NetLogManager, ImmutableArray.Create("log4net.LogManager")),
+                (Descriptors.Epi3003AvoidUsingOrderContext, ImmutableArray.Create("Mediachase.Commerce.Orders.OrderContext")));
 
         public override ImmutableArray<DiagnosticDescriptor> SupportedDiagnostics =>
             ImmutableArray.Create(
@@ -39,7 +40,8 @@ namespace CodeAnalyzers.Episerver.DiagnosticAnalyzers.CSharp
                 Descriptors.Epi1007AvoidUsingConcreteOrderClasses,
                 Descriptors.Epi3000AvoidUsingDataFactory,
                 Descriptors.Epi3001AvoidUsingCacheManager,
-                Descriptors.Epi3002AvoidUsingLog4NetLogManager);
+                Descriptors.Epi3002AvoidUsingLog4NetLogManager,
+                Descriptors.Epi3003AvoidUsingOrderContext);
 
         public override void Initialize(AnalysisContext analysisContext)
         {
