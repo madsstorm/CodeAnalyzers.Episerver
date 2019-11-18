@@ -126,7 +126,7 @@ namespace CodeAnalyzers.Episerver
 
         public static DiagnosticDescriptor Epi3003AvoidUsingOrderContext { get; } =
             Rule("Epi3003", "Avoid using legacy OrderContext", Legacy, Warning,
-                "Avoid using legacy OrderContext", "This API has been replaced by the IOrderRepository and IOrderSearchService interfaces.");
+                "Avoid using legacy OrderContext", "This API has been replaced by the IOrderRepository, IOrderEvents and IOrderSearchService interfaces.");
 
         #endregion
 
