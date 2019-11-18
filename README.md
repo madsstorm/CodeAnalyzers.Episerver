@@ -2,7 +2,7 @@
 
 # Code analyzers for Episerver
 ![Build Status](https://dev.azure.com/madsstorm/CodeAnalyzers.Episerver/_apis/build/status/CodeAnalyzers.Episerver?branchName=master)
-[![Nuget](https://img.shields.io/badge/nuget-v1.0.1-blue)][nuget]
+[![Nuget](https://img.shields.io/badge/nuget-v1.1-blue)][nuget]
 
 > **_Analyzes your code for Episerver best practices_**
 
