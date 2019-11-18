@@ -20,11 +20,13 @@ namespace CodeAnalyzers.Episerver.DiagnosticAnalyzers.CSharp
             ImmutableArray.Create(
                 (Descriptors.Epi1007AvoidUsingConcreteOrderClasses,
                     ImmutableArray.Create(
+                        "Mediachase.Commerce.Orders.OrderGroup",
                         "Mediachase.Commerce.Orders.Cart",
                         "Mediachase.Commerce.Orders.LineItem",
                         "Mediachase.Commerce.Orders.OrderAddress",
                         "Mediachase.Commerce.Orders.OrderForm",
                         "Mediachase.Commerce.Orders.OrderNote",
+                        "Mediachase.Commerce.Orders.Payment",
                         "Mediachase.Commerce.Orders.PaymentPlan",
                         "Mediachase.Commerce.Orders.PurchaseOrder",
                         "Mediachase.Commerce.Orders.Shipment",
