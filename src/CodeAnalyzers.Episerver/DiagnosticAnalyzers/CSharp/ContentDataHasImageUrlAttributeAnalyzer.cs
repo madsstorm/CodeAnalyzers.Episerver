@@ -10,9 +10,14 @@ namespace CodeAnalyzers.Episerver.DiagnosticAnalyzers.CSharp
     [DiagnosticAnalyzer(LanguageNames.CSharp)]
     public class ContentDataHasImageUrlAttributeAnalyzer : DiagnosticAnalyzer
     {
-        // Ignore content data derived from these types
-        private readonly ImmutableArray<string> IgnoredRootTypeNames =
-            ImmutableArray.Create(TypeNames.IContentMediaMetadataName);
+        // Detect content data derived from these types
+        private readonly ImmutableArray<string> RootTypeNames =
+            ImmutableArray.Create(
+                TypeNames.PageDataMetadataName,
+                TypeNames.BlockDataMetadataName,
+                TypeNames.CatalogContentBaseMetadataName,
+                TypeNames.PromotionDataMetadataName,
+                TypeNames.SalesCampaignMetadataName);
 
         public override ImmutableArray<DiagnosticDescriptor> SupportedDiagnostics =>
             ImmutableArray.Create(Descriptors.Epi2005ContentDataShouldHaveImageUrlAttribute);
@@ -26,9 +31,7 @@ namespace CodeAnalyzers.Episerver.DiagnosticAnalyzers.CSharp
 
             context.RegisterCompilationStartAction(compilationContext =>
             {
-                var ignoredRootTypes =
-                    IgnoredRootTypeNames.Select(root => compilationContext.Compilation.GetTypeByMetadataName(root))
-                        .Where(symbol => symbol != null);
+                var rootTypes = RootTypeNames.Select(r => compilationContext.Compilation.GetTypeByMetadataName(r)).Where(s => s != null);
 
                 var iContentDataType = compilationContext.Compilation.GetTypeByMetadataName(TypeNames.IContentDataMetadataName);
                 if (iContentDataType is null)
@@ -43,7 +46,7 @@ namespace CodeAnalyzers.Episerver.DiagnosticAnalyzers.CSharp
                 }
 
                 compilationContext.RegisterSymbolAction(
-                    symbolContext => AnalyzeSymbol(symbolContext, iContentDataType, imageUrlType, ignoredRootTypes)
+                    symbolContext => AnalyzeSymbol(symbolContext, iContentDataType, imageUrlType, rootTypes)
                     , SymbolKind.NamedType);
             });
         }
@@ -52,7 +55,7 @@ namespace CodeAnalyzers.Episerver.DiagnosticAnalyzers.CSharp
             SymbolAnalysisContext symbolContext,
             INamedTypeSymbol iContentDataType,
             INamedTypeSymbol imageUrlType,
-            IEnumerable<INamedTypeSymbol> ignoredRootTypes)
+            IEnumerable<INamedTypeSymbol> rootTypes)
         {
             var namedTypeSymbol = (INamedTypeSymbol)symbolContext.Symbol;
 
@@ -66,12 +69,9 @@ namespace CodeAnalyzers.Episerver.DiagnosticAnalyzers.CSharp
                 return;
             }
 
-            foreach(var rootType in ignoredRootTypes)
+            if(!rootTypes.Any(root => root.IsAssignableFrom(namedTypeSymbol)))
             {
-                if(rootType.IsAssignableFrom(namedTypeSymbol))
-                {
-                    return;
-                }
+                return;
             }
 
             var attributes = namedTypeSymbol.GetAttributes();

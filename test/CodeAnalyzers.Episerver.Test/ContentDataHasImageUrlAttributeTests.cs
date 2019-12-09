@@ -62,7 +62,7 @@ namespace CodeAnalyzers.Episerver.Test
         }
 
         [Fact]
-        public async Task IgnoreExcludedContentDataWithoutImageUrl()
+        public async Task IgnoreMediaDataWithoutImageUrl()
         {
             var test = @"
                 using EPiServer.DataAnnotations;
@@ -71,6 +71,23 @@ namespace CodeAnalyzers.Episerver.Test
                 namespace Test
                 {
                     public class MediaType : MediaData
+                    {
+                    }
+                }";
+
+            await Verify.VerifyAnalyzerAsync(test);
+        }
+
+        [Fact]
+        public async Task IgnoreUnknownContentDataWithoutImageUrl()
+        {
+            var test = @"
+                using EPiServer.DataAnnotations;
+                using EPiServer.Core;
+
+                namespace Test
+                {
+                    public class UnknownContentType : StandardContentBase
                     {
                     }
                 }";
@@ -172,7 +189,7 @@ namespace CodeAnalyzers.Episerver.Test
         }
 
         [Fact]
-        public async Task DetectContentDataWithoutImageUrl()
+        public async Task DetectPageDataWithoutImageUrl()
         {
             var test = @"
                 using EPiServer.DataAnnotations;
@@ -180,7 +197,152 @@ namespace CodeAnalyzers.Episerver.Test
 
                 namespace Test
                 {
-                    public class TypeName : PageData
+                    public class PageType : PageData
+                    {
+                    }
+                }";
+
+            await Verify.VerifyAnalyzerAsync(test,
+                Verify.Diagnostic(Descriptors.Epi2005ContentDataShouldHaveImageUrlAttribute).WithLocation(7, 34));
+        }
+
+        [Fact]
+        public async Task DetectBlockDataWithoutImageUrl()
+        {
+            var test = @"
+                using EPiServer.DataAnnotations;
+                using EPiServer.Core;
+
+                namespace Test
+                {
+                    public class BlockType : BlockData
+                    {
+                    }
+                }";
+
+            await Verify.VerifyAnalyzerAsync(test,
+                Verify.Diagnostic(Descriptors.Epi2005ContentDataShouldHaveImageUrlAttribute).WithLocation(7, 34));
+        }
+
+        [Fact]
+        public async Task DetectProductDataWithoutImageUrl()
+        {
+            var test = @"
+                using EPiServer.Commerce.Catalog.ContentTypes;
+                using EPiServer.Core;
+
+                namespace Test
+                {
+                    public class ProductType : ProductContent
+                    {
+                    }
+                }";
+
+            await Verify.VerifyAnalyzerAsync(test,
+                Verify.Diagnostic(Descriptors.Epi2005ContentDataShouldHaveImageUrlAttribute).WithLocation(7, 34));
+        }
+
+        [Fact]
+        public async Task DetectVariationDataWithoutImageUrl()
+        {
+            var test = @"
+                using EPiServer.Commerce.Catalog.ContentTypes;
+                using EPiServer.Core;
+
+                namespace Test
+                {
+                    public class VariationType : VariationContent
+                    {
+                    }
+                }";
+
+            await Verify.VerifyAnalyzerAsync(test,
+                Verify.Diagnostic(Descriptors.Epi2005ContentDataShouldHaveImageUrlAttribute).WithLocation(7, 34));
+        }
+
+        [Fact]
+        public async Task DetectBundleDataWithoutImageUrl()
+        {
+            var test = @"
+                using EPiServer.Commerce.Catalog.ContentTypes;
+                using EPiServer.Core;
+
+                namespace Test
+                {
+                    public class BundleType : BundleContent
+                    {
+                    }
+                }";
+
+            await Verify.VerifyAnalyzerAsync(test,
+                Verify.Diagnostic(Descriptors.Epi2005ContentDataShouldHaveImageUrlAttribute).WithLocation(7, 34));
+        }
+
+        [Fact]
+        public async Task DetectPackageDataWithoutImageUrl()
+        {
+            var test = @"
+                using EPiServer.Commerce.Catalog.ContentTypes;
+                using EPiServer.Core;
+
+                namespace Test
+                {
+                    public class PackageType : PackageContent
+                    {
+                    }
+                }";
+
+            await Verify.VerifyAnalyzerAsync(test,
+                Verify.Diagnostic(Descriptors.Epi2005ContentDataShouldHaveImageUrlAttribute).WithLocation(7, 34));
+        }
+
+        [Fact]
+        public async Task DetectNodeDataWithoutImageUrl()
+        {
+            var test = @"
+                using EPiServer.Commerce.Catalog.ContentTypes;
+                using EPiServer.Core;
+
+                namespace Test
+                {
+                    public class NodeType : NodeContent
+                    {
+                    }
+                }";
+
+            await Verify.VerifyAnalyzerAsync(test,
+                Verify.Diagnostic(Descriptors.Epi2005ContentDataShouldHaveImageUrlAttribute).WithLocation(7, 34));
+        }
+
+        [Fact]
+        public async Task DetectPromotionDataWithoutImageUrl()
+        {
+            var test = @"
+                using EPiServer.Commerce.Marketing;
+                using EPiServer.Core;
+
+                namespace Test
+                {
+                    public class PromotionType : PromotionData
+                    {
+                        public override DiscountType DiscountType => DiscountType.LineItem;
+                    }
+                }";
+
+            await Verify.VerifyAnalyzerAsync(test,
+                Verify.Diagnostic(Descriptors.Epi2005ContentDataShouldHaveImageUrlAttribute).WithLocation(7, 34));
+        }
+
+        [Fact]
+        public async Task DetectSalesCampaignWithoutImageUrl()
+        {
+            var test = @"
+                using EPiServer.Commerce.Marketing;
+                using EPiServer.Core;
+
+                namespace Test
+                {
+                    public class SalesCampaignType : SalesCampaign
                     {
                     }
                 }";
