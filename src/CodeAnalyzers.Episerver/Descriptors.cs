@@ -108,6 +108,11 @@ namespace CodeAnalyzers.Episerver
             Rule("Epi2011", "Avoid ContentArea property in block", Content, Info,
                 "Avoid ContentArea property in block", "ContentArea properties in blocks make it difficult for editors to manage nested content.");
 
+        public static DiagnosticDescriptor Epi2012ContentDataShouldHaveAvailableContentTypesAttribute { get; } =
+            Rule("Epi2012", "Content should have AvailableContentTypes attribute", Content, Info,
+                "Missing AvailableContentTypes attribute", "Content data should have an AvailableContentTypes attribute for restricting child content types.");
+
+
         #endregion
 
         #region Legacy 3xxx
