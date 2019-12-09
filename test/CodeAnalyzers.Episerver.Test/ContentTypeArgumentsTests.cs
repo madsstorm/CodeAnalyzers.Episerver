@@ -28,7 +28,7 @@ namespace CodeAnalyzers.Episerver.Test
         }
 
         [Fact]
-        public async Task IgnoreExcludedContentTypeWithoutArguments()
+        public async Task IgnoreMediaDataWithoutArguments()
         {
             var test = @"
                 using EPiServer.DataAnnotations;
@@ -38,6 +38,24 @@ namespace CodeAnalyzers.Episerver.Test
                 {
                     [ContentType()]
                     public class MediaType : MediaData
+                    {
+                    }
+                }";
+
+            await Verify.VerifyAnalyzerAsync(test);
+        }
+
+        [Fact]
+        public async Task IgnoreUnknownContentDataWithoutArguments()
+        {
+            var test = @"
+                using EPiServer.DataAnnotations;
+                using EPiServer.Core;
+
+                namespace Test
+                {
+                    [ContentType()]
+                    public class UnknownType : StandardContentBase
                     {
                     }
                 }";
@@ -74,7 +92,7 @@ namespace CodeAnalyzers.Episerver.Test
         }
 
         [Fact]
-        public async Task DetectContentTypeWithMissingArguments()
+        public async Task DetectPageDataWithMissingArguments()
         {
             var test = @"
                 using EPiServer.DataAnnotations;
@@ -83,7 +101,7 @@ namespace CodeAnalyzers.Episerver.Test
                 namespace Test
                 {
                     [ContentType]
-                    public class TypeName : PageData
+                    public class PageType : PageData
                     {
                     }
                 }";
@@ -96,7 +114,52 @@ namespace CodeAnalyzers.Episerver.Test
         }
 
         [Fact]
-        public async Task DetectCatalogContentTypeWithMissingArguments()
+        public async Task DetectBlockDataWithMissingArguments()
+        {
+            var test = @"
+                using EPiServer.DataAnnotations;
+                using EPiServer.Core;
+
+                namespace Test
+                {
+                    [ContentType]
+                    public class BlockType : BlockData
+                    {
+                    }
+                }";
+
+            await Verify.VerifyAnalyzerAsync(test,
+                Verify.Diagnostic(Descriptors.Epi2000ContentTypeShouldHaveDisplayName).WithLocation(7, 22),
+                Verify.Diagnostic(Descriptors.Epi2001ContentTypeShouldHaveDescription).WithLocation(7, 22),
+                Verify.Diagnostic(Descriptors.Epi2002ContentTypeShouldHaveGroupName).WithLocation(7, 22),
+                Verify.Diagnostic(Descriptors.Epi2003ContentTypeShouldHaveOrder).WithLocation(7, 22));
+        }
+
+        [Fact]
+        public async Task DetectProductDataWithMissingArguments()
+        {
+            var test = @"
+                using EPiServer.Commerce.Catalog.DataAnnotations;
+                using EPiServer.Commerce.Catalog.ContentTypes;
+                using EPiServer.Core;
+
+                namespace Test
+                {
+                    [CatalogContentType]
+                    public class ProductType : ProductContent
+                    {
+                    }
+                }";
+
+            await Verify.VerifyAnalyzerAsync(test,
+                Verify.Diagnostic(Descriptors.Epi2000ContentTypeShouldHaveDisplayName).WithLocation(8, 22),
+                Verify.Diagnostic(Descriptors.Epi2001ContentTypeShouldHaveDescription).WithLocation(8, 22),
+                Verify.Diagnostic(Descriptors.Epi2002ContentTypeShouldHaveGroupName).WithLocation(8, 22),
+                Verify.Diagnostic(Descriptors.Epi2003ContentTypeShouldHaveOrder).WithLocation(8, 22));
+        }
+
+        [Fact]
+        public async Task DetectVariationDataWithMissingArguments()
         {
             var test = @"
                 using EPiServer.Commerce.Catalog.DataAnnotations;
@@ -119,7 +182,123 @@ namespace CodeAnalyzers.Episerver.Test
         }
 
         [Fact]
-        public async Task DetectCustomContentTypeWithMissingArguments()
+        public async Task DetectBundleDataWithMissingArguments()
+        {
+            var test = @"
+                using EPiServer.Commerce.Catalog.DataAnnotations;
+                using EPiServer.Commerce.Catalog.ContentTypes;
+                using EPiServer.Core;
+
+                namespace Test
+                {
+                    [CatalogContentType]
+                    public class BundleType : BundleContent
+                    {
+                    }
+                }";
+
+            await Verify.VerifyAnalyzerAsync(test,
+                Verify.Diagnostic(Descriptors.Epi2000ContentTypeShouldHaveDisplayName).WithLocation(8, 22),
+                Verify.Diagnostic(Descriptors.Epi2001ContentTypeShouldHaveDescription).WithLocation(8, 22),
+                Verify.Diagnostic(Descriptors.Epi2002ContentTypeShouldHaveGroupName).WithLocation(8, 22),
+                Verify.Diagnostic(Descriptors.Epi2003ContentTypeShouldHaveOrder).WithLocation(8, 22));
+        }
+
+        [Fact]
+        public async Task DetectPackageDataWithMissingArguments()
+        {
+            var test = @"
+                using EPiServer.Commerce.Catalog.DataAnnotations;
+                using EPiServer.Commerce.Catalog.ContentTypes;
+                using EPiServer.Core;
+
+                namespace Test
+                {
+                    [CatalogContentType]
+                    public class PackageType : PackageContent
+                    {
+                    }
+                }";
+
+            await Verify.VerifyAnalyzerAsync(test,
+                Verify.Diagnostic(Descriptors.Epi2000ContentTypeShouldHaveDisplayName).WithLocation(8, 22),
+                Verify.Diagnostic(Descriptors.Epi2001ContentTypeShouldHaveDescription).WithLocation(8, 22),
+                Verify.Diagnostic(Descriptors.Epi2002ContentTypeShouldHaveGroupName).WithLocation(8, 22),
+                Verify.Diagnostic(Descriptors.Epi2003ContentTypeShouldHaveOrder).WithLocation(8, 22));
+        }
+
+        [Fact]
+        public async Task DetectNodeDataWithMissingArguments()
+        {
+            var test = @"
+                using EPiServer.Commerce.Catalog.DataAnnotations;
+                using EPiServer.Commerce.Catalog.ContentTypes;
+                using EPiServer.Core;
+
+                namespace Test
+                {
+                    [CatalogContentType]
+                    public class NodeType : NodeContent
+                    {
+                    }
+                }";
+
+            await Verify.VerifyAnalyzerAsync(test,
+                Verify.Diagnostic(Descriptors.Epi2000ContentTypeShouldHaveDisplayName).WithLocation(8, 22),
+                Verify.Diagnostic(Descriptors.Epi2001ContentTypeShouldHaveDescription).WithLocation(8, 22),
+                Verify.Diagnostic(Descriptors.Epi2002ContentTypeShouldHaveGroupName).WithLocation(8, 22),
+                Verify.Diagnostic(Descriptors.Epi2003ContentTypeShouldHaveOrder).WithLocation(8, 22));
+        }
+
+        [Fact]
+        public async Task DetectPromotionDataWithMissingArguments()
+        {
+            var test = @"
+                using EPiServer.Commerce.Marketing;
+                using EPiServer.DataAnnotations;
+                using EPiServer.Core;
+
+                namespace Test
+                {
+                    [ContentType]
+                    public class PromotionType : PromotionData
+                    {
+                        public override DiscountType DiscountType => DiscountType.LineItem;
+                    }
+                }";
+
+            await Verify.VerifyAnalyzerAsync(test,
+                Verify.Diagnostic(Descriptors.Epi2000ContentTypeShouldHaveDisplayName).WithLocation(8, 22),
+                Verify.Diagnostic(Descriptors.Epi2001ContentTypeShouldHaveDescription).WithLocation(8, 22),
+                Verify.Diagnostic(Descriptors.Epi2002ContentTypeShouldHaveGroupName).WithLocation(8, 22),
+                Verify.Diagnostic(Descriptors.Epi2003ContentTypeShouldHaveOrder).WithLocation(8, 22));
+        }
+
+        [Fact]
+        public async Task DetectSalesCampaignWithMissingArguments()
+        {
+            var test = @"
+                using EPiServer.Commerce.Marketing;
+                using EPiServer.DataAnnotations;
+                using EPiServer.Core;
+
+                namespace Test
+                {
+                    [ContentType]
+                    public class SalesCampaignType : SalesCampaign
+                    {
+                    }
+                }";
+
+            await Verify.VerifyAnalyzerAsync(test,
+                Verify.Diagnostic(Descriptors.Epi2000ContentTypeShouldHaveDisplayName).WithLocation(8, 22),
+                Verify.Diagnostic(Descriptors.Epi2001ContentTypeShouldHaveDescription).WithLocation(8, 22),
+                Verify.Diagnostic(Descriptors.Epi2002ContentTypeShouldHaveGroupName).WithLocation(8, 22),
+                Verify.Diagnostic(Descriptors.Epi2003ContentTypeShouldHaveOrder).WithLocation(8, 22));
+        }
+
+        [Fact]
+        public async Task DetectCustomContentTypeAttributeWithMissingArguments()
         {
             var test = @"
                 using EPiServer.Commerce.Catalog.ContentTypes;

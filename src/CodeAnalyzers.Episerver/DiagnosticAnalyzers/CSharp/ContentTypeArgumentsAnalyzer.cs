@@ -11,9 +11,14 @@ namespace CodeAnalyzers.Episerver.DiagnosticAnalyzers.CSharp
     [DiagnosticAnalyzer(LanguageNames.CSharp)]
     public class ContentTypeArgumentsAnalyzer : DiagnosticAnalyzer
     {
-        // Ignore content data derived from these types
-        private readonly ImmutableArray<string> IgnoredRootTypeNames =
-            ImmutableArray.Create(TypeNames.IContentMediaMetadataName);
+        // Detect content data derived from these types
+        private readonly ImmutableArray<string> RootTypeNames =
+            ImmutableArray.Create(
+                TypeNames.PageDataMetadataName,
+                TypeNames.BlockDataMetadataName,
+                TypeNames.CatalogContentBaseMetadataName,
+                TypeNames.PromotionDataMetadataName,
+                TypeNames.SalesCampaignMetadataName);
 
         private readonly ImmutableArray<(string ArgumentName, DiagnosticDescriptor Descriptor, bool AssumeInherited)> ContentTypeArguments =
             ImmutableArray.Create(
@@ -43,8 +48,8 @@ namespace CodeAnalyzers.Episerver.DiagnosticAnalyzers.CSharp
 
             context.RegisterCompilationStartAction(compilationContext =>
             {
-                var ignoredRootTypes = 
-                    IgnoredRootTypeNames.Select(root => compilationContext.Compilation.GetTypeByMetadataName(root))
+                var rootTypes = 
+                    RootTypeNames.Select(root => compilationContext.Compilation.GetTypeByMetadataName(root))
                         .Where(symbol => symbol != null);
 
                 var contentTypeAttribute = compilationContext.Compilation.GetTypeByMetadataName(TypeNames.ContentTypeMetadataName);
@@ -58,7 +63,7 @@ namespace CodeAnalyzers.Episerver.DiagnosticAnalyzers.CSharp
                         .Where(symbol => symbol != null);
 
                 compilationContext.RegisterSymbolAction(
-                    symbolContext => AnalyzeSymbol(symbolContext, contentTypeAttribute, knownContentTypeAttributes, ignoredRootTypes)
+                    symbolContext => AnalyzeSymbol(symbolContext, contentTypeAttribute, knownContentTypeAttributes, rootTypes)
                     , SymbolKind.NamedType);
             });
         }
@@ -67,16 +72,13 @@ namespace CodeAnalyzers.Episerver.DiagnosticAnalyzers.CSharp
             SymbolAnalysisContext symbolContext,
             INamedTypeSymbol contentTypeAttribute,
             IEnumerable<INamedTypeSymbol> knownContentTypeAttributes,
-            IEnumerable<INamedTypeSymbol> ignoredRootTypes)
+            IEnumerable<INamedTypeSymbol> rootTypes)
         {
             var namedTypeSymbol = (INamedTypeSymbol)symbolContext.Symbol;
 
-            foreach (var rootType in ignoredRootTypes)
+            if (!rootTypes.Any(root => root.IsAssignableFrom(namedTypeSymbol)))
             {
-                if (rootType.IsAssignableFrom(namedTypeSymbol))
-                {
-                    return;
-                }
+                return;
             }
 
             var attributes = namedTypeSymbol.GetAttributes();
