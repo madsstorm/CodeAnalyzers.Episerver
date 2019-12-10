@@ -7,20 +7,13 @@ using System.Collections.Generic;
 namespace CodeAnalyzers.Episerver.DiagnosticAnalyzers.CSharp
 {
     [DiagnosticAnalyzer(LanguageNames.CSharp)]
-    public class ContentDataHasAvailableContentTypesAttributeAnalyzer : DiagnosticAnalyzer
+    public abstract class ContentDataHasAvailableContentTypesAttributeAnalyzerBase : DiagnosticAnalyzer
     {
-        // Detect content data derived from these types
-        private readonly ImmutableArray<string> RootTypeNames =
-            ImmutableArray.Create(
-                TypeNames.PageDataMetadataName,
-                TypeNames.NodeContentMetadataName,
-                TypeNames.ProductContentMetadataName,
-                TypeNames.PackageContentMetadataName,
-                TypeNames.BundleContentMetadataName,
-                TypeNames.SalesCampaignMetadataName);
+        protected abstract ImmutableArray<string> RootTypeNames { get; }
 
-        public override ImmutableArray<DiagnosticDescriptor> SupportedDiagnostics =>
-            ImmutableArray.Create(Descriptors.Epi2012ContentDataShouldHaveAvailableContentTypesAttribute);
+        protected abstract DiagnosticDescriptor Descriptor { get; }
+
+        public override ImmutableArray<DiagnosticDescriptor> SupportedDiagnostics => ImmutableArray.Create(Descriptor);
 
         public override void Initialize(AnalysisContext context)
         {
@@ -83,11 +76,9 @@ namespace CodeAnalyzers.Episerver.DiagnosticAnalyzers.CSharp
             }
         }
 
-        private static void ReportMissingAvailableContentTypes(SymbolAnalysisContext symbolContext, INamedTypeSymbol namedType)
+        private void ReportMissingAvailableContentTypes(SymbolAnalysisContext symbolContext, INamedTypeSymbol namedType)
         {
-            symbolContext.ReportDiagnostic(
-                    namedType.CreateDiagnostic(
-                        Descriptors.Epi2012ContentDataShouldHaveAvailableContentTypesAttribute));
+            symbolContext.ReportDiagnostic(namedType.CreateDiagnostic(Descriptor));
         }
     }
 }

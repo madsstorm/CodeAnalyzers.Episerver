@@ -1,10 +1,10 @@
-using Verify = CodeAnalyzers.Episerver.Test.CSharpVerifier<CodeAnalyzers.Episerver.DiagnosticAnalyzers.CSharp.ContentDataHasAvailableContentTypesAttributeAnalyzer>;
+using Verify = CodeAnalyzers.Episerver.Test.CSharpVerifier<CodeAnalyzers.Episerver.DiagnosticAnalyzers.CSharp.CommerceContentDataHasAvailableContentTypesAttributeAnalyzer>;
 using System.Threading.Tasks;
 using Xunit;
 
 namespace CodeAnalyzers.Episerver.Test
 {
-    public class ContentDataHasAvailableContentTypesAttributeTests
+    public class CommerceContentDataHasAvailableContentTypesAttributeTests
     {
         [Fact]
         public async Task IgnoreContentDataWithAvailableContentTypes()
@@ -17,11 +17,6 @@ namespace CodeAnalyzers.Episerver.Test
 
                 namespace Test
                 {
-                    [AvailableContentTypes]
-                    public class PageType : PageData
-                    {
-                    }
-
                     [AvailableContentTypes]
                     public class NodeType : NodeContent
                     {
@@ -62,10 +57,6 @@ namespace CodeAnalyzers.Episerver.Test
 
                 namespace Test
                 {
-                    public abstract class PageType : PageData
-                    {
-                    }
-
                     public abstract class NodeType : NodeContent
                     {
                     }
@@ -83,23 +74,6 @@ namespace CodeAnalyzers.Episerver.Test
                     }
 
                     public abstract class SalesCampaignType : SalesCampaign
-                    {
-                    }
-                }";
-
-            await Verify.VerifyAnalyzerAsync(test);
-        }
-
-        [Fact]
-        public async Task IgnoreBlockDataWithoutAvailableContentTypes()
-        {
-            var test = @"
-                using EPiServer.DataAnnotations;
-                using EPiServer.Core;
-
-                namespace Test
-                {
-                    public class BlockType : BlockData
                     {
                     }
                 }";
@@ -182,11 +156,6 @@ namespace CodeAnalyzers.Episerver.Test
                     using Custom;
 
                     [CustomAvailableContentTypes]
-                    public class PageType : PageData
-                    {
-                    }
-
-                    [CustomAvailableContentTypes]
                     public class NodeType : NodeContent
                     {
                     }
@@ -216,24 +185,6 @@ namespace CodeAnalyzers.Episerver.Test
         }
 
         [Fact]
-        public async Task DetectPageDataWithoutAvailableContentTypes()
-        {
-            var test = @"
-                using EPiServer.DataAnnotations;
-                using EPiServer.Core;
-
-                namespace Test
-                {
-                    public class PageType : PageData
-                    {
-                    }
-                }";
-
-            await Verify.VerifyAnalyzerAsync(test,
-                Verify.Diagnostic(Descriptors.Epi2012ContentDataShouldHaveAvailableContentTypesAttribute).WithLocation(7, 34));
-        }
-
-        [Fact]
         public async Task DetectNodeDataWithoutAvailableContentTypes()
         {
             var test = @"
@@ -248,7 +199,7 @@ namespace CodeAnalyzers.Episerver.Test
                 }";
 
             await Verify.VerifyAnalyzerAsync(test,
-                Verify.Diagnostic(Descriptors.Epi2012ContentDataShouldHaveAvailableContentTypesAttribute).WithLocation(7, 34));
+                Verify.Diagnostic(Descriptors.Epi2013CommerceContentDataShouldHaveAvailableContentTypesAttribute).WithLocation(7, 34));
         }
 
         [Fact]
@@ -266,7 +217,7 @@ namespace CodeAnalyzers.Episerver.Test
                 }";
 
             await Verify.VerifyAnalyzerAsync(test,
-                Verify.Diagnostic(Descriptors.Epi2012ContentDataShouldHaveAvailableContentTypesAttribute).WithLocation(7, 34));
+                Verify.Diagnostic(Descriptors.Epi2013CommerceContentDataShouldHaveAvailableContentTypesAttribute).WithLocation(7, 34));
         }
 
         [Fact]
@@ -284,7 +235,7 @@ namespace CodeAnalyzers.Episerver.Test
                 }";
 
             await Verify.VerifyAnalyzerAsync(test,
-                Verify.Diagnostic(Descriptors.Epi2012ContentDataShouldHaveAvailableContentTypesAttribute).WithLocation(7, 34));
+                Verify.Diagnostic(Descriptors.Epi2013CommerceContentDataShouldHaveAvailableContentTypesAttribute).WithLocation(7, 34));
         }
 
         [Fact]
@@ -302,7 +253,7 @@ namespace CodeAnalyzers.Episerver.Test
                 }";
 
             await Verify.VerifyAnalyzerAsync(test,
-                Verify.Diagnostic(Descriptors.Epi2012ContentDataShouldHaveAvailableContentTypesAttribute).WithLocation(7, 34));
+                Verify.Diagnostic(Descriptors.Epi2013CommerceContentDataShouldHaveAvailableContentTypesAttribute).WithLocation(7, 34));
         }
 
         [Fact]
@@ -320,7 +271,7 @@ namespace CodeAnalyzers.Episerver.Test
                 }";
 
             await Verify.VerifyAnalyzerAsync(test,
-                Verify.Diagnostic(Descriptors.Epi2012ContentDataShouldHaveAvailableContentTypesAttribute).WithLocation(7, 34));
+                Verify.Diagnostic(Descriptors.Epi2013CommerceContentDataShouldHaveAvailableContentTypesAttribute).WithLocation(7, 34));
         }
     }
 }

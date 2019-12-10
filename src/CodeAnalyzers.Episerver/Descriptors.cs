@@ -108,10 +108,25 @@ namespace CodeAnalyzers.Episerver
             Rule("Epi2011", "Avoid ContentArea property in block", Content, Info,
                 "Avoid ContentArea property in block", "ContentArea properties in blocks make it difficult for editors to manage nested content.");
 
-        public static DiagnosticDescriptor Epi2012ContentDataShouldHaveAvailableContentTypesAttribute { get; } =
-            Rule("Epi2012", "Content should have AvailableContentTypes attribute", Content, Info,
-                "Missing AvailableContentTypes attribute", "Content data should have an AvailableContentTypes attribute for restricting child content types.");
+        public static DiagnosticDescriptor Epi2012PageDataShouldHaveAvailableContentTypesAttribute { get; } =
+            Rule("Epi2012", "Page should have an AvailableContentTypes attribute", Content, Info,
+                "Missing AvailableContentTypes attribute", "Page data should have an AvailableContentTypes attribute for restricting child content types.");
 
+        public static DiagnosticDescriptor Epi2013CommerceContentDataShouldHaveAvailableContentTypesAttribute { get; } =
+            Rule("Epi2013", "Commerce content should have an AvailableContentTypes attribute", Content, Info,
+                "Missing AvailableContentTypes attribute", "Commerce content data should have an AvailableContentTypes attribute for restricting child content types.");
+
+        public static DiagnosticDescriptor Epi2014ContentReferencePropertyShouldHaveAllowedTypesAttribute { get; } =
+            Rule("Epi2014", "ContentReference property should have an AllowedTypes attribute", Content, Info,
+                "Missing AllowedTypes attribute", "ContentReference properties should have an AllowedTypes attribute for restricting selectable content types.");
+
+        public static DiagnosticDescriptor Epi2015ContentAreaPropertyShouldHaveAllowedTypesAttribute { get; } =
+            Rule("Epi2015", "ContentArea property should have an AllowedTypes attribute", Content, Info,
+                "Missing AllowedTypes attribute", "ContentArea properties should have an AllowedTypes attribute for restricting selectable content types.");
+
+        public static DiagnosticDescriptor Epi2016ContentReferenceListPropertyShouldHaveAllowedTypesAttribute { get; } =
+            Rule("Epi2016", "ContentReferenceList property should have an AllowedTypes attribute", Content, Info,
+                "Missing AllowedTypes attribute", "ContentReferenceList properties should have an AllowedTypes attribute for restricting selectable content types.");
 
         #endregion
 
