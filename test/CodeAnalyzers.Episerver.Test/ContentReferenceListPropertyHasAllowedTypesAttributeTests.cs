@@ -67,29 +67,10 @@ namespace CodeAnalyzers.Episerver.Test
         }
 
         [Fact]
-        public async Task IgnorePageReferenceEnumerablePropertyWithAllowedTypesAttribute()
-        {
-            var test = @"
-                using System.Collections.Generic;
-                using EPiServer.Core;
-                using EPiServer.DataAnnotations;
-
-                namespace Test
-                {
-                    public class TypeName : PageData
-                    {
-                        [AllowedTypes]
-                        public virtual IEnumerable<PageReference> List {get;set;}
-                    }
-                }";
-
-            await Verify.VerifyAnalyzerAsync(test);
-        }
-
-        [Fact]
         public async Task IgnoreContentReferenceEnumerablePropertyInNonContentDataWithoutAllowedTypesAttribute()
         {
             var test = @"
+                using System.Collections.Generic;
                 using EPiServer.Core;
                 using EPiServer.DataAnnotations;
 
@@ -108,6 +89,7 @@ namespace CodeAnalyzers.Episerver.Test
         public async Task IgnoreContentReferenceEnumerablePropertyInInterfaceWithoutAllowedTypesAttribute()
         {
             var test = @"
+                using System.Collections.Generic;
                 using EPiServer.Core;
                 using EPiServer.DataAnnotations;
 
@@ -123,7 +105,26 @@ namespace CodeAnalyzers.Episerver.Test
         }
 
         [Fact]
-        public async Task DetectContentReferenceEnumerablePropertyWithAllowedTypesAttribute()
+        public async Task IgnorePropertyListWithoutAllowedTypesAttribute()
+        {
+            var test = @"
+                using System.Collections.Generic;
+                using EPiServer.Core;
+                using EPiServer.DataAnnotations;
+
+                namespace Test
+                {
+                    public class TypeName : PageData
+                    {
+                        public virtual IList<string> List {get;set;}
+                    }
+                }";
+
+            await Verify.VerifyAnalyzerAsync(test);
+        }
+
+        [Fact]
+        public async Task DetectContentReferenceEnumerablePropertyWithoutAllowedTypesAttribute()
         {
             var test = @"
                 using System.Collections.Generic;
@@ -143,7 +144,7 @@ namespace CodeAnalyzers.Episerver.Test
         }
 
         [Fact]
-        public async Task DetectContentReferenceListPropertyWithAllowedTypesAttribute()
+        public async Task DetectContentReferenceListPropertyWithoutAllowedTypesAttribute()
         {
             var test = @"
                 using System.Collections.Generic;
@@ -163,7 +164,7 @@ namespace CodeAnalyzers.Episerver.Test
         }
 
         [Fact]
-        public async Task DetectContentReferenceCollectionPropertyWithAllowedTypesAttribute()
+        public async Task DetectContentReferenceCollectionPropertyWithoutAllowedTypesAttribute()
         {
             var test = @"
                 using System.Collections.Generic;
@@ -180,26 +181,6 @@ namespace CodeAnalyzers.Episerver.Test
 
             await Verify.VerifyAnalyzerAsync(test,
                 Verify.Diagnostic(Descriptors.Epi2016ContentReferenceListPropertyShouldHaveAllowedTypesAttribute).WithLocation(10, 70));
-        }
-
-        [Fact]
-        public async Task DetectPageReferenceEnumerablePropertyWithAllowedTypesAttribute()
-        {
-            var test = @"
-                using System.Collections.Generic;
-                using EPiServer.Core;
-                using EPiServer.DataAnnotations;
-
-                namespace Test
-                {
-                    public class TypeName : PageData
-                    {
-                        public virtual IEnumerable<PageReference> List {get;set;}
-                    }
-                }";
-
-            await Verify.VerifyAnalyzerAsync(test,
-                Verify.Diagnostic(Descriptors.Epi2016ContentReferenceListPropertyShouldHaveAllowedTypesAttribute).WithLocation(10, 67));
         }
     }
 }
