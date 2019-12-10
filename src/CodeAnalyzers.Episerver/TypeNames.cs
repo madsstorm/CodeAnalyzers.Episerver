@@ -3,7 +3,6 @@
     public static class TypeNames
     {
         public static readonly string IContentDataMetadataName = "EPiServer.Core.IContentData";
-        public static readonly string IContentMediaMetadataName = "EPiServer.Core.IContentMedia";
         
         public static readonly string CatalogContentBaseMetadataName = "EPiServer.Commerce.Catalog.ContentTypes.CatalogContentBase";
         public static readonly string NodeContentMetadataName = "EPiServer.Commerce.Catalog.ContentTypes.NodeContent";
@@ -23,5 +22,10 @@
         public static readonly string ImageUrlMetadataName = "EPiServer.DataAnnotations.ImageUrlAttribute";
         public static readonly string DisplayMetadataName = "System.ComponentModel.DataAnnotations.DisplayAttribute";
         public static readonly string AvailableContentTypesMetadataName = "EPiServer.DataAnnotations.AvailableContentTypesAttribute";
+        public static readonly string AllowedTypesMetadataName = "EPiServer.DataAnnotations.AllowedTypesAttribute";
+
+        public static readonly string ContentReferenceMetadataName = "EPiServer.Core.ContentReference";
+
+        public static readonly string ContentReferenceListTypeMetadataName = "System.Collections.Generic.IEnumerable<EPiServer.Core.ContentReference>";
     }
 }

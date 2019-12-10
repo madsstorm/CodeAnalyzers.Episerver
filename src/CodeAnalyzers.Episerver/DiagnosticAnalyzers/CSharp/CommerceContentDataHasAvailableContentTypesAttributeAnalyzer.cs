@@ -1,9 +1,11 @@
 ﻿using System.Collections.Immutable;
 using Microsoft.CodeAnalysis;
+using Microsoft.CodeAnalysis.Diagnostics;
 
 namespace CodeAnalyzers.Episerver.DiagnosticAnalyzers.CSharp
 {
-    public class CommerceContentDataHasAvailableContentTypesAttributeAnalyzer : ContentDataHasAvailableContentTypesAttributeAnalyzerBase
+    [DiagnosticAnalyzer(LanguageNames.CSharp)]
+    public class CommerceContentDataHasAvailableContentTypesAttributeAnalyzer : AvailableContentTypesAttributeAnalyzerBase
     {
         protected override ImmutableArray<string> RootTypeNames =>
             ImmutableArray.Create(

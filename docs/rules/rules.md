@@ -20,7 +20,11 @@
 | Epi2009 | Content property should have an Order | Content | Warning |
 | Epi2010 | Content property should have a unique Order | Content | Warning |
 | Epi2011 | Avoid ContentArea property in block | Content | Info |
-| Epi2012 | Content should have AvailableContentTypes attribute | Content | Info |
+| Epi2012 | Page should have an AvailableContentTypes attribute | Content | Info |
+| Epi2013 | Commerce content should have an AvailableContentTypes attribute | Content | Info |
+| Epi2014 | ContentReference property should have an AllowedTypes attribute | Content | Info |
+| Epi2015 | ContentArea property should have an AllowedTypes attribute | Content | Info |
+| Epi2016 | ContentReferenceList property should have an AllowedTypes attribute | Content | Info |
 | Epi3000 | Avoid using legacy DataFactory | Legacy | Warning |
 | Epi3001 | Avoid using legacy CacheManager | Legacy | Warning |
 | Epi3002 | Avoid using legacy log4net.LogManager | Legacy | Warning |

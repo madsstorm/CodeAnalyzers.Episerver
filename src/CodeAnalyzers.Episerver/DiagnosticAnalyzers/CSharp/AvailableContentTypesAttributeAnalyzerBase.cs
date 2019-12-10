@@ -6,8 +6,7 @@ using System.Linq;
 using System.Collections.Generic;
 namespace CodeAnalyzers.Episerver.DiagnosticAnalyzers.CSharp
 {
-    [DiagnosticAnalyzer(LanguageNames.CSharp)]
-    public abstract class ContentDataHasAvailableContentTypesAttributeAnalyzerBase : DiagnosticAnalyzer
+    public abstract class AvailableContentTypesAttributeAnalyzerBase : DiagnosticAnalyzer
     {
         protected abstract ImmutableArray<string> RootTypeNames { get; }
 
