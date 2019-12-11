@@ -8,13 +8,13 @@
 
   <PropertyGroup>
     <PackageId>CodeAnalyzers.Episerver</PackageId>
-    <Version>1.1</Version>
+    <Version>1.2</Version>
     <Authors>Mads Storm Hansen</Authors>
     <PackageProjectUrl>https://github.com/madsstorm/CodeAnalyzers.Episerver</PackageProjectUrl>
     <RepositoryUrl>https://github.com/madsstorm/CodeAnalyzers.Episerver</RepositoryUrl>
     <PackageIconUrl>https://github.com/madsstorm/CodeAnalyzers.Episerver/raw/master/docs/icon/icon.png</PackageIconUrl>
     <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
-    <Description>Code analyzers for Episerver. Analyzes your code for Episerver best practices.</Description>
+    <Description>Analyzes your code for Episerver best practices.</Description>
     <PackageTags>CodeAnalyzers Episerver CodeAnalysis Analyzers Roslyn</PackageTags>
     <NoPackageAnalysis>true</NoPackageAnalysis>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
