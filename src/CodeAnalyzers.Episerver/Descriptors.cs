@@ -114,7 +114,7 @@ namespace CodeAnalyzers.Episerver
 
         public static DiagnosticDescriptor Epi2013CommerceContentDataShouldHaveAvailableContentTypesAttribute { get; } =
             Rule("Epi2013", "Commerce content should have an AvailableContentTypes attribute", Content, Info,
-                "Missing AvailableContentTypes attribute", "Commerce content data should have an AvailableContentTypes attribute for restricting child content types.");
+                "Missing AvailableContentTypes attribute", "Commerce content should have an AvailableContentTypes attribute for restricting child content types.");
 
         public static DiagnosticDescriptor Epi2014ContentReferencePropertyShouldHaveAllowedTypesAttribute { get; } =
             Rule("Epi2014", "ContentReference property should have an AllowedTypes attribute", Content, Info,
