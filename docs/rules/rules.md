@@ -8,6 +8,7 @@
 | Epi1005 | Catalog content type should implement catalog content data | Usage | Warning |
 | Epi1006 | Catalog content data should have CatalogContentType attribute | Usage | Warning |
 | Epi1007 | Avoid using concrete Order classes | Usage | Warning |
+| Epi1008 | Interface in AllowedTypes should have UIDescriptor | Usage | Warning |
 | Epi2000 | Content type should have a DisplayName | Content | Warning |
 | Epi2001 | Content type should have a Description | Content | Warning |
 | Epi2002 | Content type should have a GroupName | Content | Warning |

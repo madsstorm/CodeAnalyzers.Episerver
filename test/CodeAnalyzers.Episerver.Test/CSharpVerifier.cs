@@ -50,7 +50,8 @@ namespace CodeAnalyzers.Episerver.Test
                         .AddMetadataReference(projectId, MetadataReference.CreateFromFile(typeof(EPiServer.Commerce.Catalog.ContentTypes.VariationContent).GetTypeInfo().Assembly.Location))
                         .AddMetadataReference(projectId, MetadataReference.CreateFromFile(typeof(EPiServer.Commerce.Marketing.EntryPromotion).GetTypeInfo().Assembly.Location))
                         .AddMetadataReference(projectId, MetadataReference.CreateFromFile(typeof(Mediachase.Commerce.Currency).GetTypeInfo().Assembly.Location))
-                        .AddMetadataReference(projectId, MetadataReference.CreateFromFile(typeof(Mediachase.MetaDataPlus.MetaObject).GetTypeInfo().Assembly.Location));                   
+                        .AddMetadataReference(projectId, MetadataReference.CreateFromFile(typeof(Mediachase.MetaDataPlus.MetaObject).GetTypeInfo().Assembly.Location))
+                        .AddMetadataReference(projectId, MetadataReference.CreateFromFile(typeof(EPiServer.Shell.UIDescriptor).GetTypeInfo().Assembly.Location));
 
                     return solution;
                 });
