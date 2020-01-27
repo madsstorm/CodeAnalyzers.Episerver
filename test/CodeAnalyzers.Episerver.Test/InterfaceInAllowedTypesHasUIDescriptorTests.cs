@@ -654,6 +654,45 @@ namespace CodeAnalyzers.Episerver.Test
         }
 
         [Fact]
+        public async Task DetectMixedInterfaceConstructorArgumentsWithoutUIDescriptor()
+        {
+            var test = @"
+                using System;
+                using EPiServer.Core;
+                using EPiServer.DataAnnotations;
+                using EPiServer.Shell;
+
+                namespace Test
+                {
+                    public interface ICustomBlock { }
+                    public interface ICustomBlock2 { }
+                    public interface ICustomBlock3 { }
+                    public interface ICustomBlock4 { }
+
+                    [UIDescriptorRegistration]
+                    public class ICustomBlockUIDescriptorA : UIDescriptor<ICustomBlock2> { }
+
+                    [UIDescriptorRegistration]
+                    public class ICustomBlockUIDescriptorB : UIDescriptor<ICustomBlock3> { }
+
+                    public class TypeName : PageData
+                    {
+                        [AllowedTypes(new Type[] {typeof(ICustomBlock), typeof(ICustomBlock2)}, new Type[] {typeof(ICustomBlock3),typeof(ICustomBlock4)})]
+                        public virtual ContentArea Area {get;set;}
+
+                        [AllowedTypes(new Type[] {typeof(ICustomBlock4), typeof(ICustomBlock3)}, new Type[] {typeof(ICustomBlock2),typeof(ICustomBlock)})]
+                        public virtual ContentArea Area2 {get;set;}
+                    }
+                }";
+
+            await Verify.VerifyAnalyzerAsync(test,
+                Verify.Diagnostic(Descriptors.Epi1008InterfaceInAllowedTypesShouldHaveUIDescriptor).WithLocation(22, 26).WithArguments("ICustomBlock4"),
+                Verify.Diagnostic(Descriptors.Epi1008InterfaceInAllowedTypesShouldHaveUIDescriptor).WithLocation(22, 26).WithArguments("ICustomBlock"),
+                Verify.Diagnostic(Descriptors.Epi1008InterfaceInAllowedTypesShouldHaveUIDescriptor).WithLocation(25, 26).WithArguments("ICustomBlock"),
+                Verify.Diagnostic(Descriptors.Epi1008InterfaceInAllowedTypesShouldHaveUIDescriptor).WithLocation(25, 26).WithArguments("ICustomBlock4"));
+        }
+
+        [Fact]
         public async Task DetectAllowedTypesArgumentWithoutUIDescriptor()
         {
             var test = @"
