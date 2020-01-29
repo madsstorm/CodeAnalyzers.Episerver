@@ -614,6 +614,28 @@ namespace CodeAnalyzers.Episerver.Test
                 Verify.Diagnostic(Descriptors.Epi1008InterfaceInAllowedTypesShouldHaveUIDescriptor).WithLocation(13, 26).WithArguments("ICustomBlock"));
         }
 
+        [Fact(Skip = "TODO")]
+        public async Task DetectInterfaceConstructorArgumentWithNoExternalUIDescriptor()
+        {
+            var test = @"
+                using System;
+                using EPiServer.Core;
+                using EPiServer.DataAnnotations;
+                using EPiServer.Commerce.Order;
+
+                namespace Test
+                {
+                    public class TypeName : PageData
+                    {
+                        [AllowedTypes(typeof(IOrderGroup))]
+                        public virtual ContentArea Area {get;set;}
+                    }
+                }";
+
+            await Verify.VerifyAnalyzerAsync(test,
+                Verify.Diagnostic(Descriptors.Epi1008InterfaceInAllowedTypesShouldHaveUIDescriptor).WithLocation(11, 26).WithArguments("IOrderGroup"));
+        }      
+
         [Fact]
         public async Task DetectInterfaceConstructorArgumentsWithoutUIDescriptor()
         {
