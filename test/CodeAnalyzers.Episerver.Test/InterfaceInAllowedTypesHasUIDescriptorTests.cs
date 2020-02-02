@@ -245,46 +245,6 @@ namespace CodeAnalyzers.Episerver.Test
         }
 
         [Fact]
-        public async Task IgnoreInterfaceConstructorArgumentWithExternalUIDescriptor()
-        {
-            var test = @"
-                using System;
-                using EPiServer.Core;
-                using EPiServer.DataAnnotations;
-
-                namespace Test
-                {
-                    public class TypeName : PageData
-                    {
-                        [AllowedTypes(typeof(IContent))]
-                        public virtual ContentArea Area {get;set;}
-                    }
-                }";
-
-            await Verify.VerifyAnalyzerAsync(test);
-        }
-
-        [Fact]
-        public async Task IgnoreInterfaceConstructorArgumentsWithExternalUIDescriptors()
-        {
-            var test = @"
-                using System;
-                using EPiServer.Core;
-                using EPiServer.DataAnnotations;
-
-                namespace Test
-                {
-                    public class TypeName : PageData
-                    {
-                        [AllowedTypes(new Type[] {typeof(IContent)}, new Type[] {typeof(IContentData)})]
-                        public virtual ContentArea Area {get;set;}
-                    }
-                }";
-
-            await Verify.VerifyAnalyzerAsync(test);
-        }
-
-        [Fact]
         public async Task IgnoreInterfaceConstructorArgumentWithUIDescriptor()
         {
             var test = @"
