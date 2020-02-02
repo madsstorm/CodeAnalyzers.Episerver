@@ -57,10 +57,8 @@ namespace CodeAnalyzers.Episerver.DiagnosticAnalyzers.CSharp
 
             private readonly ImmutableArray<string> NamedArguments = ImmutableArray.Create("AllowedTypes", "RestrictedTypes");
 
-            private readonly ConcurrentDictionary<INamedTypeSymbol, byte> KnownInterfaces = new ConcurrentDictionary<INamedTypeSymbol, byte>();
-            private readonly ConcurrentDictionary<INamedTypeSymbol, byte> KnownUIDescriptorInterfaces = new ConcurrentDictionary<INamedTypeSymbol, byte>();
-            private readonly ConcurrentDictionary<(AttributeData Attribute, INamedTypeSymbol TypeSymbol), byte> KnownAllowedTypesInterfaces
-                = new ConcurrentDictionary<(AttributeData, INamedTypeSymbol), byte>();
+            private readonly ConcurrentBag<ITypeSymbol> KnownUIDescriptorTypes = new ConcurrentBag<ITypeSymbol>();
+            private readonly ConcurrentBag<(AttributeData Attribute, ITypeSymbol TypeSymbol)> KnownAllowedTypes = new ConcurrentBag<(AttributeData, ITypeSymbol)>();
 
             public CompilationAnalyzer(INamedTypeSymbol iContentDataType, INamedTypeSymbol allowedTypesType, INamedTypeSymbol uiDescriptorType)
             {
@@ -129,12 +127,18 @@ namespace CodeAnalyzers.Episerver.DiagnosticAnalyzers.CSharp
                         continue;
                     }
 
-                    INamedTypeSymbol typeSymbol = value.Value as INamedTypeSymbol;
-
-                    if (typeSymbol != null && typeSymbol.TypeKind == TypeKind.Interface)
+                    ITypeSymbol typeSymbol = value.Value as ITypeSymbol;
+                    if (typeSymbol == null)
                     {
-                        KnownAllowedTypesInterfaces.GetOrAdd((attribute, typeSymbol), 0);
-                    }                   
+                        continue;
+                    }
+
+                    if (typeSymbol.TypeKind != TypeKind.Interface)
+                    {
+                        continue;
+                    }
+
+                    KnownAllowedTypes.Add((attribute, typeSymbol));
                 }
             }
 
@@ -142,41 +146,32 @@ namespace CodeAnalyzers.Episerver.DiagnosticAnalyzers.CSharp
             {
                 var namedTypeSymbol = (INamedTypeSymbol)symbolContext.Symbol;
 
-                if(namedTypeSymbol.TypeKind == TypeKind.Interface)
-                {
-                    KnownInterfaces.GetOrAdd(namedTypeSymbol, 0);
-                }
-
                 var uiDescriptorType = GetUIDescriptorType(namedTypeSymbol);
 
-                if(uiDescriptorType != null && uiDescriptorType.TypeKind == TypeKind.Interface)
+                if(uiDescriptorType != null)
                 {
-                    KnownUIDescriptorInterfaces.GetOrAdd(uiDescriptorType, 0);
+                    KnownUIDescriptorTypes.Add(uiDescriptorType);
                 }               
             }
 
             internal void CompilationEndAction(CompilationAnalysisContext compilationContext)
             {
-                var allowedTypesKnownInterfaces = KnownAllowedTypesInterfaces
-                                                    .Where(x => KnownInterfaces.ContainsKey(x.Key.TypeSymbol))
-                                                    .OrderBy(x => x.Key.TypeSymbol.MetadataName);
-
-                foreach(var pair in allowedTypesKnownInterfaces)
+                foreach(var pair in KnownAllowedTypes)
                 {
-                    if(!KnownUIDescriptorInterfaces.ContainsKey(pair.Key.TypeSymbol))
+                    if(!KnownUIDescriptorTypes.Contains(pair.TypeSymbol))
                     {
-                        ReportMissingUIDescriptor(compilationContext, pair.Key.Attribute, pair.Key.TypeSymbol);
+                        ReportMissingUIDescriptor(compilationContext, pair.Attribute, pair.TypeSymbol);
                     }
                 }              
             }
 
-            private INamedTypeSymbol GetUIDescriptorType(INamedTypeSymbol namedTypeSymbol)
+            private ITypeSymbol GetUIDescriptorType(INamedTypeSymbol namedTypeSymbol)
             {
                 while(namedTypeSymbol != null)
                 {
                     if(namedTypeSymbol.IsGenericType && namedTypeSymbol.BaseType.Equals(uiDescriptorType))
                     {
-                        return namedTypeSymbol.TypeArguments.FirstOrDefault() as INamedTypeSymbol;
+                        return namedTypeSymbol.TypeArguments.FirstOrDefault();
                     }
 
                     namedTypeSymbol = namedTypeSymbol.BaseType;
@@ -185,7 +180,7 @@ namespace CodeAnalyzers.Episerver.DiagnosticAnalyzers.CSharp
                 return null;
             }
 
-            private void ReportMissingUIDescriptor(CompilationAnalysisContext compilationContext, AttributeData attribute, INamedTypeSymbol namedTypeSymbol)
+            private void ReportMissingUIDescriptor(CompilationAnalysisContext compilationContext, AttributeData attribute, ITypeSymbol typeSymbol)
             {
                 var node = attribute.ApplicationSyntaxReference?.GetSyntax();
                 if (node != null)
@@ -193,7 +188,7 @@ namespace CodeAnalyzers.Episerver.DiagnosticAnalyzers.CSharp
                     compilationContext.ReportDiagnostic(
                         node.CreateDiagnostic(
                             Descriptors.Epi1008InterfaceInAllowedTypesShouldHaveUIDescriptor,
-                            namedTypeSymbol.ToDisplayString(SymbolDisplayFormat.CSharpShortErrorMessageFormat)));
+                            typeSymbol.ToDisplayString(SymbolDisplayFormat.CSharpShortErrorMessageFormat)));
                 }
             }
         }
