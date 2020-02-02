@@ -244,7 +244,7 @@ namespace CodeAnalyzers.Episerver.Test
             await Verify.VerifyAnalyzerAsync(test);
         }
 
-        [Fact(Skip = "TODO")]
+        [Fact]
         public async Task IgnoreInterfaceConstructorArgumentWithExternalUIDescriptor()
         {
             var test = @"
@@ -264,7 +264,7 @@ namespace CodeAnalyzers.Episerver.Test
             await Verify.VerifyAnalyzerAsync(test);
         }
 
-        [Fact(Skip = "TODO")]
+        [Fact]
         public async Task IgnoreInterfaceConstructorArgumentsWithExternalUIDescriptors()
         {
             var test = @"
