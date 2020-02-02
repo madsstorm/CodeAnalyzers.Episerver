@@ -8,7 +8,7 @@
 
   <PropertyGroup>
     <PackageId>CodeAnalyzers.Episerver</PackageId>
-    <Version>1.3</Version>
+    <Version>1.2</Version>
     <Authors>Mads Storm Hansen</Authors>
     <PackageProjectUrl>https://github.com/madsstorm/CodeAnalyzers.Episerver</PackageProjectUrl>
     <RepositoryUrl>https://github.com/madsstorm/CodeAnalyzers.Episerver</RepositoryUrl>
