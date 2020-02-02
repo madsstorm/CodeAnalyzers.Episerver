@@ -56,10 +56,6 @@ namespace CodeAnalyzers.Episerver
             Rule("Epi1007", "Avoid using concrete Order classes", Usage, Warning,
                 "Avoid using concrete type {0}", "Use order abstraction interfaces like IPurchaseOrder, ILineItem and similar interfaces.");
 
-        public static DiagnosticDescriptor Epi1008InterfaceInAllowedTypesShouldHaveUIDescriptor { get; } =
-            Rule("Epi1008", "Interface in AllowedTypes should have UIDescriptor", Usage, Warning,
-                "Missing UIDescriptor for {0}", "Interfaces used in AllowedTypes should have a UIDescriptor.");
-
         #endregion
 
         #region Content 2xxx

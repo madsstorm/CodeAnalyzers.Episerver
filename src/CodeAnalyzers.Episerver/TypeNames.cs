@@ -25,6 +25,5 @@
         public static readonly string AllowedTypesMetadataName = "EPiServer.DataAnnotations.AllowedTypesAttribute";
 
         public static readonly string ContentReferenceMetadataName = "EPiServer.Core.ContentReference";
-        public static readonly string UIDescriptorMetadataName = "EPiServer.Shell.UIDescriptor";
     }
 }
