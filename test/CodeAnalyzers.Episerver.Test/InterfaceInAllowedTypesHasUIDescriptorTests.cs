@@ -427,29 +427,7 @@ namespace CodeAnalyzers.Episerver.Test
         }
 
         [Fact]
-        public async Task IgnoreCustomClassPropertyInterfaceConstructorArgumentWithoutUIDescriptor()
-        {
-            var test = @"
-                using System;
-                using EPiServer.Core;
-                using EPiServer.DataAnnotations;
-
-                namespace Test
-                {
-                    public interface ICustomBlock { }
-
-                    public class TypeName
-                    {
-                        [AllowedTypes(new Type[] {typeof(ICustomBlock)})]
-                        public virtual ContentArea Area {get;set;}
-                    }
-                }";
-
-            await Verify.VerifyAnalyzerAsync(test);
-        }
-
-        [Fact]
-        public async Task DetectPagePropertyInterfaceConstructorArgumentWithoutUIDescriptor()
+        public async Task DetectInterfaceConstructorArgumentWithoutUIDescriptor()
         {
             var test = @"
                 using System;
@@ -461,52 +439,6 @@ namespace CodeAnalyzers.Episerver.Test
                     public interface ICustomBlock { }
 
                     public class TypeName : PageData
-                    {
-                        [AllowedTypes(new Type[] {typeof(ICustomBlock)})]
-                        public virtual ContentArea Area {get;set;}
-                    }
-                }";
-
-            await Verify.VerifyAnalyzerAsync(test,
-                Verify.Diagnostic(Descriptors.Epi1008InterfaceInAllowedTypesShouldHaveUIDescriptor).WithLocation(12, 26).WithArguments("ICustomBlock"));
-        }
-
-        [Fact]
-        public async Task DetectBlockPropertyInterfaceConstructorArgumentWithoutUIDescriptor()
-        {
-            var test = @"
-                using System;
-                using EPiServer.Core;
-                using EPiServer.DataAnnotations;
-
-                namespace Test
-                {
-                    public interface ICustomBlock { }
-
-                    public class TypeName : BlockData
-                    {
-                        [AllowedTypes(new Type[] {typeof(ICustomBlock)})]
-                        public virtual ContentArea Area {get;set;}
-                    }
-                }";
-
-            await Verify.VerifyAnalyzerAsync(test,
-                Verify.Diagnostic(Descriptors.Epi1008InterfaceInAllowedTypesShouldHaveUIDescriptor).WithLocation(12, 26).WithArguments("ICustomBlock"));
-        }
-
-        [Fact]
-        public async Task DetectProductPropertyInterfaceConstructorArgumentWithoutUIDescriptor()
-        {
-            var test = @"
-                using System;
-                using EPiServer.Core;
-                using EPiServer.DataAnnotations;
-
-                namespace Test
-                {
-                    public interface ICustomBlock { }
-
-                    public class TypeName : ProductContent
                     {
                         [AllowedTypes(new Type[] {typeof(ICustomBlock)})]
                         public virtual ContentArea Area {get;set;}
