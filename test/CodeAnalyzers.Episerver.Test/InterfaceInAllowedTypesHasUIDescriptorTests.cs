@@ -271,34 +271,6 @@ namespace CodeAnalyzers.Episerver.Test
         }
 
         [Fact]
-        public async Task IgnoreInterfaceConstructorArgumentWithCustomUIDescriptor()
-        {
-            var test = @"
-                using System;
-                using EPiServer.Core;
-                using EPiServer.DataAnnotations;
-                using EPiServer.Shell;
-
-                namespace Test
-                {
-                    public interface ICustomBlock { }
-
-                    public class CustomUIDescriptor<T> : UIDescriptor<T> { }
-
-                    [UIDescriptorRegistration]
-                    public class ICustomBlockUIDescriptor : CustomUIDescriptor<ICustomBlock> { }
-
-                    public class TypeName : PageData
-                    {
-                        [AllowedTypes(new Type[] {typeof(ICustomBlock)})]
-                        public virtual ContentArea Area {get;set;}
-                    }
-                }";
-
-            await Verify.VerifyAnalyzerAsync(test);
-        }
-
-        [Fact]
         public async Task IgnoreInterfaceConstructorArgumentsWithUIDescriptor()
         {
             var test = @"
@@ -500,34 +472,6 @@ namespace CodeAnalyzers.Episerver.Test
         }
 
         [Fact]
-        public async Task DetectInterfaceConstructorArgumentWithIncorrectUIDescriptor()
-        {
-            var test = @"
-                using System;
-                using EPiServer.Core;
-                using EPiServer.DataAnnotations;
-                using EPiServer.Shell;
-
-                namespace Test
-                {
-                    public interface ICustomBlock { }
-                    public interface ICustomBlock2 { }
-
-                    [UIDescriptorRegistration]
-                    public class ICustomBlockUIDescriptor : UIDescriptor<ICustomBlock2> { }
-
-                    public class TypeName : PageData
-                    {
-                        [AllowedTypes(new Type[] {typeof(ICustomBlock)})]
-                        public virtual ContentArea Area {get;set;}
-                    }
-                }";
-
-            await Verify.VerifyAnalyzerAsync(test,
-                Verify.Diagnostic(Descriptors.Epi1008InterfaceInAllowedTypesShouldHaveUIDescriptor).WithLocation(17, 26).WithArguments("ICustomBlock"));
-        }
-
-        [Fact]
         public async Task DetectBlockPropertyInterfaceConstructorArgumentWithoutUIDescriptor()
         {
             var test = @"
@@ -557,7 +501,6 @@ namespace CodeAnalyzers.Episerver.Test
                 using System;
                 using EPiServer.Core;
                 using EPiServer.DataAnnotations;
-                using EPiServer.Commerce.Catalog.ContentTypes;
 
                 namespace Test
                 {
@@ -571,7 +514,7 @@ namespace CodeAnalyzers.Episerver.Test
                 }";
 
             await Verify.VerifyAnalyzerAsync(test,
-                Verify.Diagnostic(Descriptors.Epi1008InterfaceInAllowedTypesShouldHaveUIDescriptor).WithLocation(13, 26).WithArguments("ICustomBlock"));
+                Verify.Diagnostic(Descriptors.Epi1008InterfaceInAllowedTypesShouldHaveUIDescriptor).WithLocation(12, 26).WithArguments("ICustomBlock"));
         }
 
         [Fact]
@@ -595,8 +538,8 @@ namespace CodeAnalyzers.Episerver.Test
                 }";
 
             await Verify.VerifyAnalyzerAsync(test,
-                Verify.Diagnostic(Descriptors.Epi1008InterfaceInAllowedTypesShouldHaveUIDescriptor).WithLocation(13, 26).WithArguments("ICustomBlock2"),
-                Verify.Diagnostic(Descriptors.Epi1008InterfaceInAllowedTypesShouldHaveUIDescriptor).WithLocation(13, 26).WithArguments("ICustomBlock"));
+                Verify.Diagnostic(Descriptors.Epi1008InterfaceInAllowedTypesShouldHaveUIDescriptor).WithLocation(13, 26).WithArguments("ICustomBlock"),
+                Verify.Diagnostic(Descriptors.Epi1008InterfaceInAllowedTypesShouldHaveUIDescriptor).WithLocation(13, 26).WithArguments("ICustomBlock2"));
         }
 
         [Fact]
@@ -620,8 +563,8 @@ namespace CodeAnalyzers.Episerver.Test
                 }";
 
             await Verify.VerifyAnalyzerAsync(test,
-                Verify.Diagnostic(Descriptors.Epi1008InterfaceInAllowedTypesShouldHaveUIDescriptor).WithLocation(13, 26).WithArguments("ICustomBlock2"),
-                Verify.Diagnostic(Descriptors.Epi1008InterfaceInAllowedTypesShouldHaveUIDescriptor).WithLocation(13, 26).WithArguments("ICustomBlock"));
+                Verify.Diagnostic(Descriptors.Epi1008InterfaceInAllowedTypesShouldHaveUIDescriptor).WithLocation(13, 26).WithArguments("ICustomBlock"),
+                Verify.Diagnostic(Descriptors.Epi1008InterfaceInAllowedTypesShouldHaveUIDescriptor).WithLocation(13, 26).WithArguments("ICustomBlock2"));
         }
 
         [Fact]
@@ -647,10 +590,10 @@ namespace CodeAnalyzers.Episerver.Test
                 }";
 
             await Verify.VerifyAnalyzerAsync(test,
-                Verify.Diagnostic(Descriptors.Epi1008InterfaceInAllowedTypesShouldHaveUIDescriptor).WithLocation(15, 26).WithArguments("ICustomBlock4"),
-                Verify.Diagnostic(Descriptors.Epi1008InterfaceInAllowedTypesShouldHaveUIDescriptor).WithLocation(15, 26).WithArguments("ICustomBlock3"),
-                Verify.Diagnostic(Descriptors.Epi1008InterfaceInAllowedTypesShouldHaveUIDescriptor).WithLocation(15, 26).WithArguments("ICustomBlock2"),
-                Verify.Diagnostic(Descriptors.Epi1008InterfaceInAllowedTypesShouldHaveUIDescriptor).WithLocation(15, 26).WithArguments("ICustomBlock"));
+                Verify.Diagnostic(Descriptors.Epi1008InterfaceInAllowedTypesShouldHaveUIDescriptor).WithLocation(13, 26).WithArguments("ICustomBlock"),
+                Verify.Diagnostic(Descriptors.Epi1008InterfaceInAllowedTypesShouldHaveUIDescriptor).WithLocation(13, 26).WithArguments("ICustomBlock2"),
+                Verify.Diagnostic(Descriptors.Epi1008InterfaceInAllowedTypesShouldHaveUIDescriptor).WithLocation(13, 26).WithArguments("ICustomBlock3"),
+                Verify.Diagnostic(Descriptors.Epi1008InterfaceInAllowedTypesShouldHaveUIDescriptor).WithLocation(13, 26).WithArguments("ICustomBlock4"));
         }
 
         [Fact]
@@ -697,8 +640,8 @@ namespace CodeAnalyzers.Episerver.Test
                 }";
 
             await Verify.VerifyAnalyzerAsync(test,
-                Verify.Diagnostic(Descriptors.Epi1008InterfaceInAllowedTypesShouldHaveUIDescriptor).WithLocation(13, 26).WithArguments("ICustomBlock2"),
-                Verify.Diagnostic(Descriptors.Epi1008InterfaceInAllowedTypesShouldHaveUIDescriptor).WithLocation(13, 26).WithArguments("ICustomBlock"));
+                Verify.Diagnostic(Descriptors.Epi1008InterfaceInAllowedTypesShouldHaveUIDescriptor).WithLocation(13, 26).WithArguments("ICustomBlock"),
+                Verify.Diagnostic(Descriptors.Epi1008InterfaceInAllowedTypesShouldHaveUIDescriptor).WithLocation(13, 26).WithArguments("ICustomBlock2"));
         }
 
         [Fact]
@@ -745,8 +688,8 @@ namespace CodeAnalyzers.Episerver.Test
                 }";
 
             await Verify.VerifyAnalyzerAsync(test,
-                Verify.Diagnostic(Descriptors.Epi1008InterfaceInAllowedTypesShouldHaveUIDescriptor).WithLocation(13, 26).WithArguments("ICustomBlock2"),
-                Verify.Diagnostic(Descriptors.Epi1008InterfaceInAllowedTypesShouldHaveUIDescriptor).WithLocation(13, 26).WithArguments("ICustomBlock"));
+                Verify.Diagnostic(Descriptors.Epi1008InterfaceInAllowedTypesShouldHaveUIDescriptor).WithLocation(13, 26).WithArguments("ICustomBlock"),
+                Verify.Diagnostic(Descriptors.Epi1008InterfaceInAllowedTypesShouldHaveUIDescriptor).WithLocation(13, 26).WithArguments("ICustomBlock2"));
         }
 
         [Fact]
@@ -770,8 +713,8 @@ namespace CodeAnalyzers.Episerver.Test
                 }";
 
             await Verify.VerifyAnalyzerAsync(test,
-                Verify.Diagnostic(Descriptors.Epi1008InterfaceInAllowedTypesShouldHaveUIDescriptor).WithLocation(13, 26).WithArguments("ICustomBlock2"),
-                Verify.Diagnostic(Descriptors.Epi1008InterfaceInAllowedTypesShouldHaveUIDescriptor).WithLocation(13, 26).WithArguments("ICustomBlock"));
+                Verify.Diagnostic(Descriptors.Epi1008InterfaceInAllowedTypesShouldHaveUIDescriptor).WithLocation(13, 26).WithArguments("ICustomBlock"),
+                Verify.Diagnostic(Descriptors.Epi1008InterfaceInAllowedTypesShouldHaveUIDescriptor).WithLocation(13, 26).WithArguments("ICustomBlock2"));
         }
 
         [Fact]
@@ -795,8 +738,8 @@ namespace CodeAnalyzers.Episerver.Test
                 }";
 
             await Verify.VerifyAnalyzerAsync(test,
-                Verify.Diagnostic(Descriptors.Epi1008InterfaceInAllowedTypesShouldHaveUIDescriptor).WithLocation(13, 26).WithArguments("ICustomBlock2"),
-                Verify.Diagnostic(Descriptors.Epi1008InterfaceInAllowedTypesShouldHaveUIDescriptor).WithLocation(13, 26).WithArguments("ICustomBlock"));
+                Verify.Diagnostic(Descriptors.Epi1008InterfaceInAllowedTypesShouldHaveUIDescriptor).WithLocation(13, 26).WithArguments("ICustomBlock"),
+                Verify.Diagnostic(Descriptors.Epi1008InterfaceInAllowedTypesShouldHaveUIDescriptor).WithLocation(13, 26).WithArguments("ICustomBlock2"));
         }
     }
 }

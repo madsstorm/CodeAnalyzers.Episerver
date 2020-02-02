@@ -49,16 +49,92 @@ namespace CodeAnalyzers.Episerver.DiagnosticAnalyzers.CSharp
             });
         }       
 
+        //private void AnalyzePropertySymbol(
+        //    SymbolAnalysisContext symbolContext,
+        //    INamedTypeSymbol iContentDataType,
+        //    INamedTypeSymbol allowedTypesType)
+        //{
+        //    var propertySymbol = (IPropertySymbol)symbolContext.Symbol;
+
+        //    var containingType = propertySymbol.ContainingType;
+        //    if (containingType is null)
+        //    {
+        //        return;
+        //    }
+
+        //    if (!iContentDataType.IsAssignableFrom(containingType))
+        //    {
+        //        return;
+        //    }
+
+        //    var attribute = propertySymbol.GetAttributes().FirstOrDefault(a => allowedTypesType.IsAssignableFrom(a.AttributeClass));
+        //    if (attribute is null)
+        //    {
+        //        return;
+        //    }
+
+        //    if(attribute.ConstructorArguments != null)
+        //    {
+        //        foreach(var argument in attribute.ConstructorArguments)
+        //        {
+        //            VerifyTypeArrayArgument(argument, attribute);
+        //        }
+        //    }
+
+        //    if(attribute.NamedArguments != null)
+        //    {
+        //        foreach(var pair in attribute.NamedArguments)
+        //        {
+        //            if(NamedArguments.Any(x => string.Equals(x, pair.Key, StringComparison.Ordinal)))
+        //            {
+        //                VerifyTypeArrayArgument(pair.Value, attribute);
+        //            }
+        //        }
+        //    }
+        //}
+
+        private void AnalyzeTypeArrayArgument(TypedConstant argument, AttributeData attribute)
+        {
+            if (argument.Kind != TypedConstantKind.Array)
+            {
+                return;
+            }
+
+            if (argument.Values == null)
+            {
+                return;
+            }
+
+            foreach (TypedConstant value in argument.Values)
+            {
+                if (value.Kind != TypedConstantKind.Type)
+                {
+                    continue;
+                }
+
+                INamedTypeSymbol namedType = value.Value as INamedTypeSymbol;
+                if (namedType == null)
+                {
+                    continue;
+                }
+
+                if (namedType.TypeKind != TypeKind.Interface)
+                {
+                    continue;
+                }
+            }
+        }     
+
         private class CompilationAnalyzer
         {
+            private readonly ImmutableArray<string> NamedArguments =
+                ImmutableArray.Create("AllowedTypes", "RestrictedTypes");
+
+            private readonly ConcurrentBag<Type> UIDescriptorTypes = new ConcurrentBag<Type>();
+
             private readonly INamedTypeSymbol iContentDataType;
             private readonly INamedTypeSymbol allowedTypesType;
             private readonly INamedTypeSymbol uiDescriptorType;
-
-            private readonly ImmutableArray<string> NamedArguments = ImmutableArray.Create("AllowedTypes", "RestrictedTypes");
-
-            private readonly ConcurrentBag<ITypeSymbol> KnownUIDescriptorTypes = new ConcurrentBag<ITypeSymbol>();
-            private readonly ConcurrentBag<(AttributeData Attribute, ITypeSymbol TypeSymbol)> KnownAllowedTypes = new ConcurrentBag<(AttributeData, ITypeSymbol)>();
 
             public CompilationAnalyzer(INamedTypeSymbol iContentDataType, INamedTypeSymbol allowedTypesType, INamedTypeSymbol uiDescriptorType)
             {
@@ -127,68 +203,38 @@ namespace CodeAnalyzers.Episerver.DiagnosticAnalyzers.CSharp
                         continue;
                     }
 
-                    ITypeSymbol typeSymbol = value.Value as ITypeSymbol;
-                    if (typeSymbol == null)
+                    INamedTypeSymbol namedType = value.Value as INamedTypeSymbol;
+                    if (namedType == null)
                     {
                         continue;
                     }
 
-                    if (typeSymbol.TypeKind != TypeKind.Interface)
+                    if (namedType.TypeKind != TypeKind.Interface)
                     {
                         continue;
                     }
 
-                    KnownAllowedTypes.Add((attribute, typeSymbol));
+
                 }
             }
 
             internal void AnalyzeNamedType(SymbolAnalysisContext symbolContext)
             {
-                var namedTypeSymbol = (INamedTypeSymbol)symbolContext.Symbol;
-
-                var uiDescriptorType = GetUIDescriptorType(namedTypeSymbol);
-
-                if(uiDescriptorType != null)
-                {
-                    KnownUIDescriptorTypes.Add(uiDescriptorType);
-                }               
+                throw new NotImplementedException();
             }
 
             internal void CompilationEndAction(CompilationAnalysisContext compilationContext)
             {
-                foreach(var pair in KnownAllowedTypes)
-                {
-                    if(!KnownUIDescriptorTypes.Contains(pair.TypeSymbol))
-                    {
-                        ReportMissingUIDescriptor(compilationContext, pair.Attribute, pair.TypeSymbol);
-                    }
-                }              
+                throw new NotImplementedException();
             }
 
-            private ITypeSymbol GetUIDescriptorType(INamedTypeSymbol namedTypeSymbol)
-            {
-                while(namedTypeSymbol != null)
-                {
-                    if(namedTypeSymbol.IsGenericType && namedTypeSymbol.BaseType.Equals(uiDescriptorType))
-                    {
-                        return namedTypeSymbol.TypeArguments.FirstOrDefault();
-                    }
-
-                    namedTypeSymbol = namedTypeSymbol.BaseType;
-                }
-
-                return null;
-            }
-
-            private void ReportMissingUIDescriptor(CompilationAnalysisContext compilationContext, AttributeData attribute, ITypeSymbol typeSymbol)
+            private void ReportMissingUIDescriptor(CompilationAnalysisContext compilationContext, AttributeData attribute)
             {
                 var node = attribute.ApplicationSyntaxReference?.GetSyntax();
                 if (node != null)
                 {
                     compilationContext.ReportDiagnostic(
-                        node.CreateDiagnostic(
-                            Descriptors.Epi1008InterfaceInAllowedTypesShouldHaveUIDescriptor,
-                            typeSymbol.ToDisplayString(SymbolDisplayFormat.CSharpShortErrorMessageFormat)));
+                        node.CreateDiagnostic(Descriptors.Epi1008InterfaceInAllowedTypesShouldHaveUIDescriptor));
                 }
             }
         }
