@@ -105,6 +105,25 @@ namespace CodeAnalyzers.Episerver.Test
         }
 
         [Fact]
+        public async Task IgnoreContentReferenceEnumerablePropertyInContentDataInterfaceWithoutAllowedTypesAttribute()
+        {
+            var test = @"
+                using System.Collections.Generic;
+                using EPiServer.Core;
+                using EPiServer.DataAnnotations;
+
+                namespace Test
+                {
+                    public interface ITypeName : IContentData
+                    {
+                        IEnumerable<ContentReference> List {get;set;}
+                    }
+                }";
+
+            await Verify.VerifyAnalyzerAsync(test);
+        }
+
+        [Fact]
         public async Task IgnorePropertyListWithoutAllowedTypesAttribute()
         {
             var test = @"
@@ -176,6 +195,26 @@ namespace CodeAnalyzers.Episerver.Test
                     public class TypeName : PageData
                     {
                         public virtual ICollection<ContentReference> List {get;set;}
+                    }
+                }";
+
+            await Verify.VerifyAnalyzerAsync(test,
+                Verify.Diagnostic(Descriptors.Epi2016ContentReferenceListPropertyShouldHaveAllowedTypesAttribute).WithLocation(10, 70));
+        }
+
+        [Fact]
+        public async Task DetectContentReferenceEnumerablePropertyInAbstractContentDataWithoutAllowedTypesAttribute()
+        {
+            var test = @"
+                using System.Collections.Generic;
+                using EPiServer.Core;
+                using EPiServer.DataAnnotations;
+
+                namespace Test
+                {
+                    public abstract class TypeNameBase : PageData
+                    {
+                        public virtual IEnumerable<ContentReference> List {get;set;}
                     }
                 }";
 

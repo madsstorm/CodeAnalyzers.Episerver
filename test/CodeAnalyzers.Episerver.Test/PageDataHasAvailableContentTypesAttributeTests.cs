@@ -46,6 +46,23 @@ namespace CodeAnalyzers.Episerver.Test
         }
 
         [Fact]
+        public async Task IgnoreContentDataInterfaceWithoutAvailableContentTypes()
+        {
+            var test = @"
+                using EPiServer.DataAnnotations;
+                using EPiServer.Core;
+
+                namespace Test
+                {
+                    public interface ITypeName : IContentData
+                    {
+                    }
+                }";
+
+            await Verify.VerifyAnalyzerAsync(test);
+        }
+
+        [Fact]
         public async Task IgnoreBlockDataWithoutAvailableContentTypes()
         {
             var test = @"

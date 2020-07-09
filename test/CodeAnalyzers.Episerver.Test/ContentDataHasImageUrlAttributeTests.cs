@@ -62,6 +62,24 @@ namespace CodeAnalyzers.Episerver.Test
         }
 
         [Fact]
+        public async Task IgnoreContentDataInterfaceWithoutImageUrl()
+        {
+            var test = @"
+                using EPiServer.DataAnnotations;
+                using EPiServer.Core;
+                using EPiServer.Commerce.Catalog.ContentTypes;
+
+                namespace Test
+                {
+                    public interface ITypeName : IContentData
+                    {
+                    }
+                }";
+
+            await Verify.VerifyAnalyzerAsync(test);
+        }
+
+        [Fact]
         public async Task IgnoreMediaDataWithoutImageUrl()
         {
             var test = @"

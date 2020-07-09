@@ -79,6 +79,22 @@ namespace CodeAnalyzers.Episerver.Test
         }
 
         [Fact]
+        public async Task IgnoreContentDataInterfaceWithoutContentTypeAttribute()
+        {
+            var test = @"
+                using EPiServer.Core;
+
+                namespace Test
+                {
+                    public interface ITypeName : IContentData
+                    {
+                    }
+                }";
+
+            await Verify.VerifyAnalyzerAsync(test);
+        }
+
+        [Fact]
         public async Task IgnoreOtherType()
         {
             var test = @"
