@@ -59,6 +59,11 @@ namespace CodeAnalyzers.Episerver.DiagnosticAnalyzers.CSharp
                 return;
             }
 
+            if (containingType.TypeKind == TypeKind.Interface)
+            {
+                return;
+            }
+
             if (!iContentDataType.IsAssignableFrom(containingType))
             {
                 return;
