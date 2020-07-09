@@ -27,6 +27,45 @@ namespace CodeAnalyzers.Episerver.Test
         }
 
         [Fact]
+        public async Task IgnoreNonVirtualContentReferenceEnumerableProperty()
+        {
+            var test = @"
+                using System.Collections.Generic;
+                using EPiServer.Core;
+                using EPiServer.DataAnnotations;
+
+                namespace Test
+                {
+                    public class TypeName : PageData
+                    {
+                        public IEnumerable<ContentReference> List {get;set;}
+                    }
+                }";
+
+            await Verify.VerifyAnalyzerAsync(test);
+        }
+
+        [Fact]
+        public async Task IgnoreContentReferenceEnumerablePropertyWithIgnoreAttribute()
+        {
+            var test = @"
+                using System.Collections.Generic;
+                using EPiServer.Core;
+                using EPiServer.DataAnnotations;
+
+                namespace Test
+                {
+                    public class TypeName : PageData
+                    {
+                        [Ignore]
+                        public virtual IEnumerable<ContentReference> List {get;set;}
+                    }
+                }";
+
+            await Verify.VerifyAnalyzerAsync(test);
+        }
+
+        [Fact]
         public async Task IgnoreContentReferenceListPropertyWithAllowedTypesAttribute()
         {
             var test = @"

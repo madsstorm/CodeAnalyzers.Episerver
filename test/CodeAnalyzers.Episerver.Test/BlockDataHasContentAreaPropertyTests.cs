@@ -52,6 +52,78 @@ namespace CodeAnalyzers.Episerver.Test
         }
 
         [Fact]
+        public async Task IgnoreContentAreaPropertyWithIgnoreAttributeInBlockData()
+        {
+            var test = @"
+                using EPiServer.Core;
+                using EPiServer.DataAnnotations;
+
+                namespace Test
+                {
+                    public class BlockType : BlockData
+                    {
+                        [Ignore]
+                        public virtual ContentArea MainArea { get;set; }
+                    }
+                }";
+
+            await Verify.VerifyAnalyzerAsync(test);           
+        }
+
+        [Fact]
+        public async Task IgnoreNonVirtualContentAreaPropertyInBlockData()
+        {
+            var test = @"
+                using EPiServer.Core;
+
+                namespace Test
+                {
+                    public class BlockType : BlockData
+                    {
+                        public ContentArea MainArea { get;set; }
+                    }
+                }";
+
+            await Verify.VerifyAnalyzerAsync(test);
+        }
+
+        [Fact]
+        public async Task IgnorePrivateContentAreaPropertyInBlockData()
+        {
+            var test = @"
+                using EPiServer.Core;
+                using EPiServer.DataAnnotations;
+
+                namespace Test
+                {
+                    public class BlockType : BlockData
+                    {
+                        private ContentArea MainArea { get;set; }
+                    }
+                }";
+
+            await Verify.VerifyAnalyzerAsync(test);
+        }
+
+        [Fact]
+        public async Task IgnoreGetOnlyContentAreaProperty()
+        {
+            var test = @"
+                using EPiServer.Core;
+                using EPiServer.DataAnnotations;
+
+                namespace Test
+                {
+                    public class BlockType : BlockData
+                    {
+                        public virtual ContentArea MainArea { get; }
+                    }
+                }";
+
+            await Verify.VerifyAnalyzerAsync(test);
+        }
+
+        [Fact]
         public async Task DetectContentAreaPropertyInBlockData()
         {
             var test = @"

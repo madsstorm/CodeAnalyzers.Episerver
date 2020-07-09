@@ -27,6 +27,8 @@ namespace CodeAnalyzers.Episerver.DiagnosticAnalyzers.CSharp
             {
                 var rootPropertyTypes = RootPropertyTypeNames.Select(r => compilationContext.Compilation.GetTypeByMetadataName(r)).Where(s => s != null);
 
+                var ignoreAttributeType = compilationContext.Compilation.GetTypeByMetadataName(TypeNames.IgnoreAttributeMetadataName);
+
                 var iContentDataType = compilationContext.Compilation.GetTypeByMetadataName(TypeNames.IContentDataMetadataName);
                 if (iContentDataType is null)
                 {
@@ -40,7 +42,7 @@ namespace CodeAnalyzers.Episerver.DiagnosticAnalyzers.CSharp
                 }
 
                 compilationContext.RegisterSymbolAction(
-                    symbolContext => AnalyzeSymbol(symbolContext, iContentDataType, allowedTypesType, rootPropertyTypes)
+                    symbolContext => AnalyzeSymbol(symbolContext, iContentDataType, allowedTypesType, rootPropertyTypes, ignoreAttributeType)
                     , SymbolKind.Property);
             });
         }
@@ -49,9 +51,15 @@ namespace CodeAnalyzers.Episerver.DiagnosticAnalyzers.CSharp
             SymbolAnalysisContext symbolContext,
             INamedTypeSymbol iContentDataType,
             INamedTypeSymbol allowedTypesType,
-            IEnumerable<INamedTypeSymbol> rootPropertyTypes)
+            IEnumerable<INamedTypeSymbol> rootPropertyTypes,
+            INamedTypeSymbol ignoreAttribute)
         {
             var propertySymbol = (IPropertySymbol)symbolContext.Symbol;
+
+            if (!propertySymbol.IsModelProperty(ignoreAttribute))
+            {
+                return;
+            }
 
             var containingType = propertySymbol.ContainingType;
             if (containingType is null)

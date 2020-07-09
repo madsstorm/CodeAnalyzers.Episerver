@@ -45,6 +45,43 @@ namespace CodeAnalyzers.Episerver.Test
         }
 
         [Fact]
+        public async Task IgnoreContentReferencePropertyWithIgnoreAttribute()
+        {
+            var test = @"
+                using EPiServer.Core;
+                using EPiServer.DataAnnotations;
+
+                namespace Test
+                {
+                    public class TypeName : PageData
+                    {
+                        [Ignore]
+                        public virtual ContentReference Link {get;set;}
+                    }
+                }";
+
+            await Verify.VerifyAnalyzerAsync(test);
+        }
+
+        [Fact]
+        public async Task IgnoreNonVirtualContentReferenceProperty()
+        {
+            var test = @"
+                using EPiServer.Core;
+                using EPiServer.DataAnnotations;
+
+                namespace Test
+                {
+                    public class TypeName : PageData
+                    {
+                        public ContentReference Link {get;set;}
+                    }
+                }";
+
+            await Verify.VerifyAnalyzerAsync(test);
+        }
+
+        [Fact]
         public async Task IgnoreContentReferencePropertyInNonContentDataWithoutAllowedTypesAttribute()
         {
             var test = @"

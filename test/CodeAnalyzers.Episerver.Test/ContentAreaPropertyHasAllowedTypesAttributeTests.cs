@@ -26,6 +26,43 @@ namespace CodeAnalyzers.Episerver.Test
         }
 
         [Fact]
+        public async Task IgnoreNonVirtualContentAreaProperty()
+        {
+            var test = @"
+                using EPiServer.Core;
+                using EPiServer.DataAnnotations;
+
+                namespace Test
+                {
+                    public class TypeName : PageData
+                    {
+                        public ContentArea Area {get;set;}
+                    }
+                }";
+
+            await Verify.VerifyAnalyzerAsync(test);
+        }
+
+        [Fact]
+        public async Task IgnoreContentAreaPropertyWithIgnoreAttribute()
+        {
+            var test = @"
+                using EPiServer.Core;
+                using EPiServer.DataAnnotations;
+
+                namespace Test
+                {
+                    public class TypeName : PageData
+                    {
+                        [Ignore]
+                        public virtual ContentArea Area {get;set;}
+                    }
+                }";
+
+            await Verify.VerifyAnalyzerAsync(test);
+        }
+
+        [Fact]
         public async Task IgnoreContentAreaPropertyInNonContentDataWithoutAllowedTypesAttribute()
         {
             var test = @"

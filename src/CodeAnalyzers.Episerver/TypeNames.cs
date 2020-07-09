@@ -23,6 +23,7 @@
         public static readonly string DisplayMetadataName = "System.ComponentModel.DataAnnotations.DisplayAttribute";
         public static readonly string AvailableContentTypesMetadataName = "EPiServer.DataAnnotations.AvailableContentTypesAttribute";
         public static readonly string AllowedTypesMetadataName = "EPiServer.DataAnnotations.AllowedTypesAttribute";
+        public static readonly string IgnoreAttributeMetadataName = "EPiServer.DataAnnotations.IgnoreAttribute";
 
         public static readonly string ContentReferenceMetadataName = "EPiServer.Core.ContentReference";
     }

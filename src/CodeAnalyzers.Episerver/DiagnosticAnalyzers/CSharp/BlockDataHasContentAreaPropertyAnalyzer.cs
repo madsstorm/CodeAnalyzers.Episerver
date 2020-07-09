@@ -21,6 +21,8 @@ namespace CodeAnalyzers.Episerver.DiagnosticAnalyzers.CSharp
 
             context.RegisterCompilationStartAction(compilationContext =>
             {
+                var ignoreAttributeType = compilationContext.Compilation.GetTypeByMetadataName(TypeNames.IgnoreAttributeMetadataName);
+
                 var blockDataType = compilationContext.Compilation.GetTypeByMetadataName(TypeNames.BlockDataMetadataName);
                 if (blockDataType is null)
                 {
@@ -34,16 +36,25 @@ namespace CodeAnalyzers.Episerver.DiagnosticAnalyzers.CSharp
                 }
 
                 compilationContext.RegisterSymbolAction(
-                    symbolContext => AnalyzeSymbol(symbolContext, blockDataType, contentAreaType)
+                    symbolContext => AnalyzeSymbol(symbolContext, blockDataType, contentAreaType, ignoreAttributeType)
                     , SymbolKind.Property);
             });
         }
 
-        private void AnalyzeSymbol(SymbolAnalysisContext symbolContext, INamedTypeSymbol blockDataType, INamedTypeSymbol contentAreaType)
+        private void AnalyzeSymbol(
+            SymbolAnalysisContext symbolContext,
+            INamedTypeSymbol blockDataType,
+            INamedTypeSymbol contentAreaType,
+            INamedTypeSymbol ignoreAttribute)
         {
             var propertySymbol = (IPropertySymbol)symbolContext.Symbol;
             
             if(!contentAreaType.IsAssignableFrom(propertySymbol.Type))
+            {
+                return;
+            }
+
+            if (!propertySymbol.IsModelProperty(ignoreAttribute))
             {
                 return;
             }
