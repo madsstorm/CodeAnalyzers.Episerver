@@ -9,6 +9,8 @@
   <PropertyGroup>
     <TargetFramework>net461</TargetFramework>
 	  <OutputPath>bin\$(Configuration)\$(TargetFramework)\$(MSBuildProjectName)</OutputPath>
+    <!-- SonarQube needs this -->
+    <ProjectGuid>61982D1B-754E-421A-85D4-7E0731A52D65</ProjectGuid>
   </PropertyGroup>
 
   <PropertyGroup>

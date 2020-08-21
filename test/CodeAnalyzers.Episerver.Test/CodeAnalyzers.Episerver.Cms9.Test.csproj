@@ -9,6 +9,8 @@
   <PropertyGroup>
     <TargetFramework>net461</TargetFramework>
     <OutputPath>bin\$(Configuration)\$(TargetFramework)\$(MSBuildProjectName)</OutputPath>
+    <!-- SonarQube needs this -->
+    <ProjectGuid>436170CB-EDA7-48FD-BA3C-665F2B4B6141</ProjectGuid>
   </PropertyGroup>
 
   <Import Project="Sdk.targets" Sdk="Microsoft.NET.Sdk" />
