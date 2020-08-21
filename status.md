@@ -7,6 +7,7 @@
 [![Build Status](https://travis-ci.org/madsstorm/CodeAnalyzers.Episerver.Integration.svg?branch=master)](https://travis-ci.org/madsstorm/CodeAnalyzers.Episerver.Integration)
 
 ##### Code
+[![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=madsstorm_CodeAnalyzers.Episerver&metric=alert_status)](https://sonarcloud.io/dashboard?id=madsstorm_CodeAnalyzers.Episerver)
 [![Codacy Badge](https://api.codacy.com/project/badge/Grade/4e1e50d35a3e479ea65880481cf1113e)](https://www.codacy.com/manual/madsstorm/CodeAnalyzers.Episerver?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=madsstorm/CodeAnalyzers.Episerver&amp;utm_campaign=Badge_Grade)
 [![Maintainability](https://api.codeclimate.com/v1/badges/37fe42c1a216b176f447/maintainability)](https://codeclimate.com/github/madsstorm/CodeAnalyzers.Episerver/maintainability)
 [![codecov](https://codecov.io/gh/madsstorm/CodeAnalyzers.Episerver/branch/master/graph/badge.svg)](https://codecov.io/gh/madsstorm/CodeAnalyzers.Episerver)
