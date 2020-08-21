@@ -4,6 +4,8 @@
     <TargetFramework>netstandard1.3</TargetFramework>
     <IncludeBuildOutput>false</IncludeBuildOutput>
     <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
+    <!-- SonarQube needs this -->
+    <ProjectGuid>A4D7E2CC-8902-4F19-B61F-30F9DC326A70</ProjectGuid>
   </PropertyGroup>
 
   <PropertyGroup>
