@@ -15,6 +15,20 @@ steps:
     projects: 'src/CodeAnalyzers.Episerver/CodeAnalyzers.Episerver.csproj'
     arguments: '--configuration $(buildConfiguration)'
 
+- task: SonarCloudPrepare@1
+  inputs:
+    SonarCloud: 'AzureDevopsSonarCloud'
+    organization: 'madsstorm'
+    scannerMode: 'MSBuild'
+    projectKey: 'madsstorm_CodeAnalyzers.Episerver'
+    projectName: 'CodeAnalyzers.Episerver'
+
+- task: SonarCloudAnalyze@1
+
+- task: SonarCloudPublish@1
+  inputs:
+    pollingTimeoutSec: '300'
+
 - task: DotNetCoreCLI@2
   displayName: 'Test Cms 9'
   inputs:
