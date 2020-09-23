@@ -2,6 +2,7 @@
 
 # Code analyzers for Episerver
 ![Build Status](https://dev.azure.com/madsstorm/CodeAnalyzers.Episerver/_apis/build/status/CodeAnalyzers.Episerver?branchName=master)
+[![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=madsstorm_CodeAnalyzers.Episerver&metric=alert_status)](https://sonarcloud.io/dashboard?id=madsstorm_CodeAnalyzers.Episerver)
 [![Nuget](https://img.shields.io/badge/nuget-v1.2.1-blue)][nuget]
 
 > **_Analyzes your code for Episerver best practices_**
